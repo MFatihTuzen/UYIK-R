@@ -1,0 +1,23 @@
+.reveal .slide-logo {
+  height: 60px !important;
+  width: 100px !important;
+  max-width: unset !important;
+  max-height: unset !important;
+}
+
+/* Kalın kırmızı-beyaz üst şerit - her slaytta sabit */
+.reveal::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 40px; /* Şerit kalınlığı */
+  width: 100%;
+  background: linear-gradient(to right,
+    #e30a17 33.33%,
+    white 66.66%,
+    black 100%);
+  z-index: 9999;
+}
+
+

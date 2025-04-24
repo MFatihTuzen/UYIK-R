@@ -1,0 +1,731 @@
+---
+title: "R Programlama ile Veri Analizi"
+subtitle: "R Programlamaya Giriş"
+author: "Dr. Muhammed Fatih TÜZEN"
+date: 2025-5-16
+date-format: "DD-MM-YYYY"
+format: 
+  revealjs:
+    theme: white
+    slide-number: true
+    footer: "Altıncı Uluslararası Uygulamalı İstatistik Kongresi (UYIK 2025)"
+    css: custom.css
+    incremental: true
+    scrollable: true
+    logo: images/TUiK_logo_Tr.jpg
+editor: visual
+execute:
+  echo: true
+  eval: true
+---
+
+## Dr. Muhammed Fatih TÜZEN
+
+::: columns
+::: {.column width="30%"}
+![](images/profile.jpg)
+
+::: columns
+::: {.column width="50%"}
+[![](images/LinkedIn_icon.svg){fig-align="center" width="93"}](https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/)
+:::
+
+::: {.column width="40%"}
+[![](images/github-brands.svg){fig-align="center" width="84" height="91"}](https://github.com/MFatihTuzen)
+:::
+:::
+:::
+
+::: {.column width="70%"}
+::: nonincremental
+-   **Lisans:** Samsun 19 Mayıs Üniversitesi, İstatistik, 2004
+-   **Yüksek Lisans:** Kars Kafkas Üniversitesi, İşletme, 2012
+-   **Doktora:** Gazi Üniversitesi, İstatistik, 2018
+-   Zaman serileri, Mevsimsel Düzeltme, Forecasting, Çok Değişkenli İstatistik
+-   R Programlama ve Shiny uygulamaları
+:::
+:::
+:::
+
+## Sunum Planı
+
+::: incremental
+-   R Programlama ve RStudio Hakkında
+-   Temel R Fonksiyonları
+-   Veri Tipleri ve Yapıları
+-   Fonksiyonlar
+-   Kontrol İfadeleri
+-   Matematiksel İşlemler
+-   Verilerin İçe ve Dışa Aktarılması
+
+<div>
+
+📦 Ders Materyalleri : [github.com/kullanici/proje](https://github.com/kullanici/proje)
+
+</div>
+:::
+
+## R Programlama Hakkında
+
+-   **R**, istatistiksel hesaplama ve veri görselleştirme için geliştirilmiş açık kaynaklı bir programlama dilidir.
+-   CRAN (Comprehensive R Archive Network) üzerinden **19.000+ paket** erişilebilir.
+-   Veri analizi, istatistiksel modelleme, makine öğrenmesi, raporlama (R Markdown, Quarto) ve web uygulamaları (Shiny) gibi alanlarda yoğun olarak kullanılır.
+-   Akademiden endüstriye, kamu kurumlarından start-up'lara kadar geniş kullanım alanı vardır.
+
+## R ve RStudio Bağlantıları
+
+-   🔗 **R İndir (CRAN):**\
+    <https://cran.r-project.org/>
+
+-   🧰 **RStudio IDE (R için Gelişmiş Arayüz):**\
+    <https://posit.co/download/rstudio-desktop/>
+
+-   🧠 Öğrenme Kaynakları:
+
+    -   [R for Data Science](https://r4ds.hadley.nz)
+    -   [Tidyverse.org](https://www.tidyverse.org)
+    -   [Big Book of R](https://www.bigbookofr.com/)
+    -   Türkçe kaynak: [rprogramlama.netlify.app](https://rprogramlama.netlify.app)
+
+## Neler Yapılabilir?
+
+-   📊 Keşifsel Veri Analizi\
+-   📈 Veri Görselleştirme (ggplot2)\
+-   🤖 Makine Öğrenmesi\
+-   🧮 Regresyon, hipotez testleri, zaman serisi\
+-   🌐 Shiny ile etkileşimli web uygulamaları\
+-   📄 Quarto ile otomatik raporlama (PDF, HTML, slayt)
+
+> "R ile veri değil, anlam anlatırsınız."
+
+------------------------------------------------------------------------
+
+## RStudio Arayüzü
+
+**RStudio**, R dili için yaygın olarak kullanılan bir IDE'dir (entegre geliştirme ortamı). Başlıca 4 panelden oluşur:
+
+🖥 **Console:** Kodların çalıştırıldığı terminal alanı
+
+📝 **Source:** Kod dosyalarının (`.R`, `.qmd`, `.Rmd`) düzenlendiği alan
+
+🧠 **Environment / History:** Tanımlı nesneler ve komut geçmişi
+
+📁 **Files / Plots / Packages / Help:** Dosyalar, grafikler, kurulu paketler ve yardım sekmesi
+
+------------------------------------------------------------------------
+
+## RStudio Kısayolları {.no-incremental}
+
+**Sık kullanılan bazı kısayollar:**
+
+::: nonincremental
+-   <kbd>Ctrl</kbd> + <kbd>Enter</kbd> → Seçili satırı çalıştır\
+-   <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>N</kbd> → Yeni script dosyası\
+-   <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>K</kbd> → Quarto / R Markdown çıktısı al\
+-   <kbd>Tab</kbd> → Otomatik tamamlama
+:::
+
+### Tüm Kısayollara Nasıl Erişilir?
+
+📁 Menüden şu yolu takip edin:\
+**Tools → Keyboard Shortcuts Help**
+
+🖨️ Açılan sayfa üzerinden tüm kısayolları görebilir, hatta bastığınız tuşlara göre arama yapabilirsiniz.
+
+> 💡 Ayrıca `Tools → Modify Keyboard Shortcuts` ile kendi özel kısayollarınızı da tanımlayabilirsiniz.
+
+------------------------------------------------------------------------
+
+## Temel R Fonksiyonları
+
+::: nonincremental
+-   R’da işlemler fonksiyonlar ile yapılır: `fonksiyon_adı(argümanlar)`
+-   Fonksiyonlar hem hazır olabilir hem de kullanıcı tanımlı olabilir.
+-   Fonksiyon çağırırken parantez `()` kullanılır.
+:::
+
+### Yaygın Yerleşik Fonksiyonlar {.no-incremental}
+
+```{r}
+# Sayı dizileri
+seq(1, 10, by = 2)    # 1'den 10'a kadar 2'şer artan sayılar
+rep(5, times = 3)     # 5 sayısını 3 kez tekrar et
+
+# Özet istatistikler
+mean(c(10, 20, 30))   # Ortalama
+sd(c(1, 2, 3, 4, 5))  # Standart sapma
+length(letters)       # Eleman sayısı
+```
+
+### Fonksiyonları Keşfetme {.no-incremental}
+
+```{r}
+#| eval: false
+
+args(mean)        # Fonksiyonun argümanlarını gösterir
+help(mean)        # Yardım dökümanını açar
+?mean             # Aynı şekilde yardım sayfasını açar
+```
+
+> 💡 Fonksiyonların ne yaptığını anlamak için `help()` veya `example()` komutlarını kullanın.
+
+------------------------------------------------------------------------
+
+## 🧰 Yardımcı Bilgiler
+
+### 📦 Paket Yükleme vs Çağırma
+
+```{r}
+#| eval: false
+# Sadece 1 kez yapılır (yükleme):
+install.packages("readr")
+# Her oturumda çağrılır:
+library(readr)
+```
+
+💡 `install.packages()` sadece bir defa yapılır. `library()` ise her R oturumu başında yapılmalıdır.
+
+### 🔠 R Case-Sensitive'dir
+
+```{r}
+#| eval: false
+x <- 5
+X    # HATA: Nesne bulunamadı
+```
+
+🔥 `x` ile `X` tamamen farklıdır. Büyük/küçük harfe dikkat et!
+
+### 🧹 Ortam Temizliği
+
+```{r}
+#| eval: false
+ls()          # Ortamdaki nesneleri listeler
+rm(x, y)      # Seçilen nesneleri siler
+rm(list = ls())  # Tüm ortamı temizler
+```
+
+🧼 `rm(list = ls())` tüm tanımlı objeleri silerek temiz bir başlangıç yapar.
+
+## Atama Operatörü
+
+::: nonincremental
+-   R'de bir değeri bir objeye atamak için genellikle `<-` kullanılır.
+-   Alternatif olarak `=` de kullanılabilir, ancak bazı durumlarda fark yaratabilir.
+-   Değişken adı solda, değer sağda yer alır.
+:::
+
+```{r}
+x <- 5        # Geleneksel R tarzı
+y = 10        # Python benzeri
+z <- x + y
+z
+```
+
+### `<-` ile `=` Arasındaki Farklar
+
+::: nonincremental
+-   Her iki operatör de değişken atamak için çalışır.
+
+-   Ancak `<-` **R dünyasında daha yaygındır** ve fonksiyon içi argümanlarla karışmaz.
+
+-   Fonksiyon çağrısı içinde **`=` önerilir**, dışarıda **`<-` önerilir**.
+:::
+
+```{r}
+mean(x = c(1, 2, 3))   # x = argüman olarak kullanıldı
+x <- c(1, 2, 3)        # x adlı vektör oluşturuldu
+
+```
+
+------------------------------------------------------------------------
+
+## Veri Tipleri
+
+::: nonincremental
+-   R'de her veri bir **tip** (type) ile tanımlanır.
+-   Temel veri tipleri şunlardır:
+:::
+
+| Veri Tipi | Açıklama                     | Örnek           |
+|-----------|------------------------------|-----------------|
+| numeric   | Sayılar                      | `3.14`, `42`    |
+| character | Metin/string                 | `"Merhaba"`     |
+| logical   | Mantıksal değer (TRUE/FALSE) | `TRUE`, `FALSE` |
+| integer   | Tam sayılar                  | `1L`, `99L`     |
+
+```{r}
+# Örnekler
+typeof(42)           # "double"
+typeof("Merhaba")    # "character"
+typeof(TRUE)         # "logical"
+typeof(1L)           # "integer"
+```
+
+## Veri Tipi Kontrol Fonksiyonları
+
+```{r}
+is.numeric(3.14)       # TRUE
+is.character("abc")    # TRUE
+is.logical(FALSE)      # TRUE
+is.integer(1)          # FALSE (çünkü 1 double varsayılır!)
+
+```
+
+💡 Tam sayı için `L` kullan: `5L` = integer, `5` = numeric (double)
+
+------------------------------------------------------------------------
+
+## Veri Yapıları – Vektör (vector)
+
+::: nonincremental
+-   R'deki en temel veri yapısıdır.
+-   Aynı tipte birden fazla öğeden oluşur (**homojen yapı**).
+-   `c()` fonksiyonu ile oluşturulur.
+:::
+
+```{r}
+x <- c(1, 2, 3, 5, 8)
+typeof(x)        # "double"
+length(x)        # 5
+```
+
+> 💡 Vektör, sıralı tek boyutlu veri deposudur.
+
+### Vektör Özellikleri
+
+```{r}
+y <- c(TRUE, FALSE, TRUE)
+z <- c("a", "b", "c")
+class(y)    # "logical"
+class(z)    # "character"
+```
+
+::: nonincremental
+-   Tüm elemanlar **aynı tipte** olmalıdır.
+
+-   Farklı tipler yazılırsa **dönüştürülür** (örneğin karaktere).
+:::
+
+```{r}
+c(1, "a", TRUE)   # → hepsi karaktere dönüşür
+```
+
+------------------------------------------------------------------------
+
+## Veri Yapıları – Matrisler (matrix)
+
+::: nonincremental
+-   2 boyutlu vektör gibidir: satır ve sütunlardan oluşur.
+-   Tüm elemanlar aynı tiptedir (numeric, character, vb.)
+:::
+
+```{r}
+m <- matrix(1:9, nrow = 3)
+print(m)
+```
+
+💡 Vektörler 1D, matrisler 2D'dir. Ama ikisi de **homojen** tiplidir.
+
+### Matris Özellikleri
+
+```{r}
+dim(m)           # boyutları
+nrow(m); ncol(m) # satır / sütun sayısı
+```
+
+::: nonincremental
+-   `byrow = TRUE` ile satır satır doldurabilirsin
+
+-   Indexleme: `m[1, 2]` → 1. satır, 2. sütun
+:::
+
+```{r}
+m[1,2]
+```
+
+## Veri Yapıları – Veri Çerçeveleri (data.frame)
+
+::: nonincremental
+-   En yaygın kullanılan veri yapısıdır.
+-   Satırlar = gözlemler, sütunlar = değişkenler
+-   Her sütun farklı veri tipine sahip olabilir (**heterojen** yapı)
+:::
+
+```{r}
+df <- data.frame(
+  isim  = c("Ali", "Ayşe"),
+  yas   = c(25, 24),
+  mezun = c(TRUE, FALSE)
+)
+str(df)
+```
+
+### data.frame Özellikleri
+
+```{r}
+nrow(df); ncol(df)
+names(df)
+df$yas
+```
+
+💡 tidyverse dünyasında `data.frame` yerine `tibble` önerilir.
+
+------------------------------------------------------------------------
+
+## Veri Yapıları – Listeler (list)
+
+::: nonincremental
+-   R'deki en esnek yapıdır.
+-   Farklı tipte ve boyutta objeleri birlikte tutabilir (**heterojen yapı**)
+:::
+
+```{r}
+lst <- list(
+  sayı = 42,
+  kelime = "merhaba",
+  vektor = c(1, 2, 3),
+  df = data.frame(a = 1:2)
+)
+str(lst)
+```
+
+### Listeye Erişim
+
+```{r}
+lst$sayı
+lst[["kelime"]]
+lst[[3]][2]   # 3. elemanın 2. öğesi
+```
+
+------------------------------------------------------------------------
+
+## Veri Tipleri – Faktörler (factor)
+
+::: nonincremental
+-   Faktörler, **kategorik değişkenleri** temsil eder.
+-   `character` verilerden türetilir ama **önceden tanımlı düzeyleri (levels)** vardır.
+-   Grafikler ve modellerde kategorik verileri düzenli gösterir.
+:::
+
+```{r}
+renkler <- c("kırmızı", "mavi", "kırmızı", "yeşil")
+faktor_renk <- factor(renkler)
+print(faktor_renk)
+levels(faktor_renk)
+```
+
+### Faktörlerin Özellikleri
+
+```{r}
+class(faktor_renk)     # "factor"
+is.factor(faktor_renk) # TRUE
+nlevels(faktor_renk)   # 3
+```
+
+::: nonincremental
+-   Her faktör seviyesi arka planda **integer** olarak tutulur.
+-   Faktör seviyeleri varsayılan olarak **alfabetik sıralanır.**
+:::
+
+```{r}
+as.numeric(faktor_renk)
+```
+
+### Sıralı Faktörler (ordered)
+
+::: nonincremental
+-   Faktörler sıralı olabilir: örn. eğitim düzeyi, tatmin seviyesi vb.
+:::
+
+```{r}
+egitim <- factor(c("Lise", "Üniversite", "İlkokul"),
+                 levels = c("İlkokul", "Lise", "Üniversite"),
+                 ordered = TRUE)
+egitim
+```
+
+------------------------------------------------------------------------
+
+## Fonksiyonlar
+
+::: nonincremental
+-   Fonksiyonlar tekrar eden işlemleri toplamak için kullanılır.
+-   Yapı: `function(argümanlar) { işlemler }`
+:::
+
+```{r}
+
+# Bu fonksiyon, aldığı sayının karesini döndürür.
+kare <- function(x) {
+  x^2
+}
+
+kare(5)
+```
+
+### return() Fonksiyonu
+
+::: nonincremental
+-   `return()` ile fonksiyondan değer döndürülür.
+-   Ama genellikle **son satır** otomatik olarak döndürülür.
+:::
+
+```{r}
+topla <- function(a, b) {
+  return(a + b)
+}
+
+topla(3, 4)
+
+```
+
+💡 `return()` kullanmak zorunda değilsin ama bazen okunabilirliği artırır.
+
+### Birden Fazla İşlem İçeren Fonksiyon
+
+```{r}
+ortalama_fark <- function(x, y) {
+  ort1 <- mean(x)
+  ort2 <- mean(y)
+  fark <- ort1 - ort2
+  return(fark)
+}
+
+ortalama_fark(c(1,2,3), c(10,20,30))
+```
+
+💡 Fonksiyon içinde yerel değişkenler tanımlayabilir ve bunları dışarıya döndürebilirsin.
+
+------------------------------------------------------------------------
+
+## Kontrol İfadeleri – if / else
+
+::: nonincremental
+-   Koşullu ifadeler için `if` ve `else` kullanılır.
+-   Mantıksal koşul sağlanıyorsa işlem yapılır, değilse alternatif çalışır.
+:::
+
+```{r}
+sayi <- 7
+
+if (sayi %% 2 == 0) {
+  print("Çift sayı")
+} else {
+  print("Tek sayı")
+}
+```
+
+💡 `%%` operatörü kalanı verir. `7 %% 2 = 1`
+
+## ifelse() Fonksiyonu
+
+::: nonincremental
+-    Vektörel koşullu işlem yapar, tek satırda yazılır.
+:::
+
+```{r}
+yas <- c(17, 21, 19)
+ifelse(yas >= 18, "Yetişkin", "Çocuk")
+```
+
+💡 `ifelse()` fonksiyonu veri çerçeveleriyle birlikte çok kullanışlıdır.
+
+------------------------------------------------------------------------
+
+## Döngüler – for
+
+::: nonincremental
+-   Belirli bir işlemi çok sayıda tekrar etmek için kullanılır.
+:::
+
+```{r}
+for (i in 1:3) {
+  print(paste("Merhaba", i))
+}
+```
+
+💡 `paste()` metinleri birleştirir. Döngüde her turda `i` değeri değişir.
+
+### while Döngüsü
+
+::: nonincremental
+-    Koşul sağlandığı sürece döner. Sonsuz döngüye dikkat!
+:::
+
+```{r}
+x <- 1
+while (x <= 3) {
+  print(x)
+  x <- x + 1
+}
+```
+
+💡 `break` ile döngü sonlandırılabilir, `next` ile bir adım atlanabilir.
+
+```{r}
+for (i in 1:5) {
+  if (i == 3) {
+    next
+  }
+  print(i)
+}
+```
+
+------------------------------------------------------------------------
+
+## Matematiksel İşlemler
+
+R, hesap makinesi gibi çalışır. İşte en sık kullanılan işlemler:
+
+| İşlem         | Operatör / Fonksiyon | Örnek             |
+|---------------|----------------------|-------------------|
+| Toplama       | `+`                  | `3 + 5`           |
+| Çıkarma       | `-`                  | `10 - 2`          |
+| Çarpma        | `*`                  | `4 * 6`           |
+| Bölme         | `/`                  | `8 / 2`           |
+| Üs alma       | `^` veya `**`        | `2^3` veya `2**3` |
+| Kalan alma    | `%%`                 | `10 %% 3` → 1     |
+| Tamsayı bölme | `%/%`                | `10 %/% 3` → 3    |
+
+### Bazı Yerleşik Matematik Fonksiyonları
+
+```{r}
+sqrt(16)              # Karekök: 4
+log(100, base = 10)   # Logaritma
+round(3.14159, 2)     # Virgülden sonra 2 basamak
+abs(-5)               # Mutlak değer
+sum(1:10)             # Toplam
+mean(c(5, 10, 15))    # Ortalama
+var(c(3,6,8,12))      # Varyans
+sd(c(3,8,6,12))       # Standart sapma
+```
+
+💡 R’de işlemler genellikle **vektörel** çalışır: `1:5 + 10` → her elemana 10 eklenir.
+
+------------------------------------------------------------------------
+
+## Verilerin İçe Aktarılması
+
+### 📄 CSV Dosyası Okumak
+
+```{r}
+#| eval: false
+veri <- read.csv("path/dataset.csv")
+```
+
+💡Alternatif olarak `readr` paketindeki `read_csv()` fonksiyonu kullanılabilir ve daha hızlı çalışır.
+
+### 📊 Excel Dosyası Okumak
+
+```{r}
+#| eval: false
+library(readxl)
+veri <- read_excel("path/data.xlsx", sheet = 1)
+
+```
+
+💡 `.xlsx` dosyaları için `readxl`, `.xls` için `gdata` paketi kullanılabilir.
+
+### 💾 R’ye Özgü Formatları Okumak
+
+```{r}
+#| eval: false
+load("path/data.RData")     # Birden çok nesne yükler
+readRDS("data/df.rds")      # Tek bir nesne (örneğin bir veri çerçevesi)
+```
+
+## Verilerin Dışa Aktarılması
+
+### 📄 CSV Olarak Kayıt
+
+```{r}
+#| eval: false
+write.csv(veri, "veriler/cikti.csv")
+```
+
+💡Alternatif olarak `readr` paketindeki `write_csv()` fonksiyonu kullanılabilir.
+
+### 🧠 R Formatında Kayıt
+
+```{r}
+#| eval: false
+save(veri, file = "veriler/veri.RData")     # Çoklu nesne
+saveRDS(veri, "veriler/veri.rds")           # Tek nesne
+```
+
+## 📊 Excel Formatında Kayıt
+
+::: nonincremental
+-   Excel dosyası yazmak için `openxlsx` veya `writexl` paketleri kullanılır.
+-   `writexl` sade ve bağımlılığı az olan bir seçenektir.
+:::
+
+🟢 Örnek: `writexl::write_xlsx()`
+
+```{r}
+#| eval: false
+library(writexl)
+write_xlsx(df, "veriler/rapor.xlsx")
+```
+
+`df` bir veri çerçevesi (data.frame) olmalıdır.
+
+🔵 Alternatif: `openxlsx` ile daha fazla kontrol
+
+```{r}
+#| eval: false
+library(openxlsx)
+wb <- createWorkbook()
+addWorksheet(wb, "Tablo 1")
+addWorksheet(wb, "Tablo 2")
+writeData(wb, "Tablo 1", df1)
+writeData(wb, "Tablo 2", df2)
+saveWorkbook(wb, "veriler/detayli_rapor.xlsx", overwrite = TRUE)
+```
+
+## ⚠️ Dosya Yolu Hakkında Dikkat Edilmesi Gerekenler
+
+::: nonincremental
+-   R’de dosya okuma/yazma işlemlerinde **dosya yolu (path)** çok önemlidir.
+-   Dosyanın konumu **çalışma dizinine (working directory)** göre belirlenir.
+:::
+
+```{r}
+#| eval: false
+getwd()     # Şu anda hangi klasördeyim?
+setwd("C:/Users/Fatih/Belgeler/Proje")  # Çalışma dizinini değiştirir
+```
+
+### ❗️ Dikkat Edilecek Noktalar
+
+::: nonincremental
+-   **Windows yol ayracı:** `\` değil `/` kullan (veya `\\`)\
+    ✅ `"C:/veri/dosya.csv"`\
+    ❌ `"C:\veri\dosya.csv"` ← hata verir!
+-   **Dosya ismini doğru yaz:**
+    -   Uzantıyı unutma (`.csv`, `.xlsx`, `.rds`, vb.)
+
+    -    Büyük/küçük harf duyarlıdır.
+-   **Dosya gerçekten o dizinde mi?**
+    -    `file.exists("dosya.csv")` ile kontrol et.
+:::
+
+### 💡 En Sağlıklı Yol: `here` Paketi
+
+```{r}
+#| eval: false
+library(here)
+read_csv(here("veriler", "dataset.csv"))
+```
+
+`here()` ile proje içinde göreli dosya yolu tanımlayarak dosya karmaşasından kurtulursun.
+
+#  {style="text-align: center;font-size:150%"}
+
+**Teşekkürler**
+
+\
+
+Muhammed Fatih TÜZEN
+
+e-posta: **`fatih.tuzen@tuik.gov.tr`**
