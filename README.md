@@ -18,7 +18,7 @@ Bu Github reposu, 16 Mayıs 2025 tarihinde 6. Uluslararası Uygulamalı İstatis
 
 🔗 [R Programlama Kitabı (TR)](https://rprogramlama.netlify.app)
 
-🔗 [linkedin.Linkedin/in/](https://www.linkedin.com/in/fatihtuzen)[Muhammed Fatih Tüzen](https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/)
+🔗 [Muhammed Fatih Tüzen](https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/)
 
 ------------------------------------------------------------------------
 
