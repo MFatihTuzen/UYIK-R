@@ -60,7 +60,7 @@ execute:
 
 <div>
 
-📦 Ders Materyalleri : [github.com/kullanici/proje](https://github.com/kullanici/proje)
+📦 Ders Materyalleri: <https://github.com/MFatihTuzen/UYIK-R>
 
 </div>
 :::
