@@ -1,6 +1,6 @@
 # R ile Veri Analizi Eğitimi 🎓
 
-Bu repo, **Dr. Muhammed Fatih TÜZEN** tarafından 6. Uluslararası Uygulamalı İstatistik Kongresi (UYİK-2025) kapsamında hazırlanan R ile Veri Analizi eğitimine ait sunum materyallerini içermektedir.
+Bu Github reposu, 16 Mayıs 2025 tarihinde 6. Uluslararası Uygulamalı İstatistik Kongresi (UYİK-2025) kapsamında hazırlanan R ile Veri Analizi eğitimine ait sunum materyallerini içermektedir.
 
 ------------------------------------------------------------------------
 
