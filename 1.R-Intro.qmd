@@ -520,7 +520,7 @@ if (sayi %% 2 == 0) {
 ## ifelse() Fonksiyonu
 
 ::: nonincremental
--    Vektörel koşullu işlem yapar, tek satırda yazılır.
+-   Vektörel koşullu işlem yapar, tek satırda yazılır.
 :::
 
 ```{r}
@@ -549,7 +549,7 @@ for (i in 1:3) {
 ### while Döngüsü
 
 ::: nonincremental
--    Koşul sağlandığı sürece döner. Sonsuz döngüye dikkat!
+-   Koşul sağlandığı sürece döner. Sonsuz döngüye dikkat!
 :::
 
 ```{r}
@@ -705,9 +705,9 @@ setwd("C:/Users/Fatih/Belgeler/Proje")  # Çalışma dizinini değiştirir
 -   **Dosya ismini doğru yaz:**
     -   Uzantıyı unutma (`.csv`, `.xlsx`, `.rds`, vb.)
 
-    -    Büyük/küçük harf duyarlıdır.
+    -   Büyük/küçük harf duyarlıdır.
 -   **Dosya gerçekten o dizinde mi?**
-    -    `file.exists("dosya.csv")` ile kontrol et.
+    -   `file.exists("dosya.csv")` ile kontrol et.
 :::
 
 ### 💡 En Sağlıklı Yol: `here` Paketi
