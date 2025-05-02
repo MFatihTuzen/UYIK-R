@@ -8,9 +8,9 @@ format:
   revealjs:
     theme: white
     slide-number: true
+    slide-number-format: "c / t"
     footer: "Altıncı Uluslararası Uygulamalı İstatistik Kongresi (UYIK 2025)"
     css: custom.css
-    incremental: true
     scrollable: true
     logo: images/TUiK_logo_Tr.jpg
 editor: visual
@@ -729,3 +729,5 @@ read_csv(here("veriler", "dataset.csv"))
 Muhammed Fatih TÜZEN
 
 e-posta: **`fatih.tuzen@tuik.gov.tr`**
+
+Linkedin: [`https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/`](https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/)

@@ -5,7 +5,7 @@
   max-height: unset !important;
 }
 
-/* Kalın kırmızı-beyaz üst şerit - her slaytta sabit */
+/* Üst şerit */
 .reveal::before {
   content: "";
   position: fixed;
@@ -20,4 +20,15 @@
   z-index: 9999;
 }
 
+/* Slayt numarası – alta alınmış */
+.reveal .slide-number {
+  top: 45px !important;       /* Şeridin hemen altı */
+  right: 1em !important;
+  color: black !important;
+  background-color: white;    /* opsiyonel: okunabilirlik için zemin */
+  padding: 2px 6px;           /* hafif boşluk */
+  border-radius: 4px;         /* estetik */
+  font-size: 0.9em;
+  z-index: 10000 !important;  /* şeridin üstüne çıkar ama logoya karışmaz */
+}
 

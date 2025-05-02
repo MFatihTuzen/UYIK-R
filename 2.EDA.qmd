@@ -1,0 +1,570 @@
+---
+title: "R Programlama ile Veri Analizi"
+subtitle: "Keşifçi Veri Analizi"
+author: "Dr. Muhammed Fatih TÜZEN"
+date: 2025-5-16
+date-format: "DD-MM-YYYY"
+format: 
+  revealjs:
+    theme: white
+    slide-number: true
+    slide-number-format: "c / t"
+    footer: "Altıncı Uluslararası Uygulamalı İstatistik Kongresi (UYIK 2025)"
+    css: custom.css
+    scrollable: true
+    logo: images/TUiK_logo_Tr.jpg
+editor: visual
+execute:
+  echo: true
+  eval: true
+---
+
+## Sunum Planı
+
+<div>
+
+::: nonincremental
+-   Keşifçi Veri Analizi
+-   Veri ile Tanışma
+-   Sürekli Değişkenler
+-   Kategorik Değişkenler
+-   Zaman Serileri
+:::
+
+<div>
+
+📦 Ders Materyalleri: <https://github.com/MFatihTuzen/UYIK-R>
+
+</div>
+
+</div>
+
+------------------------------------------------------------------------
+
+## Keşifçi Veri Analizi Nedir?
+
+-   **Keşifçi Veri Analizi (EDA)**, bir veri kümesini önyargısız şekilde inceleyerek veri yapısını, eğilimleri ve olağandışı durumları ortaya çıkarmaya odaklanır.
+-   Amaç: veri hakkında **soru sormak**, **anlam çıkarmak**, **hipotez üretmek** ve **modelleme öncesi içgörü kazanmak**.
+
+> 📌 *"Modellemeden önce veriye saygı göster." – Hadley Wickham*
+
+------------------------------------------------------------------------
+
+## Neden Keşifçi Veri Analizi?
+
+-   **Veriyi tanımadan analiz yapılamaz.**
+-   Hatalı veri → hatalı sonuç → hatalı karar.
+-   Dağılım, aykırı değer, eksiklik gibi yapıları önceden bilmek gerekir.
+
+### 🧠 Kazanımlar:
+
+-   Değişkenlerin yapısını anlama
+-   Değişkenler arası ilişkileri görselleştirme
+-   Aykırı değerleri tespit etme
+-   Temizleme ve dönüştürme stratejileri geliştirme
+
+------------------------------------------------------------------------
+
+## Tavsiye Edilen Kaynaklar
+
+-   📘 [*R for Data Science* – Wickham & Grolemund (Bölüm 7–10)](https://r4ds.hadley.nz)
+-   📘 [*Exploratory Data Analysis with R* – Roger Peng](https://bookdown.org/rdpeng/exdata/)
+-   📦 Paketler: `dplyr`, `ggplot2`, `skimr`, `janitor`, `DataExplorer`, `GGally`, `summarytools`
+
+------------------------------------------------------------------------
+
+## Veri Seti: `palmerpenguins::penguins`
+
+-   `palmerpenguins` veri seti, Antarktika'daki 3 penguen türüne ait biyolojik ölçümler içerir.
+-   Hem **sürekli** hem de **kategorik** değişkenler içerdiği için keşifçi veri analizine çok uygundur.
+-   Doğrudan kullanılabilir – temiz, eksiksiz ve anlamlıdır.
+
+### Neden `penguins`?
+
+-   Öğretici: görselleştirme, gruplama, özetleme için ideal
+
+-   Hızlı: büyük değil ama analiz için yeterli
+
+-   Dengeli: sürekli ve kategorik değişkenler uyumlu
+
+-   Temiz: veri hazırlığı gerektirmez
+
+-   İlgi çekici: öğrencilerin ilgisini çeker 🐧
+
+## Değişkenler
+
+| Değişken            | Açıklama                        | Tür       |
+|---------------------|---------------------------------|-----------|
+| `species`           | Tür (Adelie, Gentoo, Chinstrap) | Kategorik |
+| `island`            | Bulunduğu ada                   | Kategorik |
+| `bill_length_mm`    | Gaga uzunluğu                   | Sürekli   |
+| `bill_depth_mm`     | Gaga derinliği                  | Sürekli   |
+| `flipper_length_mm` | Kanat uzunluğu                  | Sürekli   |
+| `body_mass_g`       | Vücut ağırlığı                  | Sürekli   |
+| `sex`               | Cinsiyet                        | Kategorik |
+| `year`              | Ölçüm yılı                      | Kategorik |
+
+------------------------------------------------------------------------
+
+## Veriyi Yükleyelim
+
+```{r}
+#| eval: false
+install.packages("palmerpenguins")   # ilk defa kullanılıyorsa
+
+```
+
+```{r}
+library(palmerpenguins)
+data("penguins")
+```
+
+### 👁️‍🗨️ İlk Bakış
+
+```{r}
+head(penguins)
+str(penguins)
+summary(penguins)
+```
+
+💡 `penguins` veri seti `iris`'in modern, çok boyutlu ve daha gerçekçi bir versiyonu gibidir.
+
+## 🧭 **Veri ile Tanışma**
+
+Bu bölümde:
+
+-   Veriyi ilk kez görme
+
+-   Yapısını anlama
+
+-   Eksiklikleri fark etme
+
+-   İlk istatistiksel özetlemeler
+
+-   Gözlemleri ve değişkenleri sayma
+
+…gibi temel ama çok önemli adımları işleyeceğiz.
+
+## 🧭 **Veri ile Tanışma – İlk Adımlar**
+
+Bir veriyle ilk karşılaştığınızda sormanız gereken sorular:
+
+-   📏 Kaç gözlem (satır) ve kaç değişken (sütun) var?
+-   🔠 Değişken türleri neler?
+-   ❓ Eksik veri var mı?
+-   🔁 Kayıtlar benzersiz mi?
+-   👁️ İlk bakışta dikkat çeken bir durum var mı?
+
+------------------------------------------------------------------------
+
+## Veri Yapısını Gözlemlemek
+
+```{r}
+library(dplyr)
+library(palmerpenguins)
+
+str(penguins)       # Değişken adları ve türleri
+glimpse(penguins)   # Değişken adları ve türleri, str fonksiyonuna göre daha okunabilir biçimde gösterir
+names(penguins)     # Değişken adlarını verir
+dim(penguins)       # Gözlem ve değişken sayısı
+head(penguins)      # İlk birkaç gözlem
+tail(penguins)      # Son birkaç gözlem
+```
+
+💡 `glimpse()` fonksiyonu `dplyr` paketine aittir ve `str()` fonksiyonunun daha okunabilir bir versiyonudur.
+
+## Eksik Veriye Bakış
+
+```{r}
+summary(penguins)       # sayısal özet
+anyNA(penguins)         # veri setinde eksik var mı?
+colSums(is.na(penguins)) # hangi değişkende kaç eksik var?
+```
+
+💡 `summary()` sadece sayısal değil, kategorik değişkenlerin seviyelerini de gösterir.
+
+## Kayıtlar Tekil mi?
+
+```{r}
+nrow(penguins)
+nrow(unique(penguins))   # Aynı satırdan kaç tane var?
+```
+
+💡 Eğer `nrow()` sayıları farklıysa veri setinde **kopya kayıtlar** vardır.
+
+💡 Aynı kayıtlar tekrar ediyorsa analiz sonuçları yanıltıcı olabilir.
+
+```{r}
+duplicated(penguins)        # Hangi satırlar tekrar ediyor?
+sum(duplicated(penguins))   # Toplam kaç tane?
+penguins[duplicated(penguins), ]  # Neler tekrar ediyor?
+```
+
+🔎 Bu fonksiyonlar temiz veri analizi için kritik. Aynı gözlemi iki kez analiz edersen sonuçlar bozulur!
+
+### Alternatif: `dplyr::distinct()`
+
+```{r}
+nrow(penguins)
+nrow(dplyr::distinct(penguins))
+```
+
+💡 Modern tidyverse yaklaşımı ama aynı mantık: yinelenen satırları ayıkla.
+
+## Tavsiye Edilen Paketler
+
+-   📦 `skimr::skim()` → kapsamlı özet
+
+-   📦 `janitor::tabyl()` → kategorik değişken sayımı
+
+-   📦 `visdat::vis_miss()` → eksik veri görselleştirme
+
+## Alternatif: `skimr::skim()`
+
+```{r}
+library(skimr)
+skim(penguins)
+```
+
+-   Tüm değişkenleri hem tip hem özet istatistik ile gösterir.
+
+-   Eksik değer, seviye sayısı, min–max gibi detayları sunar.
+
+> 💡 `skim()` fonksiyonu `summary()`'ye göre çok daha detaylıdır.
+
+## Sürekli Değişkenlerle Keşif
+
+> Sürekli değişkenler, dağılım ve merkezi eğilim gibi temel istatistiksel yapıları anlamamıza yardımcı olur.
+
+### 🔍 Neler Anlamaya Çalışırız?
+
+-   Tipik değer nedir? (ortalama, medyan)\
+-   Değerler ne kadar yayılmış? (standart sapma, min–max)\
+-   Aykırı değer var mı?\
+-   Dağılım simetrik mi, çarpık mı?
+
+------------------------------------------------------------------------
+
+## Sayısal Özetler
+
+```{r}
+summary(penguins$body_mass_g)
+mean(penguins$flipper_length_mm, na.rm = TRUE)
+sd(penguins$flipper_length_mm, na.rm = TRUE)
+```
+
+⚠️ Bu fonksiyonlar veri hakkında ilk fikirleri verir ama dağılımı **tam olarak** anlatmaz.
+
+## Keşifçi Veri Analizinde Görselleştirmenin Rolü
+
+> *“Veri, görselleştirilmeden önce yalnızca bir sayı yığınıdır.”*
+
+### 📈 Ne Sağlar?
+
+-   **Dağılımı anlama**: Histogram, density plot\
+-   **Aykırı değerleri tespit etme**: Boxplot\
+-   **İlişkiyi keşfetme**: Scatter plot, bar plot\
+-   **Desen arama**: Grup farklılıkları, zaman etkisi\
+-   **Anomali ayıklama**: Eksik değer, tekrar eden kayıtlar
+
+### 🧠 Yalnızca Estetik Değil, Analitik Bir Araçtır
+
+-   Sayılar her şeyi söylemez.\
+-   Sayılar yanlış yorumlanabilir.\
+-   Grafikler → anlamı sezmek, hipotez kurmak, hata ayıklamak için kullanılır.
+
+------------------------------------------------------------------------
+
+## 🔧 İpucu
+
+-   Bir değişken → histogram / density\
+-   İki sürekli değişken → scatter plot\
+-   Sürekli + kategorik → boxplot\
+-   Kategorik → bar chart\
+-   Zaman serisi → line chart
+
+> 🧭 Unutma: EDA’da görselleştirme, **veriyle sohbet etmektir**.
+
+## Histogram ve Boxplot
+
+🔍 Bu grafikler:
+
+-    Değerlerin nerede yoğunlaştığını,
+
+-    Aykırı değerleri,
+
+-   Simetri / çarpıklık durumlarını ortaya çıkarır.
+
+```{r}
+hist(penguins$body_mass_g,
+     main = "Vücut Ağırlığı Histogramı",
+     col = "skyblue", border = "white")
+```
+
+```{r}
+boxplot(penguins$flipper_length_mm,
+        main = "Kanat Uzunluğu Boxplot",
+        col = "lightgreen")
+```
+
+## Scatter Plot – Değişkenler Arasındaki İlişki
+
+```{r}
+#| fig.align: center
+
+plot(penguins$flipper_length_mm, penguins$body_mass_g,
+     main = "Kanat Uzunluğu vs Ağırlık",
+     xlab = "Kanat Uzunluğu (mm)",
+     ylab = "Vücut Ağırlığı (g)",
+     col = "darkblue", pch = 19)
+```
+
+## Scatter Plot – Değişkenler Arasındaki İlişki
+
+> 🔍 İki sürekli değişkenin ilişkisini inceleriz:\
+> Daha uzun kanat genellikle daha yüksek vücut ağırlığı demektir.
+
+> ⚠️ Scatter plot, korelasyon ve regresyon gibi ileri analizlerin **giriş kapısıdır.**\
+> Bu nedenle EDA’da en çok başvurulan grafiklerden biridir.
+
+## 🧮 **Kategorik Değişkenlerle Keşif**
+
+Bu slaytlarda odak noktamız:
+
+-    Kategorik değişkenlerin yapısını anlamak
+
+-   Frekans analizi yapmak
+
+-   Basit bar grafiklerle desteklemek
+
+-   Ve her zamanki gibi: anlamaya, yorumlamaya, sorgulamaya yönlendirmek
+
+------------------------------------------------------------------------
+
+## Kategorik Değişkenlerle Keşif
+
+> Kategorik değişkenler, gözlemleri sınıflara ayırır.\
+> Bu sınıfların sıklıkları, çeşitliliği ve dağılımları bize **çok şey anlatır**.
+
+### 🔍 Ne Tür Sorular Sorulur?
+
+-   En sık görülen kategori hangisi?
+-   Kaç farklı kategori var?
+-   Boş değerler var mı?
+-   Oranlar nasıl dağılmış?
+
+### Örnek Değişkenler
+
+-   `species` – Tür (Adelie, Gentoo, Chinstrap)
+
+-   `island` – Ölçüm adası
+
+-   `sex` – Cinsiyet
+
+------------------------------------------------------------------------
+
+## Frekans ve Oranlarla İnceleme
+
+```{r}
+table(penguins$species)
+table(penguins$island)
+
+# tidyverse alternatifi:
+library(dplyr)
+penguins %>% count(sex)
+
+# janitor paketiyle daha zengin:
+library(janitor)
+penguins %>% tabyl(species)
+```
+
+> 📌 `tabyl()` fonksiyonu frekans + oranı aynı tabloda verir → öğretici ve sade
+>
+> ⚠️ Kategorik değişkenlerde **frekans + bağlam = anlamlı veri** demektir.
+
+## Çubuk Grafik – Türlere Göre Sayım
+
+```{r}
+barplot(table(penguins$species),
+        col = "steelblue",
+        main = "Penguen Türlerine Göre Dağılım")
+```
+
+📊 Barplot en sade ama güçlü görsellerdendir.\
+
+Özellikle “hangi kategori daha baskın?” sorusuna cevap verir.
+
+## Ne Öğrendik?
+
+> 🔎 En yaygın tür `Adelie`, en az sayıda `Chinstrap`.\
+> `sex` değişkeninde eksik veri var.\
+> `island` değişkeni 3 kategorili ve dengeli dağılmış değil.
+
+> 📌 Kategorik değişkenlerde frekans farkı → örnekleme, veri toplama veya gerçek dünya etkileri olabilir. Sorgulanmalıdır.
+
+## Pasta Grafik – Oranların Sezgisel Gösterimi
+
+```{r}
+# Kategorik değişken: species
+tablo <- table(penguins$species)
+
+pie(tablo,
+    main = "Penguen Türlerine Göre Dağılım (Pie Chart)",
+    col = c("lightblue", "lightgreen", "lightpink"))
+```
+
+## Pasta Grafik – Oranların Sezgisel Gösterimi
+
+> 🎯 Pasta grafik, oranların sezgisel görünümünü verir.\
+> 🧠 Ancak pasta grafik sayılarla değil **alanla** çalıştığı için:
+
+-    Küçük farklar kolay ayırt edilemez
+
+-   Fazla kategori varsa karmaşıklaşır
+
+-   Renk seçimi yoruma çok etki eder
+
+### 📌 Not:
+
+⚠️ Pasta grafik sadece **az kategorili** ve **denge açısından güçlü** verilerde önerilir.\
+Profesyonel raporlamada genellikle bar chart tercih edilir.
+
+## ⏳ **Zaman Serileriyle Keşifçi Veri Analizi**
+
+Amaç:
+
+-   Zamanın veri üzerindeki etkisini tanımak
+
+-   Zaman serisini nasıl tanımlarız, nasıl inceleriz
+
+-   Temel görselleştirme ve desen arama
+
+------------------------------------------------------------------------
+
+## Zaman Serisi Nedir?
+
+> Zaman serisi, **zaman boyutuna göre sıralı veri kümesidir.**
+
+-   Gözlemler belirli aralıklarla toplanır (günlük, aylık, yıllık)
+-   Sıralama önemlidir – **veri bağımsız değildir**
+-   Amaç: **değişimi anlamak**, eğilim ve mevsimsellik gibi yapıları yakalamaktır
+
+### Örnek Sorular:
+
+-   Satışlar yıldan yıla nasıl değişmiş?
+-   Mevsimsel bir desen var mı?
+-   Son zamanlarda bir kırılma olmuş mu?
+
+> ⏱️ Zaman boyutu dikkate alınmadan yapılan analiz, genellikle **eksik analizdir.**
+
+## 📦 **Veri Seti – `AirPassengers`**
+
+-   `AirPassengers` verisi: 1949–1960 arasında her ayki uluslararası yolcu sayısını içerir
+-   Hazır gelir → ek paket gerekmez
+-   Aylık zaman serisi formatındadır (`ts` sınıfı)
+
+### Yükleme ve İnceleme
+
+```{r}
+data("AirPassengers")
+class(AirPassengers)
+start(AirPassengers)
+end(AirPassengers)
+frequency(AirPassengers)
+```
+
+💡 `ts` sınıfı zaman serisi analizinde temel sınıftır. Dönemsellik frekansına (`12`) göre otomatik işler.
+
+## Zaman Serisinin Görselleştirilmesi
+
+```{r}
+plot(AirPassengers,
+     main = "Aylık Uluslararası Yolcu Sayısı (1949–1960)",
+     ylab = "Yolcu Sayısı (bin)",
+     xlab = "Yıl",
+     col = "blue")
+```
+
+## 🧠 **Gözlem ve Yorumlama**
+
+📊 Bu grafikle:
+
+-    Genel artış trendini
+
+-   Mevsimsel desenleri
+
+-   Artan değişkenliği fark edebiliriz
+
+### Ne Gördük?
+
+> 🔎 Zaman ilerledikçe hem yolcu sayısı hem de dalgalanma artıyor.\
+> ✈️ Her yıl belirgin bir mevsimsel desen var.\
+> 📈 Genel bir yukarı trend gözlemleniyor.
+
+### Basit ama güçlü sorular:
+
+-   Yaz aylarında hep zirve mi yapıyor?
+-   Artış lineer mi yoksa ivmeli mi?
+-   Mevsimsel etki yıllara göre değişiyor mu?
+
+> 🧭 Bu tür sorular modelleme öncesinde veriye yön verir.
+
+------------------------------------------------------------------------
+
+## R'de `ts` Sınıfının Önemi
+
+> Zaman serisi verisi, sıradan bir vektör ya da data frame değil; **zaman yapısını içeren özel bir nesne** olmalıdır.
+
+### Neden `ts` kullanmalıyız?
+
+-   ⏳ `ts` nesnesi **zaman bilgisini içerir** (başlangıç zamanı, frekans)
+-   🔧 Birçok zaman serisi fonksiyonu (`decompose()`, `HoltWinters()`, `acf()`, `stl()`, vs.) sadece `ts` sınıfı ile çalışır
+-   📈 `plot()` gibi görselleştirme fonksiyonları zaman eksenini otomatik biçimlendirir
+
+------------------------------------------------------------------------
+
+## Basit Vektörü `ts` Nesnesine Dönüştürme
+
+```{r}
+# Rastgele oluşturulmuş 36 gözlem
+set.seed(123)
+x <- rnorm(36, mean = 100, sd = 10)
+
+# ts sınıfına çevirme: başlangıç Ocak 2020, frekans çeyreklik (4)
+xts <- ts(x, start = c(2020, 1), frequency = 4)
+
+plot(xts, main = "Rastgele Oluşturulmuş Zaman Serisi")
+```
+
+## 🎯 Ana Mesaj
+
+🔍 **Veriyi Tanımadan Analiz Yapılmaz**\
+→ Veri yapısı, eksiklik, aykırılık ve anlam ilk adımda görülmelidir.
+
+📊 **Görselleştirme sadece süs değil, bir keşif aracıdır**\
+→ Histogram, boxplot, scatter plot gibi araçlar sorular sordurur.
+
+🧮 **Sayısal özetler önemlidir ama tek başına yeterli değildir**\
+→ Dağılımın yapısını mutlaka grafikle destekle.
+
+⚠️ **Kategorik değişkenlerde bağlam her şeydir**\
+→ Frekanslar anlam ifade etmeli, yüzdelerle desteklenmeli.
+
+⏳ **Zaman serisi verisi, `ts` nesnesine dönüştürülmelidir**\
+→ Aksi halde birçok analiz ve görselleştirme çalışmaz.
+
+🎯 **Her veri seti bir hikâye anlatır, senin görevin onu duymaktır.**
+
+> 🧠 Veriye önce saygı, sonra analiz.\
+> ✨ EDA = Keşfet, yorumla, hipotez kur.\
+> Ve unutma: **Veriyi anlamadan model kurma.**
+
+#  {style="text-align: center;font-size:150%"}
+
+**Teşekkürler**
+
+Muhammed Fatih TÜZEN
+
+e-posta: **`fatih.tuzen@tuik.gov.tr`**
+
+Linkedin: [`https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/`](https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/)

@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="2.EDA_files/libs/clipboard/clipboard.min.js"></script>
+<script src="2.EDA_files/libs/quarto-html/tabby.min.js"></script>
+<script src="2.EDA_files/libs/quarto-html/popper.min.js"></script>
+<script src="2.EDA_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="2.EDA_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="2.EDA_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="2.EDA_files/libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.39">
+
+  <meta name="author" content="Dr.&nbsp;Muhammed Fatih TÜZEN">
+  <title>R Programlama ile Veri Analizi</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="2.EDA_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="2.EDA_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="2.EDA_files/libs/revealjs/dist/theme/quarto-bbe7401fe57d4b791b917637bb662036.css">
+  <link rel="stylesheet" href="custom.css">
+  <link href="2.EDA_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="2.EDA_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="2.EDA_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="2.EDA_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">R Programlama ile Veri Analizi</h1>
+  <p class="subtitle">Keşifçi Veri Analizi</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Dr.&nbsp;Muhammed Fatih TÜZEN 
+</div>
+</div>
+</div>
+
+  <p class="date">16-05-2025</p>
+</section>
+<section id="sunum-planı" class="slide level2">
+<h2>Sunum Planı</h2>
+<div>
+<div>
+<ul>
+<li>Keşifçi Veri Analizi</li>
+<li>Veri ile Tanışma</li>
+<li>Sürekli Değişkenler</li>
+<li>Kategorik Değişkenler</li>
+<li>Zaman Serileri</li>
+</ul>
+</div>
+<div>
+<p>📦 Ders Materyalleri: <a href="https://github.com/MFatihTuzen/UYIK-R" class="uri">https://github.com/MFatihTuzen/UYIK-R</a></p>
+</div>
+</div>
+</section>
+<section id="keşifçi-veri-analizi-nedir" class="slide level2">
+<h2>Keşifçi Veri Analizi Nedir?</h2>
+<ul>
+<li><strong>Keşifçi Veri Analizi (EDA)</strong>, bir veri kümesini önyargısız şekilde inceleyerek veri yapısını, eğilimleri ve olağandışı durumları ortaya çıkarmaya odaklanır.</li>
+<li>Amaç: veri hakkında <strong>soru sormak</strong>, <strong>anlam çıkarmak</strong>, <strong>hipotez üretmek</strong> ve <strong>modelleme öncesi içgörü kazanmak</strong>.</li>
+</ul>
+<blockquote>
+<p>📌 <em>“Modellemeden önce veriye saygı göster.” – Hadley Wickham</em></p>
+</blockquote>
+</section>
+<section id="neden-keşifçi-veri-analizi" class="slide level2">
+<h2>Neden Keşifçi Veri Analizi?</h2>
+<ul>
+<li><strong>Veriyi tanımadan analiz yapılamaz.</strong></li>
+<li>Hatalı veri → hatalı sonuç → hatalı karar.</li>
+<li>Dağılım, aykırı değer, eksiklik gibi yapıları önceden bilmek gerekir.</li>
+</ul>
+<h3 id="kazanımlar">🧠 Kazanımlar:</h3>
+<ul>
+<li>Değişkenlerin yapısını anlama</li>
+<li>Değişkenler arası ilişkileri görselleştirme</li>
+<li>Aykırı değerleri tespit etme</li>
+<li>Temizleme ve dönüştürme stratejileri geliştirme</li>
+</ul>
+</section>
+<section id="tavsiye-edilen-kaynaklar" class="slide level2">
+<h2>Tavsiye Edilen Kaynaklar</h2>
+<ul>
+<li>📘 <a href="https://r4ds.hadley.nz"><em>R for Data Science</em> – Wickham &amp; Grolemund (Bölüm 7–10)</a></li>
+<li>📘 <a href="https://bookdown.org/rdpeng/exdata/"><em>Exploratory Data Analysis with R</em> – Roger Peng</a></li>
+<li>📦 Paketler: <code>dplyr</code>, <code>ggplot2</code>, <code>skimr</code>, <code>janitor</code>, <code>DataExplorer</code>, <code>GGally</code>, <code>summarytools</code></li>
+</ul>
+</section>
+<section id="veri-seti-palmerpenguinspenguins" class="slide level2">
+<h2>Veri Seti: <code>palmerpenguins::penguins</code></h2>
+<ul>
+<li><code>palmerpenguins</code> veri seti, Antarktika’daki 3 penguen türüne ait biyolojik ölçümler içerir.</li>
+<li>Hem <strong>sürekli</strong> hem de <strong>kategorik</strong> değişkenler içerdiği için keşifçi veri analizine çok uygundur.</li>
+<li>Doğrudan kullanılabilir – temiz, eksiksiz ve anlamlıdır.</li>
+</ul>
+<h3 id="neden-penguins">Neden <code>penguins</code>?</h3>
+<ul>
+<li><p>Öğretici: görselleştirme, gruplama, özetleme için ideal</p></li>
+<li><p>Hızlı: büyük değil ama analiz için yeterli</p></li>
+<li><p>Dengeli: sürekli ve kategorik değişkenler uyumlu</p></li>
+<li><p>Temiz: veri hazırlığı gerektirmez</p></li>
+<li><p>İlgi çekici: öğrencilerin ilgisini çeker 🐧</p></li>
+</ul>
+</section>
+<section id="değişkenler" class="slide level2">
+<h2>Değişkenler</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Değişken</th>
+<th>Açıklama</th>
+<th>Tür</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>species</code></td>
+<td>Tür (Adelie, Gentoo, Chinstrap)</td>
+<td>Kategorik</td>
+</tr>
+<tr class="even">
+<td><code>island</code></td>
+<td>Bulunduğu ada</td>
+<td>Kategorik</td>
+</tr>
+<tr class="odd">
+<td><code>bill_length_mm</code></td>
+<td>Gaga uzunluğu</td>
+<td>Sürekli</td>
+</tr>
+<tr class="even">
+<td><code>bill_depth_mm</code></td>
+<td>Gaga derinliği</td>
+<td>Sürekli</td>
+</tr>
+<tr class="odd">
+<td><code>flipper_length_mm</code></td>
+<td>Kanat uzunluğu</td>
+<td>Sürekli</td>
+</tr>
+<tr class="even">
+<td><code>body_mass_g</code></td>
+<td>Vücut ağırlığı</td>
+<td>Sürekli</td>
+</tr>
+<tr class="odd">
+<td><code>sex</code></td>
+<td>Cinsiyet</td>
+<td>Kategorik</td>
+</tr>
+<tr class="even">
+<td><code>year</code></td>
+<td>Ölçüm yılı</td>
+<td>Kategorik</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="veriyi-yükleyelim" class="slide level2">
+<h2>Veriyi Yükleyelim</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"palmerpenguins"</span>)   <span class="co"># ilk defa kullanılıyorsa</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb2-2"><a href=""></a><span class="fu">data</span>(<span class="st">"penguins"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<h3 id="ilk-bakış">👁️‍🗨️ İlk Bakış</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">head</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 8
+  species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Adelie  Torgersen           39.1          18.7               181        3750
+2 Adelie  Torgersen           39.5          17.4               186        3800
+3 Adelie  Torgersen           40.3          18                 195        3250
+4 Adelie  Torgersen           NA            NA                  NA          NA
+5 Adelie  Torgersen           36.7          19.3               193        3450
+6 Adelie  Torgersen           39.3          20.6               190        3650
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">str</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [344 × 8] (S3: tbl_df/tbl/data.frame)
+ $ species          : Factor w/ 3 levels "Adelie","Chinstrap",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ island           : Factor w/ 3 levels "Biscoe","Dream",..: 3 3 3 3 3 3 3 3 3 3 ...
+ $ bill_length_mm   : num [1:344] 39.1 39.5 40.3 NA 36.7 39.3 38.9 39.2 34.1 42 ...
+ $ bill_depth_mm    : num [1:344] 18.7 17.4 18 NA 19.3 20.6 17.8 19.6 18.1 20.2 ...
+ $ flipper_length_mm: int [1:344] 181 186 195 NA 193 190 181 195 193 190 ...
+ $ body_mass_g      : int [1:344] 3750 3800 3250 NA 3450 3650 3625 4675 3475 4250 ...
+ $ sex              : Factor w/ 2 levels "female","male": 2 1 1 NA 1 2 1 2 NA NA ...
+ $ year             : int [1:344] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">summary</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      species          island    bill_length_mm  bill_depth_mm  
+ Adelie   :152   Biscoe   :168   Min.   :32.10   Min.   :13.10  
+ Chinstrap: 68   Dream    :124   1st Qu.:39.23   1st Qu.:15.60  
+ Gentoo   :124   Torgersen: 52   Median :44.45   Median :17.30  
+                                 Mean   :43.92   Mean   :17.15  
+                                 3rd Qu.:48.50   3rd Qu.:18.70  
+                                 Max.   :59.60   Max.   :21.50  
+                                 NA's   :2       NA's   :2      
+ flipper_length_mm  body_mass_g       sex           year     
+ Min.   :172.0     Min.   :2700   female:165   Min.   :2007  
+ 1st Qu.:190.0     1st Qu.:3550   male  :168   1st Qu.:2007  
+ Median :197.0     Median :4050   NA's  : 11   Median :2008  
+ Mean   :200.9     Mean   :4202                Mean   :2008  
+ 3rd Qu.:213.0     3rd Qu.:4750                3rd Qu.:2009  
+ Max.   :231.0     Max.   :6300                Max.   :2009  
+ NA's   :2         NA's   :2                                 </code></pre>
+</div>
+</div>
+<p>💡 <code>penguins</code> veri seti <code>iris</code>’in modern, çok boyutlu ve daha gerçekçi bir versiyonu gibidir.</p>
+</section>
+<section id="veri-ile-tanışma" class="slide level2">
+<h2>🧭 <strong>Veri ile Tanışma</strong></h2>
+<p>Bu bölümde:</p>
+<ul>
+<li><p>Veriyi ilk kez görme</p></li>
+<li><p>Yapısını anlama</p></li>
+<li><p>Eksiklikleri fark etme</p></li>
+<li><p>İlk istatistiksel özetlemeler</p></li>
+<li><p>Gözlemleri ve değişkenleri sayma</p></li>
+</ul>
+<p>…gibi temel ama çok önemli adımları işleyeceğiz.</p>
+</section>
+<section id="veri-ile-tanışma-ilk-adımlar" class="slide level2">
+<h2>🧭 <strong>Veri ile Tanışma – İlk Adımlar</strong></h2>
+<p>Bir veriyle ilk karşılaştığınızda sormanız gereken sorular:</p>
+<ul>
+<li>📏 Kaç gözlem (satır) ve kaç değişken (sütun) var?</li>
+<li>🔠 Değişken türleri neler?</li>
+<li>❓ Eksik veri var mı?</li>
+<li>🔁 Kayıtlar benzersiz mi?</li>
+<li>👁️ İlk bakışta dikkat çeken bir durum var mı?</li>
+</ul>
+</section>
+<section id="veri-yapısını-gözlemlemek" class="slide level2">
+<h2>Veri Yapısını Gözlemlemek</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb9-2"><a href=""></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb9-3"><a href=""></a></span>
+<span id="cb9-4"><a href=""></a><span class="fu">str</span>(penguins)       <span class="co"># Değişken adları ve türleri</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [344 × 8] (S3: tbl_df/tbl/data.frame)
+ $ species          : Factor w/ 3 levels "Adelie","Chinstrap",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ island           : Factor w/ 3 levels "Biscoe","Dream",..: 3 3 3 3 3 3 3 3 3 3 ...
+ $ bill_length_mm   : num [1:344] 39.1 39.5 40.3 NA 36.7 39.3 38.9 39.2 34.1 42 ...
+ $ bill_depth_mm    : num [1:344] 18.7 17.4 18 NA 19.3 20.6 17.8 19.6 18.1 20.2 ...
+ $ flipper_length_mm: int [1:344] 181 186 195 NA 193 190 181 195 193 190 ...
+ $ body_mass_g      : int [1:344] 3750 3800 3250 NA 3450 3650 3625 4675 3475 4250 ...
+ $ sex              : Factor w/ 2 levels "female","male": 2 1 1 NA 1 2 1 2 NA NA ...
+ $ year             : int [1:344] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">glimpse</span>(penguins)   <span class="co"># Değişken adları ve türleri, str fonksiyonuna göre daha okunabilir biçimde gösterir</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 344
+Columns: 8
+$ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…
+$ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…
+$ bill_length_mm    &lt;dbl&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …
+$ bill_depth_mm     &lt;dbl&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …
+$ flipper_length_mm &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…
+$ body_mass_g       &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …
+$ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…
+$ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">names</span>(penguins)     <span class="co"># Değişken adlarını verir</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "species"           "island"            "bill_length_mm"   
+[4] "bill_depth_mm"     "flipper_length_mm" "body_mass_g"      
+[7] "sex"               "year"             </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">dim</span>(penguins)       <span class="co"># Gözlem ve değişken sayısı</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 344   8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">head</span>(penguins)      <span class="co"># İlk birkaç gözlem</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 8
+  species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Adelie  Torgersen           39.1          18.7               181        3750
+2 Adelie  Torgersen           39.5          17.4               186        3800
+3 Adelie  Torgersen           40.3          18                 195        3250
+4 Adelie  Torgersen           NA            NA                  NA          NA
+5 Adelie  Torgersen           36.7          19.3               193        3450
+6 Adelie  Torgersen           39.3          20.6               190        3650
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">tail</span>(penguins)      <span class="co"># Son birkaç gözlem</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 8
+  species   island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;     &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Chinstrap Dream            45.7          17                 195        3650
+2 Chinstrap Dream            55.8          19.8               207        4000
+3 Chinstrap Dream            43.5          18.1               202        3400
+4 Chinstrap Dream            49.6          18.2               193        3775
+5 Chinstrap Dream            50.8          19                 210        4100
+6 Chinstrap Dream            50.2          18.7               198        3775
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>💡 <code>glimpse()</code> fonksiyonu <code>dplyr</code> paketine aittir ve <code>str()</code> fonksiyonunun daha okunabilir bir versiyonudur.</p>
+</section>
+<section id="eksik-veriye-bakış" class="slide level2">
+<h2>Eksik Veriye Bakış</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="fu">summary</span>(penguins)       <span class="co"># sayısal özet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      species          island    bill_length_mm  bill_depth_mm  
+ Adelie   :152   Biscoe   :168   Min.   :32.10   Min.   :13.10  
+ Chinstrap: 68   Dream    :124   1st Qu.:39.23   1st Qu.:15.60  
+ Gentoo   :124   Torgersen: 52   Median :44.45   Median :17.30  
+                                 Mean   :43.92   Mean   :17.15  
+                                 3rd Qu.:48.50   3rd Qu.:18.70  
+                                 Max.   :59.60   Max.   :21.50  
+                                 NA's   :2       NA's   :2      
+ flipper_length_mm  body_mass_g       sex           year     
+ Min.   :172.0     Min.   :2700   female:165   Min.   :2007  
+ 1st Qu.:190.0     1st Qu.:3550   male  :168   1st Qu.:2007  
+ Median :197.0     Median :4050   NA's  : 11   Median :2008  
+ Mean   :200.9     Mean   :4202                Mean   :2008  
+ 3rd Qu.:213.0     3rd Qu.:4750                3rd Qu.:2009  
+ Max.   :231.0     Max.   :6300                Max.   :2009  
+ NA's   :2         NA's   :2                                 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">anyNA</span>(penguins)         <span class="co"># veri setinde eksik var mı?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(penguins)) <span class="co"># hangi değişkende kaç eksik var?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          species            island    bill_length_mm     bill_depth_mm 
+                0                 0                 2                 2 
+flipper_length_mm       body_mass_g               sex              year 
+                2                 2                11                 0 </code></pre>
+</div>
+</div>
+<p>💡 <code>summary()</code> sadece sayısal değil, kategorik değişkenlerin seviyelerini de gösterir.</p>
+</section>
+<section id="kayıtlar-tekil-mi" class="slide level2">
+<h2>Kayıtlar Tekil mi?</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a><span class="fu">nrow</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 344</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="fu">nrow</span>(<span class="fu">unique</span>(penguins))   <span class="co"># Aynı satırdan kaç tane var?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 344</code></pre>
+</div>
+</div>
+<p>💡 Eğer <code>nrow()</code> sayıları farklıysa veri setinde <strong>kopya kayıtlar</strong> vardır.</p>
+<p>💡 Aynı kayıtlar tekrar ediyorsa analiz sonuçları yanıltıcı olabilir.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="fu">duplicated</span>(penguins)        <span class="co"># Hangi satırlar tekrar ediyor?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [25] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [37] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [49] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [61] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [73] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [85] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+ [97] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[109] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[121] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[133] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[145] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[157] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[169] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[181] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[193] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[205] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[217] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[229] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[241] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[253] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[265] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[277] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[289] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[301] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[313] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[325] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[337] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a><span class="fu">sum</span>(<span class="fu">duplicated</span>(penguins))   <span class="co"># Toplam kaç tane?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>penguins[<span class="fu">duplicated</span>(penguins), ]  <span class="co"># Neler tekrar ediyor?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 0 × 8
+# ℹ 8 variables: species &lt;fct&gt;, island &lt;fct&gt;, bill_length_mm &lt;dbl&gt;,
+#   bill_depth_mm &lt;dbl&gt;, flipper_length_mm &lt;int&gt;, body_mass_g &lt;int&gt;, sex &lt;fct&gt;,
+#   year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>🔎 Bu fonksiyonlar temiz veri analizi için kritik. Aynı gözlemi iki kez analiz edersen sonuçlar bozulur!</p>
+<h3 id="alternatif-dplyrdistinct">Alternatif: <code>dplyr::distinct()</code></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a><span class="fu">nrow</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 344</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="fu">nrow</span>(dplyr<span class="sc">::</span><span class="fu">distinct</span>(penguins))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 344</code></pre>
+</div>
+</div>
+<p>💡 Modern tidyverse yaklaşımı ama aynı mantık: yinelenen satırları ayıkla.</p>
+</section>
+<section id="tavsiye-edilen-paketler" class="slide level2">
+<h2>Tavsiye Edilen Paketler</h2>
+<ul>
+<li><p>📦 <code>skimr::skim()</code> → kapsamlı özet</p></li>
+<li><p>📦 <code>janitor::tabyl()</code> → kategorik değişken sayımı</p></li>
+<li><p>📦 <code>visdat::vis_miss()</code> → eksik veri görselleştirme</p></li>
+</ul>
+</section>
+<section id="alternatif-skimrskim" class="slide level2">
+<h2>Alternatif: <code>skimr::skim()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a><span class="fu">library</span>(skimr)</span>
+<span id="cb41-2"><a href=""></a><span class="fu">skim</span>(penguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">penguins</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">344</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">factor</td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 12%">
+<col style="width: 16%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: left;">ordered</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: left;">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">species</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Ade: 152, Gen: 124, Chi: 68</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">island</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Bis: 168, Dre: 124, Tor: 52</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sex</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.97</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">mal: 168, fem: 165</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 9%">
+<col style="width: 13%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">bill_length_mm</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">43.92</td>
+<td style="text-align: right;">5.46</td>
+<td style="text-align: right;">32.1</td>
+<td style="text-align: right;">39.23</td>
+<td style="text-align: right;">44.45</td>
+<td style="text-align: right;">48.5</td>
+<td style="text-align: right;">59.6</td>
+<td style="text-align: left;">▃▇▇▆▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">bill_depth_mm</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">17.15</td>
+<td style="text-align: right;">1.97</td>
+<td style="text-align: right;">13.1</td>
+<td style="text-align: right;">15.60</td>
+<td style="text-align: right;">17.30</td>
+<td style="text-align: right;">18.7</td>
+<td style="text-align: right;">21.5</td>
+<td style="text-align: left;">▅▅▇▇▂</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">flipper_length_mm</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">200.92</td>
+<td style="text-align: right;">14.06</td>
+<td style="text-align: right;">172.0</td>
+<td style="text-align: right;">190.00</td>
+<td style="text-align: right;">197.00</td>
+<td style="text-align: right;">213.0</td>
+<td style="text-align: right;">231.0</td>
+<td style="text-align: left;">▂▇▃▅▂</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">body_mass_g</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.99</td>
+<td style="text-align: right;">4201.75</td>
+<td style="text-align: right;">801.95</td>
+<td style="text-align: right;">2700.0</td>
+<td style="text-align: right;">3550.00</td>
+<td style="text-align: right;">4050.00</td>
+<td style="text-align: right;">4750.0</td>
+<td style="text-align: right;">6300.0</td>
+<td style="text-align: left;">▃▇▆▃▂</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">year</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">2008.03</td>
+<td style="text-align: right;">0.82</td>
+<td style="text-align: right;">2007.0</td>
+<td style="text-align: right;">2007.00</td>
+<td style="text-align: right;">2008.00</td>
+<td style="text-align: right;">2009.0</td>
+<td style="text-align: right;">2009.0</td>
+<td style="text-align: left;">▇▁▇▁▇</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<ul>
+<li><p>Tüm değişkenleri hem tip hem özet istatistik ile gösterir.</p></li>
+<li><p>Eksik değer, seviye sayısı, min–max gibi detayları sunar.</p></li>
+</ul>
+<blockquote>
+<p>💡 <code>skim()</code> fonksiyonu <code>summary()</code>’ye göre çok daha detaylıdır.</p>
+</blockquote>
+</section>
+<section id="sürekli-değişkenlerle-keşif" class="slide level2">
+<h2>Sürekli Değişkenlerle Keşif</h2>
+<blockquote>
+<p>Sürekli değişkenler, dağılım ve merkezi eğilim gibi temel istatistiksel yapıları anlamamıza yardımcı olur.</p>
+</blockquote>
+<h3 id="neler-anlamaya-çalışırız">🔍 Neler Anlamaya Çalışırız?</h3>
+<ul>
+<li>Tipik değer nedir? (ortalama, medyan)<br>
+</li>
+<li>Değerler ne kadar yayılmış? (standart sapma, min–max)<br>
+</li>
+<li>Aykırı değer var mı?<br>
+</li>
+<li>Dağılım simetrik mi, çarpık mı?</li>
+</ul>
+</section>
+<section id="sayısal-özetler" class="slide level2">
+<h2>Sayısal Özetler</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a><span class="fu">summary</span>(penguins<span class="sc">$</span>body_mass_g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+   2700    3550    4050    4202    4750    6300       2 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a><span class="fu">mean</span>(penguins<span class="sc">$</span>flipper_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 200.9152</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a><span class="fu">sd</span>(penguins<span class="sc">$</span>flipper_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 14.06171</code></pre>
+</div>
+</div>
+<p>⚠️ Bu fonksiyonlar veri hakkında ilk fikirleri verir ama dağılımı <strong>tam olarak</strong> anlatmaz.</p>
+</section>
+<section id="keşifçi-veri-analizinde-görselleştirmenin-rolü" class="slide level2">
+<h2>Keşifçi Veri Analizinde Görselleştirmenin Rolü</h2>
+<blockquote>
+<p><em>“Veri, görselleştirilmeden önce yalnızca bir sayı yığınıdır.”</em></p>
+</blockquote>
+<h3 id="ne-sağlar">📈 Ne Sağlar?</h3>
+<ul>
+<li><strong>Dağılımı anlama</strong>: Histogram, density plot<br>
+</li>
+<li><strong>Aykırı değerleri tespit etme</strong>: Boxplot<br>
+</li>
+<li><strong>İlişkiyi keşfetme</strong>: Scatter plot, bar plot<br>
+</li>
+<li><strong>Desen arama</strong>: Grup farklılıkları, zaman etkisi<br>
+</li>
+<li><strong>Anomali ayıklama</strong>: Eksik değer, tekrar eden kayıtlar</li>
+</ul>
+<h3 id="yalnızca-estetik-değil-analitik-bir-araçtır">🧠 Yalnızca Estetik Değil, Analitik Bir Araçtır</h3>
+<ul>
+<li>Sayılar her şeyi söylemez.<br>
+</li>
+<li>Sayılar yanlış yorumlanabilir.<br>
+</li>
+<li>Grafikler → anlamı sezmek, hipotez kurmak, hata ayıklamak için kullanılır.</li>
+</ul>
+</section>
+<section id="ipucu" class="slide level2">
+<h2>🔧 İpucu</h2>
+<ul>
+<li>Bir değişken → histogram / density<br>
+</li>
+<li>İki sürekli değişken → scatter plot<br>
+</li>
+<li>Sürekli + kategorik → boxplot<br>
+</li>
+<li>Kategorik → bar chart<br>
+</li>
+<li>Zaman serisi → line chart</li>
+</ul>
+<blockquote>
+<p>🧭 Unutma: EDA’da görselleştirme, <strong>veriyle sohbet etmektir</strong>.</p>
+</blockquote>
+</section>
+<section id="histogram-ve-boxplot" class="slide level2">
+<h2>Histogram ve Boxplot</h2>
+<p>🔍 Bu grafikler:</p>
+<ul>
+<li><p>Değerlerin nerede yoğunlaştığını,</p></li>
+<li><p>Aykırı değerleri,</p></li>
+<li><p>Simetri / çarpıklık durumlarını ortaya çıkarır.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a><span class="fu">hist</span>(penguins<span class="sc">$</span>body_mass_g,</span>
+<span id="cb48-2"><a href=""></a>     <span class="at">main =</span> <span class="st">"Vücut Ağırlığı Histogramı"</span>,</span>
+<span id="cb48-3"><a href=""></a>     <span class="at">col =</span> <span class="st">"skyblue"</span>, <span class="at">border =</span> <span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="2.EDA_files/figure-revealjs/unnamed-chunk-11-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href=""></a><span class="fu">boxplot</span>(penguins<span class="sc">$</span>flipper_length_mm,</span>
+<span id="cb49-2"><a href=""></a>        <span class="at">main =</span> <span class="st">"Kanat Uzunluğu Boxplot"</span>,</span>
+<span id="cb49-3"><a href=""></a>        <span class="at">col =</span> <span class="st">"lightgreen"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="2.EDA_files/figure-revealjs/unnamed-chunk-12-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="scatter-plot-değişkenler-arasındaki-ilişki" class="slide level2">
+<h2>Scatter Plot – Değişkenler Arasındaki İlişki</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a><span class="fu">plot</span>(penguins<span class="sc">$</span>flipper_length_mm, penguins<span class="sc">$</span>body_mass_g,</span>
+<span id="cb50-2"><a href=""></a>     <span class="at">main =</span> <span class="st">"Kanat Uzunluğu vs Ağırlık"</span>,</span>
+<span id="cb50-3"><a href=""></a>     <span class="at">xlab =</span> <span class="st">"Kanat Uzunluğu (mm)"</span>,</span>
+<span id="cb50-4"><a href=""></a>     <span class="at">ylab =</span> <span class="st">"Vücut Ağırlığı (g)"</span>,</span>
+<span id="cb50-5"><a href=""></a>     <span class="at">col =</span> <span class="st">"darkblue"</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="2.EDA_files/figure-revealjs/unnamed-chunk-13-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<section id="scatter-plot-değişkenler-arasındaki-ilişki-1" class="slide level2">
+<h2>Scatter Plot – Değişkenler Arasındaki İlişki</h2>
+<blockquote>
+<p>🔍 İki sürekli değişkenin ilişkisini inceleriz:<br>
+Daha uzun kanat genellikle daha yüksek vücut ağırlığı demektir.</p>
+</blockquote>
+<blockquote>
+<p>⚠️ Scatter plot, korelasyon ve regresyon gibi ileri analizlerin <strong>giriş kapısıdır.</strong><br>
+Bu nedenle EDA’da en çok başvurulan grafiklerden biridir.</p>
+</blockquote>
+</section>
+<section id="kategorik-değişkenlerle-keşif" class="slide level2">
+<h2>🧮 <strong>Kategorik Değişkenlerle Keşif</strong></h2>
+<p>Bu slaytlarda odak noktamız:</p>
+<ul>
+<li><p>Kategorik değişkenlerin yapısını anlamak</p></li>
+<li><p>Frekans analizi yapmak</p></li>
+<li><p>Basit bar grafiklerle desteklemek</p></li>
+<li><p>Ve her zamanki gibi: anlamaya, yorumlamaya, sorgulamaya yönlendirmek</p></li>
+</ul>
+</section>
+<section id="kategorik-değişkenlerle-keşif-1" class="slide level2">
+<h2>Kategorik Değişkenlerle Keşif</h2>
+<blockquote>
+<p>Kategorik değişkenler, gözlemleri sınıflara ayırır.<br>
+Bu sınıfların sıklıkları, çeşitliliği ve dağılımları bize <strong>çok şey anlatır</strong>.</p>
+</blockquote>
+<h3 id="ne-tür-sorular-sorulur">🔍 Ne Tür Sorular Sorulur?</h3>
+<ul>
+<li>En sık görülen kategori hangisi?</li>
+<li>Kaç farklı kategori var?</li>
+<li>Boş değerler var mı?</li>
+<li>Oranlar nasıl dağılmış?</li>
+</ul>
+<h3 id="örnek-değişkenler">Örnek Değişkenler</h3>
+<ul>
+<li><p><code>species</code> – Tür (Adelie, Gentoo, Chinstrap)</p></li>
+<li><p><code>island</code> – Ölçüm adası</p></li>
+<li><p><code>sex</code> – Cinsiyet</p></li>
+</ul>
+</section>
+<section id="frekans-ve-oranlarla-inceleme" class="slide level2">
+<h2>Frekans ve Oranlarla İnceleme</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a><span class="fu">table</span>(penguins<span class="sc">$</span>species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   Adelie Chinstrap    Gentoo 
+      152        68       124 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a><span class="fu">table</span>(penguins<span class="sc">$</span>island)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   Biscoe     Dream Torgersen 
+      168       124        52 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href=""></a><span class="co"># tidyverse alternatifi:</span></span>
+<span id="cb55-2"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb55-3"><a href=""></a>penguins <span class="sc">%&gt;%</span> <span class="fu">count</span>(sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  sex        n
+  &lt;fct&gt;  &lt;int&gt;
+1 female   165
+2 male     168
+3 &lt;NA&gt;      11</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a><span class="co"># janitor paketiyle daha zengin:</span></span>
+<span id="cb57-2"><a href=""></a><span class="fu">library</span>(janitor)</span>
+<span id="cb57-3"><a href=""></a>penguins <span class="sc">%&gt;%</span> <span class="fu">tabyl</span>(species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   species   n   percent
+    Adelie 152 0.4418605
+ Chinstrap  68 0.1976744
+    Gentoo 124 0.3604651</code></pre>
+</div>
+</div>
+<blockquote>
+<p>📌 <code>tabyl()</code> fonksiyonu frekans + oranı aynı tabloda verir → öğretici ve sade</p>
+<p>⚠️ Kategorik değişkenlerde <strong>frekans + bağlam = anlamlı veri</strong> demektir.</p>
+</blockquote>
+</section>
+<section id="çubuk-grafik-türlere-göre-sayım" class="slide level2">
+<h2>Çubuk Grafik – Türlere Göre Sayım</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href=""></a><span class="fu">barplot</span>(<span class="fu">table</span>(penguins<span class="sc">$</span>species),</span>
+<span id="cb59-2"><a href=""></a>        <span class="at">col =</span> <span class="st">"steelblue"</span>,</span>
+<span id="cb59-3"><a href=""></a>        <span class="at">main =</span> <span class="st">"Penguen Türlerine Göre Dağılım"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="2.EDA_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"><p>📊 Barplot en sade ama güçlü görsellerdendir.<br>
+</p>
+<p>Özellikle “hangi kategori daha baskın?” sorusuna cevap verir.</p>
+</section>
+<section id="ne-öğrendik" class="slide level2">
+<h2>Ne Öğrendik?</h2>
+<blockquote>
+<p>🔎 En yaygın tür <code>Adelie</code>, en az sayıda <code>Chinstrap</code>.<br>
+<code>sex</code> değişkeninde eksik veri var.<br>
+<code>island</code> değişkeni 3 kategorili ve dengeli dağılmış değil.</p>
+</blockquote>
+<blockquote>
+<p>📌 Kategorik değişkenlerde frekans farkı → örnekleme, veri toplama veya gerçek dünya etkileri olabilir. Sorgulanmalıdır.</p>
+</blockquote>
+</section>
+<section id="pasta-grafik-oranların-sezgisel-gösterimi" class="slide level2">
+<h2>Pasta Grafik – Oranların Sezgisel Gösterimi</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href=""></a><span class="co"># Kategorik değişken: species</span></span>
+<span id="cb60-2"><a href=""></a>tablo <span class="ot">&lt;-</span> <span class="fu">table</span>(penguins<span class="sc">$</span>species)</span>
+<span id="cb60-3"><a href=""></a></span>
+<span id="cb60-4"><a href=""></a><span class="fu">pie</span>(tablo,</span>
+<span id="cb60-5"><a href=""></a>    <span class="at">main =</span> <span class="st">"Penguen Türlerine Göre Dağılım (Pie Chart)"</span>,</span>
+<span id="cb60-6"><a href=""></a>    <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"lightgreen"</span>, <span class="st">"lightpink"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="2.EDA_files/figure-revealjs/unnamed-chunk-16-1.png" width="960" class="r-stretch"></section>
+<section id="pasta-grafik-oranların-sezgisel-gösterimi-1" class="slide level2">
+<h2>Pasta Grafik – Oranların Sezgisel Gösterimi</h2>
+<blockquote>
+<p>🎯 Pasta grafik, oranların sezgisel görünümünü verir.<br>
+🧠 Ancak pasta grafik sayılarla değil <strong>alanla</strong> çalıştığı için:</p>
+</blockquote>
+<ul>
+<li><p>Küçük farklar kolay ayırt edilemez</p></li>
+<li><p>Fazla kategori varsa karmaşıklaşır</p></li>
+<li><p>Renk seçimi yoruma çok etki eder</p></li>
+</ul>
+<h3 id="not">📌 Not:</h3>
+<p>⚠️ Pasta grafik sadece <strong>az kategorili</strong> ve <strong>denge açısından güçlü</strong> verilerde önerilir.<br>
+Profesyonel raporlamada genellikle bar chart tercih edilir.</p>
+</section>
+<section id="zaman-serileriyle-keşifçi-veri-analizi" class="slide level2">
+<h2>⏳ <strong>Zaman Serileriyle Keşifçi Veri Analizi</strong></h2>
+<p>Amaç:</p>
+<ul>
+<li><p>Zamanın veri üzerindeki etkisini tanımak</p></li>
+<li><p>Zaman serisini nasıl tanımlarız, nasıl inceleriz</p></li>
+<li><p>Temel görselleştirme ve desen arama</p></li>
+</ul>
+</section>
+<section id="zaman-serisi-nedir" class="slide level2">
+<h2>Zaman Serisi Nedir?</h2>
+<blockquote>
+<p>Zaman serisi, <strong>zaman boyutuna göre sıralı veri kümesidir.</strong></p>
+</blockquote>
+<ul>
+<li>Gözlemler belirli aralıklarla toplanır (günlük, aylık, yıllık)</li>
+<li>Sıralama önemlidir – <strong>veri bağımsız değildir</strong></li>
+<li>Amaç: <strong>değişimi anlamak</strong>, eğilim ve mevsimsellik gibi yapıları yakalamaktır</li>
+</ul>
+<h3 id="örnek-sorular">Örnek Sorular:</h3>
+<ul>
+<li>Satışlar yıldan yıla nasıl değişmiş?</li>
+<li>Mevsimsel bir desen var mı?</li>
+<li>Son zamanlarda bir kırılma olmuş mu?</li>
+</ul>
+<blockquote>
+<p>⏱️ Zaman boyutu dikkate alınmadan yapılan analiz, genellikle <strong>eksik analizdir.</strong></p>
+</blockquote>
+</section>
+<section id="veri-seti-airpassengers" class="slide level2">
+<h2>📦 <strong>Veri Seti – <code>AirPassengers</code></strong></h2>
+<ul>
+<li><code>AirPassengers</code> verisi: 1949–1960 arasında her ayki uluslararası yolcu sayısını içerir</li>
+<li>Hazır gelir → ek paket gerekmez</li>
+<li>Aylık zaman serisi formatındadır (<code>ts</code> sınıfı)</li>
+</ul>
+<h3 id="yükleme-ve-inceleme">Yükleme ve İnceleme</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href=""></a><span class="fu">data</span>(<span class="st">"AirPassengers"</span>)</span>
+<span id="cb61-2"><a href=""></a><span class="fu">class</span>(AirPassengers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "ts"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a><span class="fu">start</span>(AirPassengers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1949    1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a><span class="fu">end</span>(AirPassengers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1960   12</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href=""></a><span class="fu">frequency</span>(AirPassengers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 12</code></pre>
+</div>
+</div>
+<p>💡 <code>ts</code> sınıfı zaman serisi analizinde temel sınıftır. Dönemsellik frekansına (<code>12</code>) göre otomatik işler.</p>
+</section>
+<section id="zaman-serisinin-görselleştirilmesi" class="slide level2">
+<h2>Zaman Serisinin Görselleştirilmesi</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a><span class="fu">plot</span>(AirPassengers,</span>
+<span id="cb69-2"><a href=""></a>     <span class="at">main =</span> <span class="st">"Aylık Uluslararası Yolcu Sayısı (1949–1960)"</span>,</span>
+<span id="cb69-3"><a href=""></a>     <span class="at">ylab =</span> <span class="st">"Yolcu Sayısı (bin)"</span>,</span>
+<span id="cb69-4"><a href=""></a>     <span class="at">xlab =</span> <span class="st">"Yıl"</span>,</span>
+<span id="cb69-5"><a href=""></a>     <span class="at">col =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="2.EDA_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
+<section id="gözlem-ve-yorumlama" class="slide level2">
+<h2>🧠 <strong>Gözlem ve Yorumlama</strong></h2>
+<p>📊 Bu grafikle:</p>
+<ul>
+<li><p>Genel artış trendini</p></li>
+<li><p>Mevsimsel desenleri</p></li>
+<li><p>Artan değişkenliği fark edebiliriz</p></li>
+</ul>
+<h3 id="ne-gördük">Ne Gördük?</h3>
+<blockquote>
+<p>🔎 Zaman ilerledikçe hem yolcu sayısı hem de dalgalanma artıyor.<br>
+✈️ Her yıl belirgin bir mevsimsel desen var.<br>
+📈 Genel bir yukarı trend gözlemleniyor.</p>
+</blockquote>
+<h3 id="basit-ama-güçlü-sorular">Basit ama güçlü sorular:</h3>
+<ul>
+<li>Yaz aylarında hep zirve mi yapıyor?</li>
+<li>Artış lineer mi yoksa ivmeli mi?</li>
+<li>Mevsimsel etki yıllara göre değişiyor mu?</li>
+</ul>
+<blockquote>
+<p>🧭 Bu tür sorular modelleme öncesinde veriye yön verir.</p>
+</blockquote>
+</section>
+<section id="rde-ts-sınıfının-önemi" class="slide level2">
+<h2>R’de <code>ts</code> Sınıfının Önemi</h2>
+<blockquote>
+<p>Zaman serisi verisi, sıradan bir vektör ya da data frame değil; <strong>zaman yapısını içeren özel bir nesne</strong> olmalıdır.</p>
+</blockquote>
+<h3 id="neden-ts-kullanmalıyız">Neden <code>ts</code> kullanmalıyız?</h3>
+<ul>
+<li>⏳ <code>ts</code> nesnesi <strong>zaman bilgisini içerir</strong> (başlangıç zamanı, frekans)</li>
+<li>🔧 Birçok zaman serisi fonksiyonu (<code>decompose()</code>, <code>HoltWinters()</code>, <code>acf()</code>, <code>stl()</code>, vs.) sadece <code>ts</code> sınıfı ile çalışır</li>
+<li>📈 <code>plot()</code> gibi görselleştirme fonksiyonları zaman eksenini otomatik biçimlendirir</li>
+</ul>
+</section>
+<section id="basit-vektörü-ts-nesnesine-dönüştürme" class="slide level2">
+<h2>Basit Vektörü <code>ts</code> Nesnesine Dönüştürme</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href=""></a><span class="co"># Rastgele oluşturulmuş 36 gözlem</span></span>
+<span id="cb70-2"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb70-3"><a href=""></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">36</span>, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span>
+<span id="cb70-4"><a href=""></a></span>
+<span id="cb70-5"><a href=""></a><span class="co"># ts sınıfına çevirme: başlangıç Ocak 2020, frekans çeyreklik (4)</span></span>
+<span id="cb70-6"><a href=""></a>xts <span class="ot">&lt;-</span> <span class="fu">ts</span>(x, <span class="at">start =</span> <span class="fu">c</span>(<span class="dv">2020</span>, <span class="dv">1</span>), <span class="at">frequency =</span> <span class="dv">4</span>)</span>
+<span id="cb70-7"><a href=""></a></span>
+<span id="cb70-8"><a href=""></a><span class="fu">plot</span>(xts, <span class="at">main =</span> <span class="st">"Rastgele Oluşturulmuş Zaman Serisi"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="2.EDA_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
+<section id="ana-mesaj" class="slide level2">
+<h2>🎯 Ana Mesaj</h2>
+<p>🔍 <strong>Veriyi Tanımadan Analiz Yapılmaz</strong><br>
+→ Veri yapısı, eksiklik, aykırılık ve anlam ilk adımda görülmelidir.</p>
+<p>📊 <strong>Görselleştirme sadece süs değil, bir keşif aracıdır</strong><br>
+→ Histogram, boxplot, scatter plot gibi araçlar sorular sordurur.</p>
+<p>🧮 <strong>Sayısal özetler önemlidir ama tek başına yeterli değildir</strong><br>
+→ Dağılımın yapısını mutlaka grafikle destekle.</p>
+<p>⚠️ <strong>Kategorik değişkenlerde bağlam her şeydir</strong><br>
+→ Frekanslar anlam ifade etmeli, yüzdelerle desteklenmeli.</p>
+<p>⏳ <strong>Zaman serisi verisi, <code>ts</code> nesnesine dönüştürülmelidir</strong><br>
+→ Aksi halde birçok analiz ve görselleştirme çalışmaz.</p>
+<p>🎯 <strong>Her veri seti bir hikâye anlatır, senin görevin onu duymaktır.</strong></p>
+<blockquote>
+<p>🧠 Veriye önce saygı, sonra analiz.<br>
+✨ EDA = Keşfet, yorumla, hipotez kur.<br>
+Ve unutma: <strong>Veriyi anlamadan model kurma.</strong></p>
+</blockquote>
+</section>
+<section id="section" class="title-slide slide level1 center" style="text-align: center;font-size:150%">
+<h1></h1>
+<p><strong>Teşekkürler</strong></p>
+<p>Muhammed Fatih TÜZEN</p>
+<p>e-posta: <strong><code>fatih.tuzen@tuik.gov.tr</code></strong></p>
+<p>Linkedin: <a href="https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/"><code>https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/</code></a></p>
+
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="images/TUiK_logo_Tr.jpg" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>Altıncı Uluslararası Uygulamalı İstatistik Kongresi (UYIK 2025)</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="2.EDA_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="2.EDA_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="2.EDA_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="2.EDA_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="2.EDA_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="2.EDA_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="2.EDA_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="2.EDA_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="2.EDA_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="2.EDA_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
