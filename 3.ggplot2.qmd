@@ -1,0 +1,757 @@
+---
+title: "R Programlama ile Veri Analizi"
+subtitle: "ggplot2 ile Veri Görselleştirme"
+author: "Dr. Muhammed Fatih TÜZEN"
+date: 2025-5-16
+date-format: "DD-MM-YYYY"
+format: 
+  revealjs:
+    theme: white
+    slide-number: true
+    slide-number-format: "c / t"
+    footer: "Altıncı Uluslararası Uygulamalı İstatistik Kongresi (UYIK 2025)"
+    css: custom.css
+    scrollable: true
+    logo: images/TUiK_logo_Tr.jpg
+editor: visual
+execute:
+  echo: true
+  eval: true
+  warnings: false
+  messages: false
+---
+
+## Sunum Planı
+
+<div>
+
+::: nonincremental
+-   Veri Görselleştirme
+-   ggplot2
+-   Dağılım Grafikleri
+-   SaçılımGrafikleri
+-   Sütun Grafikleri
+-   Zaman Serisi Grafikleri
+:::
+
+<div>
+
+📦 Ders Materyalleri: <https://github.com/MFatihTuzen/UYIK-R>
+
+</div>
+
+</div>
+
+------------------------------------------------------------------------
+
+## Neden Görselleştirme?
+
+📊 Veriyi sayılardan görsele dönüştürmek:
+
+-   Desenleri ve ilişkileri fark etmenin en hızlı yolu
+
+-   Anomali ve uç değerleri yakalama aracı
+
+-   Model kurmadan önce veriyle konuşma fırsatı
+
+-   Son kullanıcıya anlatmanın en etkili yöntemi
+
+> 🔍 Görselleştirme = Keşif + Anlatı + İkna
+
+📌 R'de veri görselleştirme için en güçlü paket: `ggplot2`
+
+## `ggplot2` Mantığı
+
+-   Katman (layer) temelli sistem: her grafik parçası ayrı bir katmandır
+-   `ggplot(data, aes(...)) + geom_*() + ...` şeklinde inşa edilir
+
+```{r}
+#| eval: false
+ggplot(data = df, aes(x = var1, y = var2)) +
+  geom_point()
+```
+
+**🔧 Temel bileşenler:**
+
+| Bileşen     | Açıklama                       |
+|-------------|--------------------------------|
+| `data`      | Veri seti                      |
+| `aes()`     | Estetik: eksenler, renk, şekil |
+| `geom_*()`  | Grafik türü                    |
+| `labs()`    | Etiketler, başlıklar           |
+| `theme_*()` | Görsel stil ayarları           |
+
+> 💡 `ggplot2` sadece grafik değil, **grafik dili**dir.
+
+------------------------------------------------------------------------
+
+## 📦 Veri Seti: diamonds
+
+📦 `ggplot2` paketi içinde yer alan, elmasların fiziksel özelliklerini ve fiyatlarını içeren hazır veri setidir.
+
+### 📊 İçerdiği Değişkenler
+
+| Değişken      | Açıklama                         | Türü      |
+|---------------|----------------------------------|-----------|
+| `carat`       | Elmas ağırlığı (0.2 gram = 1 ct) | Sürekli   |
+| `cut`         | Kesim kalitesi (Fair → Ideal)    | Kategorik |
+| `color`       | Renk derecesi (D = en iyi)       | Kategorik |
+| `clarity`     | Berraklık derecesi               | Kategorik |
+| `price`       | Fiyat (ABD doları)               | Sürekli   |
+| `x`, `y`, `z` | Fiziksel boyutlar (mm)           | Sürekli   |
+
+### 📌 Neden Bu Veri Seti?
+
+-   Hem **sürekli hem kategorik** değişken içeriyor
+
+-   50.000+ gözlem → yoğunluk ve desen analizi için ideal
+
+-   Temiz ve hazır → ön işleme gerek yok
+
+-   Tüm grafik türlerine uygun
+
+> 💡 Eğitim, analiz ve grafik becerilerini geliştirmek için mükemmel bir veri setidir.
+
+## Dağılım Grafikleri
+
+> Sürekli değişkenlerin değerlerinin nasıl dağıldığını görselleştiren grafik türleridir.
+
+📌 Amaç:
+
+-   Merkez (ortalama, medyan)
+
+-   Yayılım (min–maks, çeyrekler, standart sapma)
+
+-   Aykırılar
+
+-   Dağılım şekli (simetrik, çarpık, çift tepeli...)
+
+### 🔍 Kullanılan Bazı Grafik Türleri
+
+| Grafik Türü  | Ne Zaman Kullanılır?                                |
+|--------------|-----------------------------------------------------|
+| Histogram    | Gözlem sayısı ile dağılım analizi                   |
+| Density Plot | Sürekli, pürüzsüz dağılım analizi (büyük veri için) |
+| Boxplot      | Merkezi eğilim + çeyrekler + aykırılar              |
+| Violin Plot  | Boxplot + yoğunluk bilgisi birleşimi                |
+
+> 📊 Her grafik veri setinin farklı yönlerini ortaya çıkarır.\
+> 👀 Doğru görselleştirme → doğru veri okuma.
+
+## 🟦 Histogram
+
+```{r}
+#| output-location: slide 
+library(ggplot2)
+ggplot(diamonds, aes(x = carat)) +
+  geom_histogram(bins = 30, fill = "steelblue", color = "white")
+```
+
+> 📌 Her sütun belirli bir aralıktaki gözlem sayısını gösterir.
+
+### 🎯 Ne Zaman Kullanılır?
+
+-   Gözlem sayısı yeterli ise (örneğin \> 100)
+-   Dağılım yapısı keşfi (tek modlu, çarpıklık, uçlar)
+
+### 🔧 Fonksiyon ve Argümanlar
+
+| Argüman                | Açıklama                                           |
+|-------------------------|----------------------------------------------|
+| `bins`                 | Aralık sayısı (fazla olursa detay, az olursa özet) |
+| `fill`                 | Sütun içi renk                                     |
+| `color`                | Sütun kenarlığı rengi                              |
+| `aes(y = ..density..)` | Histogramı yoğunluk olarak çizmek için             |
+
+## 🌊 Yoğunluk Grafiği (Density Plot)
+
+```{r}
+#| output-location: slide 
+ggplot(diamonds, aes(x = carat)) +
+  geom_density(fill = "lightgreen", alpha = 0.6)
+```
+
+> ⚠️ Histogramdan farklı olarak **gözlem sayısını değil yoğunluğu** gösterir
+
+### 🔍 Avantajları
+
+-   Eğilimleri daha net gösterir
+
+-   Karşılaştırmalı analizlerde idealdir (örn. iki grup)
+
+## Histogram ve Density
+
+Histogram ve density aynı grafik içinde birlikte çizilebilir!
+
+```{r}
+#| output-location: slide 
+ggplot(diamonds, aes(x = carat)) +
+  geom_histogram(aes(y = ..density..), 
+                 bins = 30, 
+                 fill = "lightgray", 
+                 color = "white") +
+  geom_density(color = "darkblue", 
+               size = 1.2)
+```
+
+## 📦 Boxplot
+
+```{r}
+#| output-location: slide 
+ggplot(diamonds, aes(y = carat)) +
+  geom_boxplot(fill = "orange")
+```
+
+📌 Medyan, çeyrekler (Q1 ve Q3), minimum–maksimum ve aykırı değerleri gösterir.
+
+### 📌 Yorumlama
+
+-   Kutu: Q1–Q3 aralığı (IQR)
+
+-   Çizgi: Medyan
+
+-   Kuyruklar: minimum ve maksimum (outlier hariç)
+
+-   Noktalar: aykırı değerler
+
+### 🔧 Fonksiyon Argümanları
+
+| Argüman          | Açıklama                        |
+|------------------|---------------------------------|
+| `notch = TRUE`   | Medyan güven aralığını gösterir |
+| `outlier.colour` | Aykırı değer rengi              |
+
+> ⚠️ Kategorik gruplar için `aes(x = group, y = value)` yapısıyla çok güçlü hale gelir.
+
+## 🎻 Violin Plot – Yoğunluk + Boxplot
+
+```{r}
+#| output-location: slide 
+ggplot(diamonds, aes(x = cut, y = carat)) +
+  geom_violin(fill = "violet", alpha = 0.7)
+```
+
+🎻 Dağılımın şekli, yoğunluğu ve merkezi bir arada gösterilir
+
+### 📌 Avantajları
+
+-   Özellikle **çok modlu dağılımlar** için daha bilgilendirici
+
+-   Yoğunluk grafiği ile boxplot’un birleşimi
+
+-   Büyük veri setlerinde daha estetik ve sezgisel
+
+### 🔧 Önemli Argümanlar
+
+| Argüman          | Açıklama                           |
+|------------------|------------------------------------|
+| `trim = FALSE`   | Tüm yoğunluk kuyruklarını gösterir |
+| `scale = "area"` | Alan, genişlik ya da count bazlı   |
+
+🎯 Violin plot, boxplot’un fazla sade kaldığı durumlarda güçlü bir alternatiftir.
+
+## Boxplot vs Violin Plot
+
+```{r}
+#| echo: false
+library(ggplot2)
+library(dplyr)
+
+# Veri setini ikiye kopyalayalım
+diamonds_subset <- diamonds %>% 
+  filter(cut %in% c("Fair", "Good", "Very Good")) %>%  # sadeleştirme
+  select(cut, carat)
+
+box_data <- diamonds_subset %>%
+  mutate(plot_type = "Boxplot")
+
+violin_data <- diamonds_subset %>%
+  mutate(plot_type = "Violin")
+
+combined_data <- bind_rows(box_data, violin_data)
+
+# Grafik çizimi
+ggplot(combined_data, aes(x = cut, y = carat, fill = plot_type)) +
+  facet_wrap(~plot_type) +
+  geom_boxplot(data = subset(combined_data, plot_type == "Boxplot")) +
+  geom_violin(data = subset(combined_data, plot_type == "Violin")) +
+  theme_minimal() +
+  labs(title = "Boxplot vs Violin Plot", y = "Carat", x = "Cut") +
+  scale_fill_manual(values = c("Boxplot" = "#f8766d", "Violin" = "#00bfc4"))
+
+```
+
+## Boxplot vs Violin Plot
+
+Boxplot sadece medyan, çeyrekler ve uç değerleri gösterir
+
+-   Violin plot → bu bilgileri gösterir + yoğunluğun şekli de ortaya çıkar
+-   Violin plot özellikle **çok modlu dağılımlar** için bilgilendiricidir
+-   Boxplot daha sade ama bazen fazla özet kalır
+
+> 🔍 Violin plot, dağılımı görmek isteyen göz için;\
+> Boxplot, özet görmek isteyen akıl içindir.
+
+------------------------------------------------------------------------
+
+## Saçılım (Scatter) Grafikleri
+
+> İki sürekli değişken arasındaki ilişkiyi görselleştirir.
+
+📌 Kullanım Amaçları:
+
+-   İki değişkenin birlikte nasıl değiştiğini görmek
+
+-   Doğrusal veya eğrisel ilişki var mı?
+
+-   Gruplar arası farklar?
+
+-   Aykırı gözlemler?
+
+### 🎯 Ne Zaman Kullanılır?
+
+-   Korelasyon analizi öncesi
+-   Regresyon öncesi ilişkiyi incelemek için
+-   Gruplar arası farklılıkları görselleştirmek için
+
+### Estetik Öğeler (aes):
+
+| Estetik | Anlamı                                            |
+|---------|---------------------------------------------------|
+| `x`     | Bağımsız değişken                                 |
+| `y`     | Bağımlı değişken                                  |
+| `color` | Gruplar arası farkı göstermek                     |
+| `size`  | Değişkenin önemini göstermek                      |
+| `shape` | Kategorik grup ayrımı (kısıtlı sayıda)            |
+| `alpha` | Saydamlık – üst üste binen noktaları ayırmak için |
+
+## Basit Saçılım Grafiği
+
+::: columns
+::: {.column width="60%"}
+```{r}
+ggplot(diamonds, aes(x = carat, y = price)) +
+  geom_point(alpha = 0.4, color = "darkred") +
+  labs(
+    title = "Elmas Ağırlığı ve Fiyat İlişkisi",
+    x = "Carat (Ağırlık)",
+    y = "Price (Fiyat)"
+  )
+```
+:::
+
+::: {.column width="40%"}
+-   `carat` arttıkça `price` da artıyor → pozitif ilişki
+
+-   Dağılım doğrusal değil, **kavisli ve ivmelenen** bir yapı var
+
+-   Alt bölgede yoğunluk fazla (küçük carat, düşük fiyat)
+:::
+:::
+
+## Grupları Renkle Göster
+
+::: columns
+::: {.column width="60%"}
+```{r}
+ggplot(diamonds, aes(x = carat, y = price, color = cut)) +
+  geom_point(alpha = 0.4)
+```
+:::
+
+::: {.column width="40%"}
+🎨 `color = cut` → farklı kesim kaliteleri farklı renklerle gösterilir
+
+Bu grafik, aynı carat değeri için fiyatların kesime göre nasıl değiştiğini görmemizi sağlar
+:::
+:::
+
+------------------------------------------------------------------------
+
+## Scatter Plot'ta Kullanılabilecek Estetikler
+
+> `ggplot()` içinde `aes()` fonksiyonu görsel ögeleri veriyle ilişkilendirir.\
+> Temel olarak `x` ve `y` zorunludur. Diğer estetikler isteğe bağlıdır.
+>
+> 💡 Estetikleri seçerken hem veri türünü hem de görsel sadeliği göz önünde bulundur!
+
+## 🎯 Ekstra Estetik Argümanlar
+
+| Argüman  | Açıklama                                                   |
+|----------|------------------------------------------------------------|
+| `color`  | Noktaları değişken bazlı renklendirir (kategori/sürekli)   |
+| `size`   | Nokta büyüklüğünü bir değişkene göre ayarlar               |
+| `shape`  | Nokta şekli – sadece kategorik değişkenlerde kullanılır    |
+| `alpha`  | Saydamlık – üst üste gelen noktaları ayırt etmeye yarar    |
+| `stroke` | Noktanın dış çizgisinin kalınlığı (sadece bazı şekillerde) |
+
+## 🧠 Dikkat Edilmesi Gerekenler
+
+-   `shape` sadece 6 farklı kategoriye kadar destekler\
+-   `size` için **çok küçük farklar** algılanamaz – ölçek kontrol edilmeli\
+-   `alpha` → büyük veri setlerinde her zaman tavsiye edilir\
+-   Fazla estetik bir arada kullanılırsa **grafik yorulabilir** (az çoktur!)
+
+## 📈**Scatter Plot + Trend Çizgisi**
+
+```{r}
+#| output-location: slide 
+set.seed(42)
+diamonds_sample <- diamonds[sample(nrow(diamonds), 1000), ]
+
+ggplot(diamonds_sample, aes(x = carat, y = price)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "lm", se = TRUE, color = "blue")
+
+```
+
+-   `geom_smooth()` → ilişkiyi modelleyip bir çizgi çizer
+
+-   `method = "lm"` → doğrusal regresyon
+
+-   `se = TRUE` → çizginin etrafındaki güven aralığını gösterir
+
+-   `color` → çizgi rengi
+
+## Doğrusal vs Loess Trend Çizgisi
+
+::: columns
+::: {.column width="90%"}
+```{r}
+ggplot(diamonds_sample, aes(x = carat, y = price)) +
+  geom_point(alpha = 0.2) +
+  geom_smooth(method = "loess", color = "red", se = FALSE) +
+  geom_smooth(method = "lm", color = "blue", se = FALSE)
+```
+
+🔴 Kırmızı çizgi → loess 🔵 Mavi çizgi → lm
+:::
+:::
+
+------------------------------------------------------------------------
+
+## Sütun (Bar) Grafikleri – Nedir?
+
+> Kategorik değişkenlerin frekanslarını veya oranlarını görselleştirmeye yarar.
+
+### 🎯 Kullanım Amaçları:
+
+-   Hangi kategori daha baskın?
+-   Sınıf dağılımları nasıl?
+-   Gruplar arası farklar açık mı?
+-   Oransal karşılaştırmalar yapılabilir mi?
+
+### 🔧 Yöntemler
+
+| Amaç                      | Kullanılacak geom              |
+|---------------------------|--------------------------------|
+| Gözlem sayısını göstermek | `geom_bar()` (otomatik sayar)  |
+| Manuel değerle çizmek     | `geom_col()` (önceden sayılır) |
+
+> 💡 `geom_bar()` → sadece x, `geom_col()` → hem x hem y gerekir\
+> 🎨 Renk, pozisyon, tema ve etiketlerle çok güçlü hale getirilebilir
+
+## 📊 Basit `geom_bar()`
+
+::: columns
+::: {.column width="90%"}
+```{r}
+ggplot(diamonds, aes(x = cut)) +
+  geom_bar(fill = "skyblue", color = "black")
+```
+:::
+:::
+
+🎯 `geom_bar()` sadece `x` ister, `y`'yi frekans olarak otomatik hesaplar\
+
+Renk (`fill`) ve kenarlık (`color`) ile stil verilebilir
+
+## ⚔️ `geom_bar()` vs `geom_col()`
+
+| Özellik        | `geom_bar()`                                 | `geom_col()`                             |
+|------------------|----------------------------|--------------------------|
+| Y değerleri    | Otomatik olarak gözlem sayısını **hesaplar** | **Senin sağladığın y** değerini kullanır |
+| Girdi          | Sadece `x` yeterlidir                        | `x` ve `y` ikisi de gerekir              |
+| Tipik kullanım | Kategorilerin frekans grafiği                | Özet tablolar, oranlar, manuel veriler   |
+| `stat`         | `stat = "count"` (varsayılan)                | `stat = "identity"` (otomatik olarak)    |
+
+## ⚔️ `geom_bar()` vs `geom_col()`
+
+::: columns
+::: {.column width="50%"}
+📊 `geom_bar()`
+
+```{r}
+ggplot(diamonds, aes(x = cut)) +
+  geom_bar(fill = "skyblue", color = "black")
+```
+:::
+
+::: {.column width="50%"}
+📊 `geom_col()`
+
+```{r}
+diamonds |> count(cut) |> 
+  ggplot(aes(x = cut, y = n)) +
+  geom_col(fill = "skyblue", color = "black")
+```
+:::
+:::
+
+🎯 `geom_bar()` otomatik sayar. Diğer yandan **`geom_col`** ile çizilen grafik `geom_bar()` grafiğinin aynısını çizer — ama bu kez **veriyi sen saydın, `ggplot2` değil**.
+
+## 💬 Ne Zaman Hangisi?
+
+✅ Eğer **ham veriyle** çalışıyorsan → `geom_bar()` yeterli ve kolay
+
+✅ Eğer **özetlenmiş veri** (örneğin `dplyr::count()` sonrası) varsa → `geom_col()` gerekir
+
+### 🔧 Bonus: Farkı Görmek İçin `stat` Parametresiyle Oyna
+
+Aşağıdaki iki satır aynı sonucu verir:
+
+```{r}
+#| eval: false
+geom_bar(stat = "count")   # Otomatik sayar (varsayılan)
+geom_col(stat = "identity")  # y değerlerini doğrudan kullanır
+```
+
+## 📦Kategorileri Renkle Göster (`fill`)
+
+::: columns
+::: {.column width="95%"}
+```{r}
+ggplot(diamonds, aes(x = cut, fill = color)) +
+  geom_bar(position = "stack")
+```
+:::
+:::
+
+📌 Bu grafik "cut" her biri içinde farklı "color" gruplarının dağılımını gösterir\
+
+💡 Varsayılan pozisyon `stack` → gruplar üst üste bindirilir
+
+### Alternatifler:
+
+| position argümanı | Açıklama                         |
+|-------------------|----------------------------------|
+| `"stack"`         | Üst üste bindirir (varsayılan)   |
+| `"dodge"`         | Yan yana koyar                   |
+| `"fill"`          | Oranlar üzerinden normalize eder |
+
+## 🎨Yan Yana Barlar (`position = "dodge"`)
+
+::: columns
+::: {.column width="95%"}
+```{r}
+ggplot(diamonds, aes(x = cut, fill = color)) +
+  geom_bar(position = "dodge")
+```
+:::
+:::
+
+🆚 Her "cut" kategorisinde "color" değerleri yan yana gelir. Gruplar arası karşılaştırma için daha net.
+
+## 🏷️ Etiket Ekleme ve Legend Ayarları
+
+::: columns
+::: {.column width="95%"}
+```{r}
+ggplot(diamonds, aes(x = cut, fill = color)) +
+  geom_bar(position = "dodge") +
+  geom_text(stat = "count", aes(label = after_stat(count)),
+            position = position_dodge(width = 0.9), vjust = -0.5) +
+  labs(title = "Kesim Kalitesine Göre Renk Dağılımı",
+       fill = "Renk Grubu") +
+  theme(legend.position = "bottom")
+```
+:::
+:::
+
+### 🎯 Açıklama:
+
+-   `geom_text()` → sayısal etiket ekler
+
+-   `stat = "count"` → sayımı otomatik hesaplar
+
+-   `after_stat(count)` → `ggplot2` v3.4+ sürümle gelen yeni yapı
+
+-   `legend.position = "bottom"` → legenda sunum dostu yerleştirme
+
+## Sütun Grafikleri – Sık Yapılan Hatalar
+
+⚠️ Kategorik değişken sayısı çoksa:\
+→ Sütunlar aşırı sıkışır, okunabilirlik düşer\
+→ Gerekirse gruplandır veya sadeleştir
+
+⚠️ Y ekseni 0'dan başlamıyorsa:\
+→ Görsel yanılsama olur → yorumlar hatalı olur
+
+⚠️ Oran karşılaştırması için: → `position = "fill"` kullan, sayı değil oran göster
+
+> 🎯 Grafik sadece şekil değil → veri anlatım aracıdır
+
+------------------------------------------------------------------------
+
+## Zaman Serisi Grafiklerinin Önemi
+
+> 📈 Değerlerin zaman içindeki değişimini görselleştirmeye yarar.
+
+### 🎯 Kullanım Amaçları:
+
+-   Trendleri, mevsimsellikleri ve kırılmaları görmek\
+-   Olayların zamanlamasına bağlı değişimleri izlemek\
+-   Seriler arası karşılaştırmalar yapmak (birden fazla çizgi)
+
+### 💡 Uygun Grafik Tipi
+
+| Amaç             | Kullanılacak `geom`       |
+|------------------|---------------------------|
+| Tek seri         | `geom_line()`             |
+| Çoklu seri       | `facet_wrap()`, `color`   |
+| Noktaları görmek | `+ geom_point()`          |
+| Gruplu seriler   | `group`, `color`, `facet` |
+
+## 📘 Veri Seti: `economics`
+
+📦 `ggplot2` paketinde yer alan hazır zaman serisi veri setidir.
+
+```{r}
+library(ggplot2)
+data(economics)
+dplyr::glimpse(economics)
+```
+
+## 📘 Veri Seti: `economics`
+
+### 🧾 Değişkenler:
+
+| Değişken   | Açıklama                                |
+|------------|-----------------------------------------|
+| `date`     | Gözlem tarihi (aylık)                   |
+| `pce`      | Kişisel tüketim harcamaları (milyar \$) |
+| `pop`      | Nüfus                                   |
+| `unemploy` | İşsiz sayısı (bin kişi)                 |
+| `uempmed`  | Ortalama işsizlik süresi (hafta)        |
+| `psavert`  | Tasarruf oranı (%)                      |
+
+📅 Aylık frekansta, 1967 yılından itibaren gözlem içerir.\
+🔍 Zaman serisi analizleri ve grafik örnekleri için idealdir.
+
+## Temel Zaman Serisi Grafiği
+
+::: columns
+::: {.column width="95%"}
+```{r}
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line(color = "darkred", size = 1.2) +
+  labs(title = "ABD'de İşsiz Sayısının Zaman İçindeki Değişimi",
+       x = "Tarih", y = "İşsiz Sayısı (Bin)")
+```
+:::
+:::
+
+🔍 `geom_line()` zaman ekseninde kesintisiz çizgi üretir
+
+🧠 Trend ve ani kırılmalar doğrudan görülebilir
+
+## `theme()` ile Grafik Düzenleme
+
+::: columns
+::: {.column width="95%"}
+```{r}
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line(color = "steelblue", size = 1) +
+  labs(title = "İşsiz Sayısı Trend Grafiği") +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid.minor = element_blank()
+  )
+```
+:::
+:::
+
+🎯 Grafik okunabilirliği için başlık, eksenler ve grid çizgileri düzenlenir
+
+## Çoklu Zaman Serisi Grafiği
+
+::: columns
+::: {.column width="95%"}
+```{r}
+ggplot(economics_long, aes(x = date, y = value)) +
+  geom_line(color = "steelblue", size = 1) +
+  facet_wrap(~ variable, scales = "free_y", ncol = 2) +
+  labs(title = "Ekonomik Göstergelerin Zaman Serisi Grafikleri",
+       x = "Tarih", y = "Değer")
+```
+:::
+:::
+
+📦 `economics_long` zaten tidy (long) formattadır\
+`facet_wrap()` her göstergeyi ayrı panelde net bir şekilde sunar\
+`free_y` → her gösterge kendi eksen ölçeğiyle değerlendirilir
+
+------------------------------------------------------------------------
+
+### 🎨 Renkli Tek Grafik: `color = variable`
+
+::: columns
+::: {.column width="95%"}
+```{r}
+ggplot(economics_long, aes(x = date, y = value, color = variable)) +
+  geom_line(size = 1) +
+  labs(title = "Ekonomik Göstergeler (Renkli)",
+       x = "Tarih", y = "Değer", color = "Gösterge") +
+  theme_minimal()
+```
+:::
+:::
+
+🧠 `color = variable` → her seriyi ayırt etmek kolay
+
+🎯 Özellikle karşılaştırmalı analizler için uygundur
+
+⚠️ Grafik ölçekleri aynı değilse karşılaştırma yanıltıcı olabilir.
+
+## Ekstra Grafik Türleri – ggplot2 ile Neler Yapabilirsiniz?
+
+-   `geom_area()` → kümülatif değişim
+-   `geom_smooth()` → trend ve ilişki çizgisi
+-   `geom_point()` → seyrek serilerde nokta görselliği
+-   `geom_vline()` / `annotate()` → önemli tarih işaretleme
+-   `gganimate` → zamanla değişimi gösteren animasyonlar
+-   `plotly::ggplotly()` → interaktif grafiklere dönüşüm
+
+------------------------------------------------------------------------
+
+## ggplot2 için Harika Kaynaklar
+
+-   📘 [**ggplot2: Elegant Graphics for Data Analysis** (Hadley Wickham)](https://ggplot2-book.org/)\
+-   🌐 <https://r-graph-gallery.com/> – yüzlerce örnek\
+-   📚 [The Big Book of R](https://www.bigbookofr.com/) – Data Visualization\
+-   📘 `ggplot2` cheat sheet → RStudio’dan indirilebilir\
+-   📦 Paketler: `ggthemes`, `ggrepel`, `viridis`, `scales`, `patchwork`
+
+> 💡 Grafik öğrenmek, “çizip geçmek” değil “gösterip anlatmak” işidir.
+
+------------------------------------------------------------------------
+
+## Grafik Çizerken Dikkat Etmemiz Gerekenler
+
+✅ Y ekseni mümkünse 0’dan başlamalı\
+✅ Kategoriler okunabilir olmalı (çok kategori varsa sadeleştir)\
+✅ Renk seçimi → anlamlı ve erişilebilir (renk körlüğü!)\
+✅ Başlıklar, etiketler, legend → anlatımı netleştirmeli\
+✅ Fazla süs → grafiğin mesajını zayıflatır\
+✅ Ölçek farkı varsa karşılaştırmadan kaçın (örnek: economics_long)
+
+> 🎯 Grafik, analiz sonucunun değil, **anlamın görselidir**
+
+**Teşekkürler**
+
+Muhammed Fatih TÜZEN
+
+e-posta: **`fatih.tuzen@tuik.gov.tr`**
+
+Linkedin: [`https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/`](https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/)

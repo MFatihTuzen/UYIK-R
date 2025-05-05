@@ -17,6 +17,8 @@ editor: visual
 execute:
   echo: true
   eval: true
+  warnings: false
+  messages: false
 ---
 
 ## Dr. Muhammed Fatih TÜZEN

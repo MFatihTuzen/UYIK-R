@@ -17,6 +17,8 @@ editor: visual
 execute:
   echo: true
   eval: true
+  warnings: false
+  messages: false
 ---
 
 ## Sunum Planı
@@ -289,9 +291,9 @@ sd(penguins$flipper_length_mm, na.rm = TRUE)
 
 🔍 Bu grafikler:
 
--    Değerlerin nerede yoğunlaştığını,
+-   Değerlerin nerede yoğunlaştığını,
 
--    Aykırı değerleri,
+-   Aykırı değerleri,
 
 -   Simetri / çarpıklık durumlarını ortaya çıkarır.
 
@@ -331,7 +333,7 @@ plot(penguins$flipper_length_mm, penguins$body_mass_g,
 
 Bu slaytlarda odak noktamız:
 
--    Kategorik değişkenlerin yapısını anlamak
+-   Kategorik değişkenlerin yapısını anlamak
 
 -   Frekans analizi yapmak
 
@@ -418,7 +420,7 @@ pie(tablo,
 > 🎯 Pasta grafik, oranların sezgisel görünümünü verir.\
 > 🧠 Ancak pasta grafik sayılarla değil **alanla** çalıştığı için:
 
--    Küçük farklar kolay ayırt edilemez
+-   Küçük farklar kolay ayırt edilemez
 
 -   Fazla kategori varsa karmaşıklaşır
 
@@ -489,7 +491,7 @@ plot(AirPassengers,
 
 📊 Bu grafikle:
 
--    Genel artış trendini
+-   Genel artış trendini
 
 -   Mevsimsel desenleri
 
