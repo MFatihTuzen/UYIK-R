@@ -6,8 +6,8 @@
 <script src="5.data_preprocess_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="5.data_preprocess_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="5.data_preprocess_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="5.data_preprocess_files/libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.39">
+<link href="5.data_preprocess_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.40">
 
   <meta name="author" content="Dr.&nbsp;Muhammed Fatih TÜZEN">
   <title>R Programlama ile Veri Analizi</title>
@@ -372,8 +372,8 @@ R ortamında bu durum <code>NA</code> (Not Available) ile gösterilir.</p>
 <h3 id="eksik-veri-türleri">🧠 Eksik Veri Türleri</h3>
 <table class="caption-top">
 <colgroup>
-<col style="width: 18%">
-<col style="width: 81%">
+<col style="width: 50%">
+<col style="width: 50%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -436,7 +436,8 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 <h2>🔍 R ile Eksik Veri Tespiti</h2>
 <h3 id="temel-fonksiyonlar">🔧 Temel Fonksiyonlar</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">summary</span>(airquality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>air_data <span class="ot">&lt;-</span> airquality</span>
+<span id="cb1-2"><a href=""></a><span class="fu">summary</span>(air_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Ozone           Solar.R           Wind             Temp      
  Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00  
@@ -458,11 +459,11 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 </div>
 <p>Her değişkenin min–max, NA durumu görülür.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">sum</span>(<span class="fu">is.na</span>(airquality))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">sum</span>(<span class="fu">is.na</span>(air_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 44</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(airquality))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(air_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Ozone Solar.R    Wind    Temp   Month     Day 
      37       7       0       0       0       0 </code></pre>
@@ -471,7 +472,7 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 <p>Tüm veri setindeki ve değişken bazlı eksik değer sayıları</p>
 <h3 id="eksik-olan-gözlemleri-filtreleme">📌 Eksik olan gözlemleri filtreleme</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>airquality[<span class="sc">!</span><span class="fu">complete.cases</span>(airquality), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>air_data[<span class="sc">!</span><span class="fu">complete.cases</span>(air_data), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    Ozone Solar.R Wind Temp Month Day
 5      NA      NA 14.3   56     5   5
@@ -529,7 +530,7 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 <h3 id="naniar-paketi">📦 <code>naniar</code> paketi</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">library</span>(naniar)</span>
-<span id="cb9-2"><a href=""></a><span class="fu">gg_miss_var</span>(airquality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-2"><a href=""></a><span class="fu">gg_miss_var</span>(air_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
@@ -540,7 +541,7 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 </div>
 <p>Değişken bazında eksik oranı çubuğu</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">vis_miss</span>(airquality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">vis_miss</span>(air_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
@@ -555,7 +556,7 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 <h2>📦 Alternatif: <code>visdat</code> paketi</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">library</span>(visdat)</span>
-<span id="cb11-2"><a href=""></a><span class="fu">vis_dat</span>(airquality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-2"><a href=""></a><span class="fu">vis_dat</span>(air_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="5.data_preprocess_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"><p>Veri tipleriyle birlikte eksikliği ve yapıyı renkli olarak sunar</p>
@@ -585,14 +586,14 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 <h3 id="basit-imputasyon-yöntemleri">🔧 Basit İmputasyon Yöntemleri</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a><span class="co"># Ortalama ile</span></span>
-<span id="cb12-2"><a href=""></a>airquality<span class="sc">$</span>Ozone <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(airquality<span class="sc">$</span>Ozone),</span>
-<span id="cb12-3"><a href=""></a>                           <span class="fu">mean</span>(airquality<span class="sc">$</span>Ozone, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb12-4"><a href=""></a>                           airquality<span class="sc">$</span>Ozone)</span>
+<span id="cb12-2"><a href=""></a>air_data<span class="sc">$</span>Ozone <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(air_data<span class="sc">$</span>Ozone),</span>
+<span id="cb12-3"><a href=""></a>                           <span class="fu">mean</span>(air_data<span class="sc">$</span>Ozone, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb12-4"><a href=""></a>                           air_data<span class="sc">$</span>Ozone)</span>
 <span id="cb12-5"><a href=""></a></span>
 <span id="cb12-6"><a href=""></a><span class="co"># Ortanca ile</span></span>
-<span id="cb12-7"><a href=""></a>airquality<span class="sc">$</span>Solar.R <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(airquality<span class="sc">$</span>Solar.R),</span>
-<span id="cb12-8"><a href=""></a>                             <span class="fu">median</span>(airquality<span class="sc">$</span>Solar.R, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb12-9"><a href=""></a>                             airquality<span class="sc">$</span>Solar.R)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-7"><a href=""></a>air_data<span class="sc">$</span>Solar.R<span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(air_data<span class="sc">$</span>Solar.R),</span>
+<span id="cb12-8"><a href=""></a>                             <span class="fu">median</span>(air_data<span class="sc">$</span>Solar.R, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb12-9"><a href=""></a>                             air_data<span class="sc">$</span>Solar.R)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>⚠️ Ortalamayla doldurmak varyansı küçültür → modelleme etkilenebilir</p>
 <p>🔍 Basit yöntemler hızlıdır ama <strong>istatistiksel varsayımları bozabilir</strong></p>
@@ -607,74 +608,70 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 <li><p>Çoklu imputasyon yapar: <code>m</code> kez tekrar eder → belirsizlik dikkate alınır</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="co"># Gerekli paket</span></span>
-<span id="cb13-2"><a href=""></a><span class="fu">library</span>(mice)</span>
-<span id="cb13-3"><a href=""></a></span>
-<span id="cb13-4"><a href=""></a><span class="co"># airquality veri setini gözden geçir</span></span>
-<span id="cb13-5"><a href=""></a><span class="fu">summary</span>(airquality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>air_data <span class="ot">&lt;-</span> airquality</span>
+<span id="cb13-2"><a href=""></a><span class="co"># airquality veri setini gözden geçir</span></span>
+<span id="cb13-3"><a href=""></a><span class="fu">summary</span>(air_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Ozone           Solar.R           Wind             Temp      
  Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00  
- 1st Qu.: 21.00   1st Qu.:120.0   1st Qu.: 7.400   1st Qu.:72.00  
- Median : 42.13   Median :205.0   Median : 9.700   Median :79.00  
- Mean   : 42.13   Mean   :186.8   Mean   : 9.958   Mean   :77.88  
- 3rd Qu.: 46.00   3rd Qu.:256.0   3rd Qu.:11.500   3rd Qu.:85.00  
+ 1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00  
+ Median : 31.50   Median :205.0   Median : 9.700   Median :79.00  
+ Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88  
+ 3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00  
  Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00  
+ NA's   :37       NA's   :7                                       
      Month            Day      
  Min.   :5.000   Min.   : 1.0  
  1st Qu.:6.000   1st Qu.: 8.0  
  Median :7.000   Median :16.0  
  Mean   :6.993   Mean   :15.8  
  3rd Qu.:8.000   3rd Qu.:23.0  
- Max.   :9.000   Max.   :31.0  </code></pre>
+ Max.   :9.000   Max.   :31.0  
+                               </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="co"># Çoklu imputasyon başlat</span></span>
-<span id="cb15-2"><a href=""></a><span class="co"># method = "pmm" predictive mean matching kullanır</span></span>
-<span id="cb15-3"><a href=""></a><span class="co"># m = 5 → 5 farklı tamamlanmış veri seti üretilecek</span></span>
-<span id="cb15-4"><a href=""></a><span class="co"># seed → tekrar üretilebilirlik için sabitlenir</span></span>
-<span id="cb15-5"><a href=""></a>imp <span class="ot">&lt;-</span> <span class="fu">mice</span>(airquality, <span class="at">method =</span> <span class="st">"pmm"</span>, <span class="at">m =</span> <span class="dv">5</span>, <span class="at">seed =</span> <span class="dv">123</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="co"># Gerekli paket</span></span>
+<span id="cb15-2"><a href=""></a><span class="fu">library</span>(mice)</span>
+<span id="cb15-3"><a href=""></a><span class="co"># Çoklu imputasyon başlat</span></span>
+<span id="cb15-4"><a href=""></a><span class="co"># method = "pmm" predictive mean matching kullanır</span></span>
+<span id="cb15-5"><a href=""></a><span class="co"># m = 5 → 5 farklı tamamlanmış veri seti üretilecek</span></span>
+<span id="cb15-6"><a href=""></a><span class="co"># seed → tekrar üretilebilirlik için sabitlenir</span></span>
+<span id="cb15-7"><a href=""></a>imp <span class="ot">&lt;-</span> <span class="fu">mice</span>(air_data, <span class="at">method =</span> <span class="st">"pmm"</span>, <span class="at">m =</span> <span class="dv">5</span>, <span class="at">seed =</span> <span class="dv">123</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
  iter imp variable
-  1   1
-  1   2
-  1   3
-  1   4
-  1   5
-  2   1
-  2   2
-  2   3
-  2   4
-  2   5
-  3   1
-  3   2
-  3   3
-  3   4
-  3   5
-  4   1
-  4   2
-  4   3
-  4   4
-  4   5
-  5   1
-  5   2
-  5   3
-  5   4
-  5   5</code></pre>
+  1   1  Ozone  Solar.R
+  1   2  Ozone  Solar.R
+  1   3  Ozone  Solar.R
+  1   4  Ozone  Solar.R
+  1   5  Ozone  Solar.R
+  2   1  Ozone  Solar.R
+  2   2  Ozone  Solar.R
+  2   3  Ozone  Solar.R
+  2   4  Ozone  Solar.R
+  2   5  Ozone  Solar.R
+  3   1  Ozone  Solar.R
+  3   2  Ozone  Solar.R
+  3   3  Ozone  Solar.R
+  3   4  Ozone  Solar.R
+  3   5  Ozone  Solar.R
+  4   1  Ozone  Solar.R
+  4   2  Ozone  Solar.R
+  4   3  Ozone  Solar.R
+  4   4  Ozone  Solar.R
+  4   5  Ozone  Solar.R
+  5   1  Ozone  Solar.R
+  5   2  Ozone  Solar.R
+  5   3  Ozone  Solar.R
+  5   4  Ozone  Solar.R
+  5   5  Ozone  Solar.R</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="co"># İlk tamamlanmış (impute edilmiş) veri setini al</span></span>
 <span id="cb17-2"><a href=""></a>completed_data <span class="ot">&lt;-</span> <span class="fu">complete</span>(imp, <span class="dv">1</span>)</span>
-<span id="cb17-3"><a href=""></a></span>
-<span id="cb17-4"><a href=""></a><span class="co"># Ozone değişkeninin imputasyon öncesi ve sonrası dağılımı</span></span>
-<span id="cb17-5"><a href=""></a><span class="fu">summary</span>(airquality<span class="sc">$</span>Ozone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-3"><a href=""></a><span class="co"># Ozone değişkeninin imputasyon sonrası dağılımı</span></span>
+<span id="cb17-4"><a href=""></a><span class="fu">summary</span>(completed_data<span class="sc">$</span>Ozone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   1.00   21.00   42.13   42.13   46.00  168.00 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">summary</span>(completed_data<span class="sc">$</span>Ozone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   1.00   21.00   42.13   42.13   46.00  168.00 </code></pre>
+   1.00   18.00   29.00   40.66   59.00  168.00 </code></pre>
 </div>
 </div>
 <p>🧾 <strong>Açıklamalar:</strong></p>
@@ -694,38 +691,48 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 <li><p>Dışsal değişkenleri etkili biçimde kullanır</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="co"># Gerekli paket</span></span>
-<span id="cb21-2"><a href=""></a><span class="fu">library</span>(missForest)</span>
-<span id="cb21-3"><a href=""></a></span>
-<span id="cb21-4"><a href=""></a><span class="co"># Random Forest ile imputasyon (dikkat: zaman alabilir!)</span></span>
-<span id="cb21-5"><a href=""></a><span class="co"># ntree = 100 default, istenirse artırılabilir</span></span>
-<span id="cb21-6"><a href=""></a><span class="co"># verbose = TRUE → işlem ilerleyişini gösterir</span></span>
-<span id="cb21-7"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb21-8"><a href=""></a>imp_rf <span class="ot">&lt;-</span> <span class="fu">missForest</span>(airquality, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="co"># Gerekli paket</span></span>
+<span id="cb19-2"><a href=""></a><span class="fu">library</span>(missForest)</span>
+<span id="cb19-3"><a href=""></a></span>
+<span id="cb19-4"><a href=""></a><span class="co"># Random Forest ile imputasyon (dikkat: zaman alabilir!)</span></span>
+<span id="cb19-5"><a href=""></a><span class="co"># ntree = 100 default, istenirse artırılabilir</span></span>
+<span id="cb19-6"><a href=""></a><span class="co"># verbose = TRUE → işlem ilerleyişini gösterir</span></span>
+<span id="cb19-7"><a href=""></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb19-8"><a href=""></a>imp_rf <span class="ot">&lt;-</span> <span class="fu">missForest</span>(air_data, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  missForest iteration 1 in progress...done!
-    estimated error(s): 0 
-    difference(s): 0 
-    time: 0 seconds
+    estimated error(s): 0.4729807 
+    difference(s): 0.004116049 
+    time: 0.06 seconds
 
   missForest iteration 2 in progress...done!
-    estimated error(s): 0 
-    difference(s): 0 
-    time: 0 seconds</code></pre>
+    estimated error(s): 0.4591754 
+    difference(s): 0.0003780686 
+    time: 0.08 seconds
+
+  missForest iteration 3 in progress...done!
+    estimated error(s): 0.4640599 
+    difference(s): 0.0001197957 
+    time: 0.07 seconds
+
+  missForest iteration 4 in progress...done!
+    estimated error(s): 0.4655499 
+    difference(s): 0.0001712192 
+    time: 0.07 seconds</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="co"># İmpute edilmiş veri setine erişim</span></span>
-<span id="cb23-2"><a href=""></a>imputed_data <span class="ot">&lt;-</span> imp_rf<span class="sc">$</span>ximp</span>
-<span id="cb23-3"><a href=""></a></span>
-<span id="cb23-4"><a href=""></a><span class="co"># Karşılaştırma: Ozone değişkeni</span></span>
-<span id="cb23-5"><a href=""></a><span class="fu">summary</span>(airquality<span class="sc">$</span>Ozone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="co"># İmpute edilmiş veri setine erişim</span></span>
+<span id="cb21-2"><a href=""></a>imputed_data <span class="ot">&lt;-</span> imp_rf<span class="sc">$</span>ximp</span>
+<span id="cb21-3"><a href=""></a></span>
+<span id="cb21-4"><a href=""></a><span class="co"># Karşılaştırma: Ozone değişkeni</span></span>
+<span id="cb21-5"><a href=""></a><span class="fu">summary</span>(air_data<span class="sc">$</span>Ozone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+   1.00   18.00   31.50   42.13   63.25  168.00      37 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">summary</span>(imputed_data<span class="sc">$</span>Ozone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   1.00   21.00   42.13   42.13   46.00  168.00 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="fu">summary</span>(imputed_data<span class="sc">$</span>Ozone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   1.00   21.00   42.13   42.13   46.00  168.00 </code></pre>
+    1.0    20.0    32.0    41.6    59.0   168.0 </code></pre>
 </div>
 </div>
 <p>🧾 <strong>Açıklamalar:</strong></p>
@@ -736,9 +743,61 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 <li><p><code>OOBerror</code> gibi hata ölçüleri de döner (isteğe bağlı kullanılabilir)</p></li>
 </ul>
 </section>
-<section class="slide level2">
+<section id="çoklu-imputasyon" class="slide level2">
+<h2>🔁 Çoklu İmputasyon</h2>
+<h3 id="sorun">🧩 Sorun:</h3>
+<p>Eksik değerler olduğunda, <strong>tek bir değerle</strong> (örneğin ortalama veya tek bir imputasyon sonucu) doldurmak, o değeri <strong>gerçek gibi varsaymak</strong> demektir.</p>
+<p>Ama bu doğru değil çünkü:</p>
+<ul>
+<li><p>Aslında neyin oraya gelmesi gerektiğini bilmiyoruz.</p></li>
+<li><p>İmputasyon <strong>belirsizlik içerir</strong>. Bu belirsizliği tek bir setle göz ardı ederiz.</p></li>
+</ul>
+<h3 id="çözüm-çoklu-imputasyon-multiple-imputation">🧠 Çözüm: Çoklu İmputasyon (Multiple Imputation)</h3>
+<ul>
+<li><p>MICE gibi algoritmalar bu yüzden <strong>m farklı tamamlanmış veri seti üretir.</strong></p></li>
+<li><p>Her biri farklı bir olasılık dahilinde eksik gözlemleri doldurur.</p></li>
+<li><p>Bu, sanki eksik veri yerine birkaç “senaryo” koymak gibidir.</p></li>
+</ul>
+<h3 id="istatistiksel-avantajı">🔬 İstatistiksel Avantajı</h3>
+<p>Çoklu imputasyonla yapılan analizlerde:</p>
+<ul>
+<li><p><strong>Tahminlerin ortalaması</strong> alınır</p></li>
+<li><p><strong>Varyanslar birleştirilir</strong> (hem model içi hem imputasyon varyansı)</p></li>
+<li><p>Böylece <strong>daha güvenilir ve doğru güven aralıkları</strong> elde edilir</p></li>
+</ul>
+</section>
+<section id="uygulamalı-örnek-neden-önemli" class="slide level2">
+<h2>📌 Uygulamalı Örnek: Neden Önemli?</h2>
+<h3 id="tek-imputasyonla-yapılan-analiz">Tek imputasyonla yapılan analiz</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Ozone <span class="sc">~</span> Solar.R <span class="sc">+</span> Wind <span class="sc">+</span> Temp, <span class="at">data =</span> completed_data)</span>
+<span id="cb25-2"><a href=""></a><span class="fu">summary</span>(model1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Ozone ~ Solar.R + Wind + Temp, data = completed_data)
 
-<h3 id="çoklu-imputasyonun-farkı-ve-kullanımı">🔁 Çoklu İmputasyonun Farkı ve Kullanımı</h3>
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-50.154 -13.971  -3.135  12.466  99.975 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -54.98280   19.98202  -2.752  0.00667 ** 
+Solar.R       0.02559    0.02079   1.231  0.22029    
+Wind         -3.21623    0.57256  -5.617 9.25e-08 ***
+Temp          1.57841    0.22329   7.069 5.62e-11 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 22.04 on 149 degrees of freedom
+Multiple R-squared:  0.5301,    Adjusted R-squared:  0.5206 
+F-statistic: 56.03 on 3 and 149 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Bu sana regresyon katsayıları verir ama şunu göz ardı eder:</p>
+<p>❌ “Tamamladığım veride belirsizlik vardı, ama ben onu tek bir gerçek gibi kabul ettim.”</p>
+<h3 id="çoklu-imputasyonla-yapılan-analiz">Çoklu imputasyonla yapılan analiz</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a><span class="co"># Her bir tamamlanmış veri seti için model kurulumu</span></span>
 <span id="cb27-2"><a href=""></a>fit <span class="ot">&lt;-</span> <span class="fu">with</span>(imp, <span class="fu">lm</span>(Ozone <span class="sc">~</span> Solar.R <span class="sc">+</span> Wind <span class="sc">+</span> Temp))</span>
@@ -750,10 +809,10 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 <span id="cb27-8"><a href=""></a><span class="fu">summary</span>(pooled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         term     estimate   std.error statistic       df      p.value
-1 (Intercept) -38.69307087 18.86715927 -2.050816 147.0247 4.206053e-02
-2     Solar.R   0.05799313  0.01996099  2.905323 147.0247 4.236041e-03
-3        Wind  -2.70846198  0.54233301 -4.994094 147.0247 1.653438e-06
-4        Temp   1.24493660  0.20853216  5.969998 147.0247 1.703413e-08</code></pre>
+1 (Intercept) -62.90711969 22.86085695 -2.751739 34.72865 9.356044e-03
+2     Solar.R   0.05301193  0.02635913  2.011141 18.06439 5.947583e-02
+3        Wind  -3.07477837  0.65455278 -4.697525 35.55451 3.864956e-05
+4        Temp   1.61792306  0.24083347  6.718016 53.61993 1.218849e-08</code></pre>
 </div>
 </div>
 <p>🧾 <strong>Açıklamalar:</strong></p>
@@ -762,6 +821,480 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 <li><p><code>pool()</code>: Bu regresyonların sonuçlarını birleştirir, varyans ve belirsizliği yansıtarak güvenilir sonuç sunar</p></li>
 <li><p><code>summary(pooled)</code>: Nihai regresyon çıktısını verir</p></li>
 </ul>
+</section>
+<section id="diğer-imputasyon-yöntemleri" class="slide level2">
+<h2>🧰 Diğer İmputasyon Yöntemleri</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<caption>Eksik Veri Doldurma Yöntemleri Karşılaştırması</caption>
+<colgroup>
+<col style="width: 23%">
+<col style="width: 30%">
+<col style="width: 21%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Yöntem</th>
+<th style="text-align: left;">Açıklama</th>
+<th style="text-align: left;">Avantaj</th>
+<th style="text-align: left;">Dezavantaj</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Listwise Deletion</td>
+<td style="text-align: left;">NA içeren gözlemleri tamamen siler</td>
+<td style="text-align: left;">Basit, hızlı</td>
+<td style="text-align: left;">Veri kaybı, önyargı</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ortalama / Medyan / Mod</td>
+<td style="text-align: left;">Sabit değerle doldurma</td>
+<td style="text-align: left;">Uygulaması kolay</td>
+<td style="text-align: left;">Varyans azalır, ilişki bozulur</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LOCF (Last Obs. Carried Fwd)</td>
+<td style="text-align: left;">Önceki gözlemi taşıma (zaman serisi)</td>
+<td style="text-align: left;">Zaman serisinde kullanışlı</td>
+<td style="text-align: left;">Trend ve varyans yok sayılır</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Linear Interpolation</td>
+<td style="text-align: left;">Doğrusal interpolasyon</td>
+<td style="text-align: left;">Trend korunur, sade</td>
+<td style="text-align: left;">Ani değişimleri yakalayamaz</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">KNN Imputation</td>
+<td style="text-align: left;">Komşu benzer gözlemlere göre doldurma</td>
+<td style="text-align: left;">İlişkiyi korur</td>
+<td style="text-align: left;">Yavaş, hesaplama maliyetli</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MICE</td>
+<td style="text-align: left;">Zincirleme çoklu regresyon</td>
+<td style="text-align: left;">Belirsizlik dahil</td>
+<td style="text-align: left;">Yavaş, uzmanlık ister</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">missForest</td>
+<td style="text-align: left;">Random Forest ile doldurma</td>
+<td style="text-align: left;">Karmaşık yapıları öğrenir</td>
+<td style="text-align: left;">Yorumlaması zor</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EM Algorithm</td>
+<td style="text-align: left;">Olasılıksal, iteratif model</td>
+<td style="text-align: left;">İstatistiksel temelli</td>
+<td style="text-align: left;">İleri düzey bilgi gerekir</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="ne-zaman-hangi-yöntem">📌 Ne Zaman Hangi Yöntem?</h3>
+<ul>
+<li><strong>Keşifsel analiz</strong>: Ortalama, medyan, listwise</li>
+<li><strong>Modelleme öncesi</strong>: MICE, missForest</li>
+<li><strong>Zaman serisi</strong>: LOCF, interpolation</li>
+<li><strong>Karmaşık veri yapısı</strong>: KNN, missForest</li>
+<li><strong>İstatistiksel çıkarım önemliyse</strong>: MICE, EM</li>
+</ul>
+<h3 id="tavsiye">🧠 Tavsiye</h3>
+<blockquote>
+<p><strong>Yöntem seçimi veri tipine ve analiz amacına göre yapılmalıdır.</strong><br>
+“Bir yöntem herkese uymaz.” Verinin yapısını iyi tanımak en büyük avantajdır.</p>
+</blockquote>
+</section>
+<section id="aykırı-değer-nedir-ve-neden-önemlidir" class="slide level2">
+<h2>🚨 Aykırı Değer Nedir ve Neden Önemlidir?</h2>
+<h3 id="tanım-4">🔍 Tanım:</h3>
+<blockquote>
+<p>Aykırı değer (outlier), veri setindeki diğer gözlemlerle karşılaştırıldığında <strong>anormal derecede farklı</strong> olan bir değerdir.</p>
+</blockquote>
+<h3 id="neden-önemlidir-1">🎯 Neden Önemlidir?</h3>
+<ul>
+<li>🔧 <strong>Analizleri bozabilir</strong>: Ortalama, varyans, korelasyon gibi ölçüleri çarpıtabilir.</li>
+<li>📉 <strong>Modelleme hatası oluşturabilir</strong>: Regresyon gibi modellerde etki büyük olabilir.</li>
+<li>🕵️‍♀️ <strong>Gerçek dışı değer mi yoksa ilginç bir sinyal mi?</strong> – her zaman silinmemeli.</li>
+</ul>
+</section>
+<section id="örnek-durumlar" class="slide level2">
+<h2>📌 Örnek Durumlar</h2>
+<ul>
+<li>Anket verisinde: “Aylık gelir” → 5 milyon TL (veri girişi hatası mı?)</li>
+<li>Zaman serisinde: Aniden sıfırlanan üretim verisi</li>
+<li>Algılama sistemi: Uç bir sıcaklık değeri – hata mı yoksa alarm mı?</li>
+</ul>
+<h3 id="tavsiye-1">🧠 Tavsiye</h3>
+<blockquote>
+<p>Aykırı değer <strong>her zaman sorun değil</strong>, ama <strong>ne olduğu bilinmeden model kurulmaz.</strong><br>
+“Önce anlamaya çalış, sonra temizle!”</p>
+</blockquote>
+</section>
+<section id="aykırı-değer-belirleme-yöntemleri" class="slide level2">
+<h2>🛠️ Aykırı Değer Belirleme Yöntemleri</h2>
+<h3 id="iqr-interquartile-range-yöntemi">📊 1. IQR (Interquartile Range) Yöntemi</h3>
+<p>Matematiksel tanım:</p>
+<p><span class="math display">\[
+\text{IQR} = Q_3 - Q_1 \\
+\text{Alt sınır} = Q_1 - 1.5 \times \text{IQR} \\
+\text{Üst sınır} = Q_3 + 1.5 \times \text{IQR}
+\]</span></p>
+<p>Bu aralık dışındaki gözlemler <strong>aykırı</strong> kabul edilir.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="co"># Örnek veri: air_data$Ozone</span></span>
+<span id="cb29-2"><a href=""></a>iqr <span class="ot">&lt;-</span> <span class="fu">IQR</span>(air_data<span class="sc">$</span>Ozone, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)                <span class="co"># IQR hesapla</span></span>
+<span id="cb29-3"><a href=""></a>q1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(air_data<span class="sc">$</span>Ozone, <span class="fl">0.25</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)      <span class="co"># 1. çeyrek</span></span>
+<span id="cb29-4"><a href=""></a>q3 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(air_data<span class="sc">$</span>Ozone, <span class="fl">0.75</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)      <span class="co"># 3. çeyrek</span></span>
+<span id="cb29-5"><a href=""></a></span>
+<span id="cb29-6"><a href=""></a><span class="co"># Alt ve üst sınırlar</span></span>
+<span id="cb29-7"><a href=""></a>lower <span class="ot">&lt;-</span> q1 <span class="sc">-</span> <span class="fl">1.5</span> <span class="sc">*</span> iqr</span>
+<span id="cb29-8"><a href=""></a>upper <span class="ot">&lt;-</span> q3 <span class="sc">+</span> <span class="fl">1.5</span> <span class="sc">*</span> iqr</span>
+<span id="cb29-9"><a href=""></a></span>
+<span id="cb29-10"><a href=""></a><span class="co"># Aykırı değerlerin filtrelenmesi</span></span>
+<span id="cb29-11"><a href=""></a>outliers_iqr <span class="ot">&lt;-</span> air_data <span class="sc">%&gt;%</span></span>
+<span id="cb29-12"><a href=""></a>  <span class="fu">filter</span>(Ozone <span class="sc">&lt;</span> lower <span class="sc">|</span> Ozone <span class="sc">&gt;</span> upper)</span>
+<span id="cb29-13"><a href=""></a></span>
+<span id="cb29-14"><a href=""></a>outliers_iqr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Ozone Solar.R Wind Temp Month Day
+1   135     269  4.1   84     7   1
+2   168     238  3.4   81     8  25</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="z-skoru-yöntemi">🧮 2. Z-Skoru Yöntemi</h3>
+<p>Matematiksel ifade:</p>
+<p><span class="math display">\[
+z = \frac{x - \mu}{\sigma}
+\]</span></p>
+<p>Genellikle <span class="math inline">\(|z| &gt; 3\)</span> olan değerler aykırı kabul edilir.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a><span class="co"># Z-skoru hesaplama</span></span>
+<span id="cb31-2"><a href=""></a>ozone_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(air_data<span class="sc">$</span>Ozone, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb31-3"><a href=""></a>ozone_sd <span class="ot">&lt;-</span> <span class="fu">sd</span>(air_data<span class="sc">$</span>Ozone, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb31-4"><a href=""></a></span>
+<span id="cb31-5"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb31-6"><a href=""></a>air_data <span class="ot">&lt;-</span> air_data <span class="sc">%&gt;%</span></span>
+<span id="cb31-7"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">z_score =</span> (Ozone <span class="sc">-</span> ozone_mean) <span class="sc">/</span> ozone_sd)</span>
+<span id="cb31-8"><a href=""></a></span>
+<span id="cb31-9"><a href=""></a><span class="co"># Aykırı değerlerin seçilmesi</span></span>
+<span id="cb31-10"><a href=""></a>outliers_z <span class="ot">&lt;-</span> air_data <span class="sc">%&gt;%</span></span>
+<span id="cb31-11"><a href=""></a>  <span class="fu">filter</span>(<span class="fu">abs</span>(z_score) <span class="sc">&gt;</span> <span class="dv">3</span>)</span>
+<span id="cb31-12"><a href=""></a></span>
+<span id="cb31-13"><a href=""></a>outliers_z</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Ozone Solar.R Wind Temp Month Day  z_score
+1   168     238  3.4   81     8  25 3.815664</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="görsel-yöntemler-boxplot">👀 3. Görsel Yöntemler (Boxplot)</h3>
+<div class="columns">
+<div class="column" style="width:90%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb33-2"><a href=""></a></span>
+<span id="cb33-3"><a href=""></a><span class="fu">ggplot</span>(air_data, <span class="fu">aes</span>(<span class="at">y =</span> Ozone)) <span class="sc">+</span></span>
+<span id="cb33-4"><a href=""></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb33-5"><a href=""></a>  <span class="fu">labs</span>(</span>
+<span id="cb33-6"><a href=""></a>    <span class="at">title =</span> <span class="st">"Ozone Değişkeni İçin Boxplot"</span>,</span>
+<span id="cb33-7"><a href=""></a>    <span class="at">y =</span> <span class="st">"Ozone"</span></span>
+<span id="cb33-8"><a href=""></a>  ) <span class="sc">+</span></span>
+<span id="cb33-9"><a href=""></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="5.data_preprocess_files/figure-revealjs/unnamed-chunk-15-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section class="slide level2">
+
+<h3 id="diğer-yöntemler-ileri-seviye">🔎 Diğer Yöntemler (İleri Seviye)</h3>
+<table class="caption-top">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 55%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Yöntem</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Mahalanobis Mesafesi</strong></td>
+<td>Çok değişkenli aykırılık tespiti</td>
+</tr>
+<tr class="even">
+<td><strong>LOF (Local Outlier Factor)</strong></td>
+<td>Yoğunluk temelli, kümelenme analizinde güçlü</td>
+</tr>
+<tr class="odd">
+<td><strong>DBSCAN</strong></td>
+<td>Aykırıları ayrı kümeye yerleştirir</td>
+</tr>
+<tr class="even">
+<td><strong>Isolation Forest</strong></td>
+<td>Makine öğrenmesi temelli, büyük veri için uygun</td>
+</tr>
+</tbody>
+</table>
+<h3 id="yorum">💬 Yorum</h3>
+<blockquote>
+<p>Z-skoru ve IQR yöntemleri tek değişkenli analiz için yeterlidir.<br>
+Ancak çok değişkenli veri veya yoğunluk bilgisi varsa daha gelişmiş yöntemler tercih edilmelidir.</p>
+</blockquote>
+</section>
+<section id="aykırı-değerlere-müdahale-yöntemleri" class="slide level2">
+<h2>🔧 Aykırı Değerlere Müdahale Yöntemleri</h2>
+<h3 id="ne-yapılabilir">🛠️ Ne Yapılabilir?</h3>
+<ul>
+<li><p><strong>Silmek (listwise deletion)</strong><br>
+Aşırı uçta ve açıkça hatalıysa → örn: 9999 gibi girilmiş anket hataları</p></li>
+<li><p><strong>Winsorization (sınır kırpma)</strong><br>
+Aykırı değerler üst/alt çeyrek sınırlarına eşitlenir<br>
+(örn. en büyük %1 değer, %99’luk değere çekilir)</p></li>
+<li><p><strong>Log veya Box-Cox dönüşümleri</strong><br>
+Çarpık dağılımlar için → aykırı etkisi yumuşatılır</p></li>
+<li><p><strong>Gözlemi işaretlemek (flag)</strong><br>
+Modelden çıkarmak yerine “aykırı” etiketi ile takip etmek</p></li>
+<li><p><strong>Kaynağından kontrol ve düzeltme</strong><br>
+Mümkünse verinin kaynağında hatalı giriş olup olmadığına bakmak</p></li>
+</ul>
+<h3 id="tavsiye-2">🧠 Tavsiye:</h3>
+<blockquote>
+<p><strong>Aykırı değeri hemen silme.</strong><br>
+Önce incele: hata mı, yoksa anlamlı bir uyarı mı?<br>
+Gerekçeni yaz, analizini hem “öncesi” hem “sonrası” ile karşılaştır.</p>
+</blockquote>
+</section>
+<section id="veri-normalleştirme" class="slide level2">
+<h2>⚖️ Veri Normalleştirme</h2>
+<h3 id="tanım-5">🧮 Tanım:</h3>
+<blockquote>
+<p>Veri normalleştirme, farklı ölçeklerdeki değişkenleri <strong>ortak bir ölçekte ifade etmek</strong> için yapılan dönüşümdür.</p>
+</blockquote>
+<h3 id="neden-gereklidir-1">🎯 Neden Gereklidir?</h3>
+<ul>
+<li>📊 Değişkenler farklı ölçeklerdeyse model hatalı öğrenir<br>
+(örn. gelir: 10.000, yaş: 30 → gelir etkisi abartılır)</li>
+<li>📐 Uzaklık tabanlı yöntemlerde (k-means, kNN, PCA) çok kritiktir</li>
+<li>📈 Modelin eğitimi ve yorumlanabilirliği kolaylaşır</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="en-yaygın-yöntemler">🔍 En Yaygın Yöntemler</h3>
+<table class="caption-top">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 30%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Yöntem</th>
+<th>Formül</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Min-Max Normalizasyonu</strong></td>
+<td><span class="math display">\[ x' = \frac{x - \min(x)}{\max(x) - \min(x)} \]</span></td>
+<td>0–1 aralığına dönüştürür</td>
+</tr>
+<tr class="even">
+<td><strong>Z-Skoru Standardizasyonu</strong></td>
+<td><span class="math display">\[ z = \frac{x - \mu}{\sigma} \]</span></td>
+<td>Ortalama 0, sd = 1 olacak şekilde standardize eder</td>
+</tr>
+<tr class="odd">
+<td><strong>Robust Scaling</strong></td>
+<td><span class="math display">\[ x' = \frac{x - \text{median}}{\text{IQR}} \]</span></td>
+<td>Aykırı değerlerden daha az etkilenir</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tavsiye-3">🧠 Tavsiye</h3>
+<blockquote>
+<p>Modelleme öncesi <strong>özellikle regresyon ve mesafe tabanlı algoritmalarda</strong> normalizasyon uygulanmalıdır.<br>
+Ama ağaç tabanlı yöntemlerde (decision tree, random forest) genellikle gerekmez.</p>
+</blockquote>
+</section>
+<section id="normalleştirme-yöntemleri" class="slide level2">
+<h2>🔧 Normalleştirme Yöntemleri</h2>
+<h3 id="örnek-air_datatemp-değişkeni-üzerinde-3-farklı-yöntem">📊 Örnek: <code>air_data$Temp</code> değişkeni üzerinde 3 farklı yöntem</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb34-2"><a href=""></a></span>
+<span id="cb34-3"><a href=""></a><span class="co"># Örnek veri</span></span>
+<span id="cb34-4"><a href=""></a>x <span class="ot">&lt;-</span> air_data<span class="sc">$</span>Temp</span>
+<span id="cb34-5"><a href=""></a></span>
+<span id="cb34-6"><a href=""></a><span class="co"># Min-Max</span></span>
+<span id="cb34-7"><a href=""></a>minmax_scaled <span class="ot">&lt;-</span> (x <span class="sc">-</span> <span class="fu">min</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">/</span> (<span class="fu">max</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="fu">min</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb34-8"><a href=""></a></span>
+<span id="cb34-9"><a href=""></a><span class="co"># Z-skoru</span></span>
+<span id="cb34-10"><a href=""></a>z_scaled <span class="ot">&lt;-</span> <span class="fu">scale</span>(x)</span>
+<span id="cb34-11"><a href=""></a></span>
+<span id="cb34-12"><a href=""></a><span class="co"># Robust scaling (medyan ve IQR ile)</span></span>
+<span id="cb34-13"><a href=""></a>med <span class="ot">&lt;-</span> <span class="fu">median</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb34-14"><a href=""></a>iqr <span class="ot">&lt;-</span> <span class="fu">IQR</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb34-15"><a href=""></a>robust_scaled <span class="ot">&lt;-</span> (x <span class="sc">-</span> med) <span class="sc">/</span> iqr</span>
+<span id="cb34-16"><a href=""></a></span>
+<span id="cb34-17"><a href=""></a><span class="co"># Yeni tablo</span></span>
+<span id="cb34-18"><a href=""></a>normalized_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb34-19"><a href=""></a>  <span class="at">Original =</span> x,</span>
+<span id="cb34-20"><a href=""></a>  <span class="at">MinMax =</span> minmax_scaled,</span>
+<span id="cb34-21"><a href=""></a>  <span class="at">ZScore =</span> <span class="fu">as.numeric</span>(z_scaled),</span>
+<span id="cb34-22"><a href=""></a>  <span class="at">Robust =</span> robust_scaled</span>
+<span id="cb34-23"><a href=""></a>)</span>
+<span id="cb34-24"><a href=""></a></span>
+<span id="cb34-25"><a href=""></a><span class="fu">head</span>(normalized_df, <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  Original MinMax ZScore Robust
+     &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1       67  0.268 -1.15  -0.923
+2       72  0.390 -0.621 -0.538
+3       74  0.439 -0.410 -0.385
+4       62  0.146 -1.68  -1.31 
+5       56  0     -2.31  -1.77 
+6       66  0.244 -1.26  -1    </code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="görsel-karşılaştırma">📉 Görsel Karşılaştırma</h3>
+<div class="columns">
+<div class="column" style="width:90%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb36-2"><a href=""></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb36-3"><a href=""></a></span>
+<span id="cb36-4"><a href=""></a><span class="co"># Uzun formata çevir ve görselleştir</span></span>
+<span id="cb36-5"><a href=""></a>normalized_df_long <span class="ot">&lt;-</span> normalized_df <span class="sc">%&gt;%</span></span>
+<span id="cb36-6"><a href=""></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>Original, <span class="at">names_to =</span> <span class="st">"Method"</span>, <span class="at">values_to =</span> <span class="st">"Value"</span>)</span>
+<span id="cb36-7"><a href=""></a></span>
+<span id="cb36-8"><a href=""></a><span class="fu">ggplot</span>(normalized_df_long, <span class="fu">aes</span>(<span class="at">x =</span> Value, <span class="at">fill =</span> Method)) <span class="sc">+</span></span>
+<span id="cb36-9"><a href=""></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb36-10"><a href=""></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Method, <span class="at">scales =</span> <span class="st">"free"</span>) <span class="sc">+</span></span>
+<span id="cb36-11"><a href=""></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Normalleştirme Yöntemleriyle Dönüşüm Dağılımları"</span>) <span class="sc">+</span></span>
+<span id="cb36-12"><a href=""></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="5.data_preprocess_files/figure-revealjs/unnamed-chunk-17-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+<h3 id="not">📌 Not:</h3>
+<ul>
+<li>Bu yöntemler <strong>veri setinin yapısını bozmaz</strong>, sadece <strong>ölçeğini değiştirir</strong>.</li>
+<li>Gözlemler arası</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="hangi-normalleştirme-yöntemi-ne-zaman-kullanılır">🧭 Hangi Normalleştirme Yöntemi Ne Zaman Kullanılır?</h3>
+<table class="caption-top">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 61%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Yöntem</th>
+<th>Kullanım Durumu</th>
+<th>Not</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Min-Max</strong></td>
+<td>Değerlerin 0–1 aralığına çekilmesi isteniyorsa</td>
+<td>Özellikle neural network, k-NN gibi yöntemlerde</td>
+</tr>
+<tr class="even">
+<td><strong>Z-Skoru</strong></td>
+<td>Ortalama 0, sd 1 ölçeği gerekiyorsa</td>
+<td>PCA, regresyon gibi analitik yöntemlerde idealdir</td>
+</tr>
+<tr class="odd">
+<td><strong>Robust Scaling</strong></td>
+<td>Aykırı değerlerin etkisini azaltmak istiyorsan</td>
+<td>Medyan ve IQR kullanımı sayesinde daha sağlam</td>
+</tr>
+<tr class="even">
+<td><strong>Standardizasyon Gereksiz</strong></td>
+<td>Ağaç tabanlı yöntemler (decision tree, RF)</td>
+<td>Bu modeller ölçek duyarlı değildir</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tavsiye-4">🧠 Tavsiye:</h3>
+<ul>
+<li><strong>Veri tipine ve modeline göre karar ver.</strong></li>
+<li>Girdilerin farklı ölçeklerde olması, özellikle <em>uzaklık-temelli</em> ve <em>parametrik</em> modellerde sonuçları bozar.</li>
+<li>Aykırı değer varsa → <code>Robust Scaling</code></li>
+<li>Tüm veri normalize değilse → karşılaştırmalar yanıltıcı olabilir.</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="neler-öğrendik">📌 Neler Öğrendik?</h3>
+<ul>
+<li><strong>Eksik Veriler:</strong>
+<ul>
+<li>MCAR / MAR / MNAR farkları</li>
+<li>Basit ve gelişmiş imputasyon yöntemleri (<code>mean</code>, <code>mice</code>, <code>missForest</code>)</li>
+<li>Çoklu imputasyonun mantığı ve R ile uygulaması</li>
+</ul></li>
+<li><strong>Aykırı Değerler:</strong>
+<ul>
+<li>IQR ve Z-skoru yöntemleriyle tespit</li>
+<li>Görsel analiz (boxplot)</li>
+<li>Aykırı değerlerle nasıl başa çıkılır?</li>
+</ul></li>
+<li><strong>Veri Normalleştirme:</strong>
+<ul>
+<li>Min-Max, Z-skoru, Robust scaling</li>
+<li>Hangi yöntem ne zaman kullanılmalı?</li>
+<li>Model öncesi ölçekleme fark yaratır!</li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="teşekkürler">🙏 Teşekkürler</h3>
+<blockquote>
+<p>Katılımınız ve ilginiz için çok teşekkürler!<br>
+Görüşmek üzere 👋<br>
+<strong>Dr.&nbsp;M. Fatih Tüzen</strong><br>
+<a href="https://rprogramlama.netlify.app">rprogramlama.netlify.app</a><br>
+<a href="https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/">linkedin.com/in/dr-m-fatih-t-2b2a4328</a></p>
+</blockquote>
 
 </section>
     </div>

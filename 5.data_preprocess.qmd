@@ -166,11 +166,11 @@ R ortamında bu durum `NA` (Not Available) ile gösterilir.
 
 ### 🧠 Eksik Veri Türleri
 
-| Tür      | Açıklama                                                                                              |
-|-------------|-----------------------------------------------------------|
-| **MCAR** | Eksiklik rastgele ve tüm gözlemler için eşit olasılıkla oluşur                                        |
-| **MAR**  | Eksiklik, gözlemlenebilen diğer değişkenlerle ilişkilidir (örneğin yaş arttıkça eksik olma olasılığı) |
-| **MNAR** | Eksiklik, gözlemlenemeyen bir özelliğe bağlıdır (örneğin çok hasta bireylerin veri vermemesi)         |
+| Tür | Açıklama |
+|------------------------------------|------------------------------------|
+| **MCAR** | Eksiklik rastgele ve tüm gözlemler için eşit olasılıkla oluşur |
+| **MAR** | Eksiklik, gözlemlenebilen diğer değişkenlerle ilişkilidir (örneğin yaş arttıkça eksik olma olasılığı) |
+| **MNAR** | Eksiklik, gözlemlenemeyen bir özelliğe bağlıdır (örneğin çok hasta bireylerin veri vermemesi) |
 
 > 🎯 Türünü bilmek → uygun işlem tekniğini seçmek için kritik!
 
@@ -219,14 +219,15 @@ Modelleme için **en riskli durumdur** → İmputasyon yanlı olabilir
 ### 🔧 Temel Fonksiyonlar
 
 ```{r}
-summary(airquality)
+air_data <- airquality
+summary(air_data)
 ```
 
 Her değişkenin min–max, NA durumu görülür.
 
 ```{r}
-sum(is.na(airquality))
-colSums(is.na(airquality))
+sum(is.na(air_data))
+colSums(is.na(air_data))
 ```
 
 Tüm veri setindeki ve değişken bazlı eksik değer sayıları
@@ -234,7 +235,7 @@ Tüm veri setindeki ve değişken bazlı eksik değer sayıları
 ### 📌 Eksik olan gözlemleri filtreleme
 
 ```{r}
-airquality[!complete.cases(airquality), ]
+air_data[!complete.cases(air_data), ]
 ```
 
 -   En az bir NA içeren satırlar
@@ -251,13 +252,13 @@ airquality[!complete.cases(airquality), ]
 
 ```{r}
 library(naniar)
-gg_miss_var(airquality)
+gg_miss_var(air_data)
 ```
 
 Değişken bazında eksik oranı çubuğu
 
 ```{r}
-vis_miss(airquality)
+vis_miss(air_data)
 ```
 
 Tabloda eksik vs dolu alanların gösterimi (ısı haritası gibi)
@@ -266,7 +267,7 @@ Tabloda eksik vs dolu alanların gösterimi (ısı haritası gibi)
 
 ```{r}
 library(visdat)
-vis_dat(airquality)
+vis_dat(air_data)
 ```
 
 Veri tipleriyle birlikte eksikliği ve yapıyı renkli olarak sunar
@@ -299,14 +300,14 @@ Veri tipleriyle birlikte eksikliği ve yapıyı renkli olarak sunar
 
 ```{r}
 # Ortalama ile
-airquality$Ozone <- ifelse(is.na(airquality$Ozone),
-                           mean(airquality$Ozone, na.rm = TRUE),
-                           airquality$Ozone)
+air_data$Ozone <- ifelse(is.na(air_data$Ozone),
+                           mean(air_data$Ozone, na.rm = TRUE),
+                           air_data$Ozone)
 
 # Ortanca ile
-airquality$Solar.R <- ifelse(is.na(airquality$Solar.R),
-                             median(airquality$Solar.R, na.rm = TRUE),
-                             airquality$Solar.R)
+air_data$Solar.R<- ifelse(is.na(air_data$Solar.R),
+                             median(air_data$Solar.R, na.rm = TRUE),
+                             air_data$Solar.R)
 ```
 
 ⚠️ Ortalamayla doldurmak varyansı küçültür → modelleme etkilenebilir
@@ -315,41 +316,37 @@ airquality$Solar.R <- ifelse(is.na(airquality$Solar.R),
 
 Bu yüzden daha sofistike yaklaşımlar gerekir.
 
----
+------------------------------------------------------------------------
 
 ### **MICE (Multivariate Imputation by Chained Equations)**
 
--    Değişkenler arası ilişkiyi koruyarak eksik değerleri tahmin eder
+-   Değişkenler arası ilişkiyi koruyarak eksik değerleri tahmin eder
 
 -   Her eksik değişken için ayrı regresyon modeli kurar (chain)
 
 -   Çoklu imputasyon yapar: `m` kez tekrar eder → belirsizlik dikkate alınır
 
 ```{r}
+air_data <- airquality
+# airquality veri setini gözden geçir
+summary(air_data)
 # Gerekli paket
 library(mice)
-
-# airquality veri setini gözden geçir
-summary(airquality)
-
 # Çoklu imputasyon başlat
 # method = "pmm" predictive mean matching kullanır
 # m = 5 → 5 farklı tamamlanmış veri seti üretilecek
 # seed → tekrar üretilebilirlik için sabitlenir
-imp <- mice(airquality, method = "pmm", m = 5, seed = 123)
+imp <- mice(air_data, method = "pmm", m = 5, seed = 123)
 
 # İlk tamamlanmış (impute edilmiş) veri setini al
 completed_data <- complete(imp, 1)
-
-# Ozone değişkeninin imputasyon öncesi ve sonrası dağılımı
-summary(airquality$Ozone)
+# Ozone değişkeninin imputasyon sonrası dağılımı
 summary(completed_data$Ozone)
-
 ```
 
 🧾 **Açıklamalar:**
 
--    `mice()` fonksiyonu eksik verileri değişken bazlı modellerle doldurur.
+-   `mice()` fonksiyonu eksik verileri değişken bazlı modellerle doldurur.
 
 -   `pmm`: Tahmin edilen değere en yakın gözlemin değeri kullanılır → aykırı değer üretme riski düşer.
 
@@ -357,7 +354,7 @@ summary(completed_data$Ozone)
 
 -   Bu işlemin sonunda elde ettiğimiz `completed_data` modeli kurmaya hazır hale gelir.
 
----
+------------------------------------------------------------------------
 
 ### **missForest** (Random Forest ile imputasyon)
 
@@ -375,20 +372,20 @@ library(missForest)
 # ntree = 100 default, istenirse artırılabilir
 # verbose = TRUE → işlem ilerleyişini gösterir
 set.seed(123)
-imp_rf <- missForest(airquality, verbose = TRUE)
+imp_rf <- missForest(air_data, verbose = TRUE)
 
 # İmpute edilmiş veri setine erişim
 imputed_data <- imp_rf$ximp
 
 # Karşılaştırma: Ozone değişkeni
-summary(airquality$Ozone)
+summary(air_data$Ozone)
 summary(imputed_data$Ozone)
 
 ```
 
 🧾 **Açıklamalar:**
 
--    `missForest()` hem sayısal hem kategorik değişkenlerde çalışır
+-   `missForest()` hem sayısal hem kategorik değişkenlerde çalışır
 
 -   Decision tree yapıları sayesinde doğrusal olmayan ilişkileri de öğrenir
 
@@ -396,9 +393,52 @@ summary(imputed_data$Ozone)
 
 -   `OOBerror` gibi hata ölçüleri de döner (isteğe bağlı kullanılabilir)
 
----
+------------------------------------------------------------------------
 
-### 🔁 Çoklu İmputasyonun Farkı ve Kullanımı
+## 🔁 Çoklu İmputasyon
+
+### 🧩 Sorun:
+
+Eksik değerler olduğunda, **tek bir değerle** (örneğin ortalama veya tek bir imputasyon sonucu) doldurmak, o değeri **gerçek gibi varsaymak** demektir.
+
+Ama bu doğru değil çünkü:
+
+-    Aslında neyin oraya gelmesi gerektiğini bilmiyoruz.
+
+-   İmputasyon **belirsizlik içerir**. Bu belirsizliği tek bir setle göz ardı ederiz.
+
+### 🧠 Çözüm: Çoklu İmputasyon (Multiple Imputation)
+
+-   MICE gibi algoritmalar bu yüzden **m farklı tamamlanmış veri seti üretir.**
+
+-   Her biri farklı bir olasılık dahilinde eksik gözlemleri doldurur.
+
+-   Bu, sanki eksik veri yerine birkaç “senaryo” koymak gibidir.
+
+### 🔬 İstatistiksel Avantajı
+
+Çoklu imputasyonla yapılan analizlerde:
+
+-   **Tahminlerin ortalaması** alınır
+
+-   **Varyanslar birleştirilir** (hem model içi hem imputasyon varyansı)
+
+-   Böylece **daha güvenilir ve doğru güven aralıkları** elde edilir
+
+## 📌 Uygulamalı Örnek: Neden Önemli?
+
+### Tek imputasyonla yapılan analiz
+
+```{r}
+model1 <- lm(Ozone ~ Solar.R + Wind + Temp, data = completed_data)
+summary(model1)
+```
+
+Bu sana regresyon katsayıları verir ama şunu göz ardı eder:
+
+❌ "Tamamladığım veride belirsizlik vardı, ama ben onu tek bir gerçek gibi kabul ettim."
+
+### Çoklu imputasyonla yapılan analiz
 
 ```{r}
 # Her bir tamamlanmış veri seti için model kurulumu
@@ -413,8 +453,350 @@ summary(pooled)
 
 🧾 **Açıklamalar:**
 
--    `with()`: Her bir imputasyon setinde regresyon kurar
+-   `with()`: Her bir imputasyon setinde regresyon kurar
 
 -   `pool()`: Bu regresyonların sonuçlarını birleştirir, varyans ve belirsizliği yansıtarak güvenilir sonuç sunar
 
 -   `summary(pooled)`: Nihai regresyon çıktısını verir
+
+## 🧰 Diğer İmputasyon Yöntemleri
+
+```{r}
+#| echo: false
+library(knitr)
+tibble::tibble(
+  Yöntem = c(
+    "Listwise Deletion",
+    "Ortalama / Medyan / Mod",
+    "LOCF (Last Obs. Carried Fwd)",
+    "Linear Interpolation",
+    "KNN Imputation",
+    "MICE",
+    "missForest",
+    "EM Algorithm"
+  ),
+  Açıklama = c(
+    "NA içeren gözlemleri tamamen siler",
+    "Sabit değerle doldurma",
+    "Önceki gözlemi taşıma (zaman serisi)",
+    "Doğrusal interpolasyon",
+    "Komşu benzer gözlemlere göre doldurma",
+    "Zincirleme çoklu regresyon",
+    "Random Forest ile doldurma",
+    "Olasılıksal, iteratif model"
+  ),
+  Avantaj = c(
+    "Basit, hızlı",
+    "Uygulaması kolay",
+    "Zaman serisinde kullanışlı",
+    "Trend korunur, sade",
+    "İlişkiyi korur",
+    "Belirsizlik dahil",
+    "Karmaşık yapıları öğrenir",
+    "İstatistiksel temelli"
+  ),
+  Dezavantaj = c(
+    "Veri kaybı, önyargı",
+    "Varyans azalır, ilişki bozulur",
+    "Trend ve varyans yok sayılır",
+    "Ani değişimleri yakalayamaz",
+    "Yavaş, hesaplama maliyetli",
+    "Yavaş, uzmanlık ister",
+    "Yorumlaması zor",
+    "İleri düzey bilgi gerekir"
+  )
+) %>%
+  kable(caption = "Eksik Veri Doldurma Yöntemleri Karşılaştırması", align = "l")
+```
+
+------------------------------------------------------------------------
+
+### 📌 Ne Zaman Hangi Yöntem?
+
+-   **Keşifsel analiz**: Ortalama, medyan, listwise
+-   **Modelleme öncesi**: MICE, missForest
+-   **Zaman serisi**: LOCF, interpolation
+-   **Karmaşık veri yapısı**: KNN, missForest
+-   **İstatistiksel çıkarım önemliyse**: MICE, EM
+
+### 🧠 Tavsiye
+
+> **Yöntem seçimi veri tipine ve analiz amacına göre yapılmalıdır.**\
+> “Bir yöntem herkese uymaz.” Verinin yapısını iyi tanımak en büyük avantajdır.
+
+## 🚨 Aykırı Değer Nedir ve Neden Önemlidir?
+
+### 🔍 Tanım:
+
+> Aykırı değer (outlier), veri setindeki diğer gözlemlerle karşılaştırıldığında **anormal derecede farklı** olan bir değerdir.
+
+### 🎯 Neden Önemlidir?
+
+-   🔧 **Analizleri bozabilir**: Ortalama, varyans, korelasyon gibi ölçüleri çarpıtabilir.
+-   📉 **Modelleme hatası oluşturabilir**: Regresyon gibi modellerde etki büyük olabilir.
+-   🕵️‍♀️ **Gerçek dışı değer mi yoksa ilginç bir sinyal mi?** – her zaman silinmemeli.
+
+## 📌 Örnek Durumlar
+
+-   Anket verisinde: “Aylık gelir” → 5 milyon TL (veri girişi hatası mı?)
+-   Zaman serisinde: Aniden sıfırlanan üretim verisi
+-   Algılama sistemi: Uç bir sıcaklık değeri – hata mı yoksa alarm mı?
+
+### 🧠 Tavsiye
+
+> Aykırı değer **her zaman sorun değil**, ama **ne olduğu bilinmeden model kurulmaz.**\
+> “Önce anlamaya çalış, sonra temizle!”
+
+## 🛠️ Aykırı Değer Belirleme Yöntemleri
+
+### 📊 1. IQR (Interquartile Range) Yöntemi
+
+Matematiksel tanım:
+
+$$
+\text{IQR} = Q_3 - Q_1 \\
+\text{Alt sınır} = Q_1 - 1.5 \times \text{IQR} \\
+\text{Üst sınır} = Q_3 + 1.5 \times \text{IQR}
+$$
+
+Bu aralık dışındaki gözlemler **aykırı** kabul edilir.
+
+```{r}
+# Örnek veri: air_data$Ozone
+iqr <- IQR(air_data$Ozone, na.rm = TRUE)                # IQR hesapla
+q1 <- quantile(air_data$Ozone, 0.25, na.rm = TRUE)      # 1. çeyrek
+q3 <- quantile(air_data$Ozone, 0.75, na.rm = TRUE)      # 3. çeyrek
+
+# Alt ve üst sınırlar
+lower <- q1 - 1.5 * iqr
+upper <- q3 + 1.5 * iqr
+
+# Aykırı değerlerin filtrelenmesi
+outliers_iqr <- air_data %>%
+  filter(Ozone < lower | Ozone > upper)
+
+outliers_iqr
+```
+
+------------------------------------------------------------------------
+
+### 🧮 2. Z-Skoru Yöntemi
+
+Matematiksel ifade:
+
+$$
+z = \frac{x - \mu}{\sigma}
+$$
+
+Genellikle $|z| > 3$ olan değerler aykırı kabul edilir.
+
+```{r}
+# Z-skoru hesaplama
+ozone_mean <- mean(air_data$Ozone, na.rm = TRUE)
+ozone_sd <- sd(air_data$Ozone, na.rm = TRUE)
+
+library(dplyr)
+air_data <- air_data %>%
+  mutate(z_score = (Ozone - ozone_mean) / ozone_sd)
+
+# Aykırı değerlerin seçilmesi
+outliers_z <- air_data %>%
+  filter(abs(z_score) > 3)
+
+outliers_z
+```
+
+------------------------------------------------------------------------
+
+### 👀 3. Görsel Yöntemler (Boxplot)
+
+:::: columns
+::: {.column width="90%"}
+```{r}
+library(ggplot2)
+
+ggplot(air_data, aes(y = Ozone)) +
+  geom_boxplot(fill = "lightblue") +
+  labs(
+    title = "Ozone Değişkeni İçin Boxplot",
+    y = "Ozone"
+  ) +
+  theme_minimal()
+```
+:::
+::::
+
+------------------------------------------------------------------------
+
+### 🔎 Diğer Yöntemler (İleri Seviye)
+
+| Yöntem | Açıklama |
+|--------------------------------|----------------------------------------|
+| **Mahalanobis Mesafesi** | Çok değişkenli aykırılık tespiti |
+| **LOF (Local Outlier Factor)** | Yoğunluk temelli, kümelenme analizinde güçlü |
+| **DBSCAN** | Aykırıları ayrı kümeye yerleştirir |
+| **Isolation Forest** | Makine öğrenmesi temelli, büyük veri için uygun |
+
+### 💬 Yorum
+
+> Z-skoru ve IQR yöntemleri tek değişkenli analiz için yeterlidir.\
+> Ancak çok değişkenli veri veya yoğunluk bilgisi varsa daha gelişmiş yöntemler tercih edilmelidir.
+
+## 🔧 Aykırı Değerlere Müdahale Yöntemleri
+
+### 🛠️ Ne Yapılabilir?
+
+-   **Silmek (listwise deletion)**\
+    Aşırı uçta ve açıkça hatalıysa → örn: 9999 gibi girilmiş anket hataları
+
+-   **Winsorization (sınır kırpma)**\
+    Aykırı değerler üst/alt çeyrek sınırlarına eşitlenir\
+    (örn. en büyük %1 değer, %99'luk değere çekilir)
+
+-   **Log veya Box-Cox dönüşümleri**\
+    Çarpık dağılımlar için → aykırı etkisi yumuşatılır
+
+-   **Gözlemi işaretlemek (flag)**\
+    Modelden çıkarmak yerine “aykırı” etiketi ile takip etmek
+
+-   **Kaynağından kontrol ve düzeltme**\
+    Mümkünse verinin kaynağında hatalı giriş olup olmadığına bakmak
+
+### 🧠 Tavsiye:
+
+> **Aykırı değeri hemen silme.**\
+> Önce incele: hata mı, yoksa anlamlı bir uyarı mı?\
+> Gerekçeni yaz, analizini hem “öncesi” hem “sonrası” ile karşılaştır.
+
+## ⚖️ Veri Normalleştirme
+
+### 🧮 Tanım:
+
+> Veri normalleştirme, farklı ölçeklerdeki değişkenleri **ortak bir ölçekte ifade etmek** için yapılan dönüşümdür.
+
+### 🎯 Neden Gereklidir?
+
+-   📊 Değişkenler farklı ölçeklerdeyse model hatalı öğrenir\
+    (örn. gelir: 10.000, yaş: 30 → gelir etkisi abartılır)
+-   📐 Uzaklık tabanlı yöntemlerde (k-means, kNN, PCA) çok kritiktir
+-   📈 Modelin eğitimi ve yorumlanabilirliği kolaylaşır
+
+------------------------------------------------------------------------
+
+### 🔍 En Yaygın Yöntemler
+
+| Yöntem | Formül | Açıklama |
+|----------------------|----------------------|----------------------------|
+| **Min-Max Normalizasyonu** | $$ x' = \frac{x - \min(x)}{\max(x) - \min(x)} $$ | 0–1 aralığına dönüştürür |
+| **Z-Skoru Standardizasyonu** | $$ z = \frac{x - \mu}{\sigma} $$ | Ortalama 0, sd = 1 olacak şekilde standardize eder |
+| **Robust Scaling** | $$ x' = \frac{x - \text{median}}{\text{IQR}} $$ | Aykırı değerlerden daha az etkilenir |
+
+### 🧠 Tavsiye
+
+> Modelleme öncesi **özellikle regresyon ve mesafe tabanlı algoritmalarda** normalizasyon uygulanmalıdır.\
+> Ama ağaç tabanlı yöntemlerde (decision tree, random forest) genellikle gerekmez.
+
+## 🔧 Normalleştirme Yöntemleri
+
+### 📊 Örnek: `air_data$Temp` değişkeni üzerinde 3 farklı yöntem
+
+```{r}
+library(dplyr)
+
+# Örnek veri
+x <- air_data$Temp
+
+# Min-Max
+minmax_scaled <- (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+
+# Z-skoru
+z_scaled <- scale(x)
+
+# Robust scaling (medyan ve IQR ile)
+med <- median(x, na.rm = TRUE)
+iqr <- IQR(x, na.rm = TRUE)
+robust_scaled <- (x - med) / iqr
+
+# Yeni tablo
+normalized_df <- tibble(
+  Original = x,
+  MinMax = minmax_scaled,
+  ZScore = as.numeric(z_scaled),
+  Robust = robust_scaled
+)
+
+head(normalized_df, 6)
+```
+
+------------------------------------------------------------------------
+
+### 📉 Görsel Karşılaştırma
+
+:::: columns
+::: {.column width="90%"}
+```{r}
+library(tidyr)
+library(ggplot2)
+
+# Uzun formata çevir ve görselleştir
+normalized_df_long <- normalized_df %>%
+  pivot_longer(cols = -Original, names_to = "Method", values_to = "Value")
+
+ggplot(normalized_df_long, aes(x = Value, fill = Method)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~ Method, scales = "free") +
+  labs(title = "Normalleştirme Yöntemleriyle Dönüşüm Dağılımları") +
+  theme_minimal()
+```
+:::
+::::
+
+### 📌 Not:
+
+-   Bu yöntemler **veri setinin yapısını bozmaz**, sadece **ölçeğini değiştirir**.
+-   Gözlemler arası
+
+---
+
+### 🧭 Hangi Normalleştirme Yöntemi Ne Zaman Kullanılır?
+
+| Yöntem | Kullanım Durumu | Not |
+|--------------|---------------------------------------------|--------------|
+| **Min-Max** | Değerlerin 0–1 aralığına çekilmesi isteniyorsa | Özellikle neural network, k-NN gibi yöntemlerde |
+| **Z-Skoru** | Ortalama 0, sd 1 ölçeği gerekiyorsa | PCA, regresyon gibi analitik yöntemlerde idealdir |
+| **Robust Scaling** | Aykırı değerlerin etkisini azaltmak istiyorsan | Medyan ve IQR kullanımı sayesinde daha sağlam |
+| **Standardizasyon Gereksiz** | Ağaç tabanlı yöntemler (decision tree, RF) | Bu modeller ölçek duyarlı değildir |
+
+### 🧠 Tavsiye:
+
+-   **Veri tipine ve modeline göre karar ver.**
+-   Girdilerin farklı ölçeklerde olması, özellikle *uzaklık-temelli* ve *parametrik* modellerde sonuçları bozar.
+-   Aykırı değer varsa → `Robust Scaling`
+-   Tüm veri normalize değilse → karşılaştırmalar yanıltıcı olabilir.
+
+---
+
+### 📌 Neler Öğrendik?
+
+-   **Eksik Veriler:**
+    -   MCAR / MAR / MNAR farkları
+    -   Basit ve gelişmiş imputasyon yöntemleri (`mean`, `mice`, `missForest`)
+    -   Çoklu imputasyonun mantığı ve R ile uygulaması
+-   **Aykırı Değerler:**
+    -   IQR ve Z-skoru yöntemleriyle tespit
+    -   Görsel analiz (boxplot)
+    -   Aykırı değerlerle nasıl başa çıkılır?
+-   **Veri Normalleştirme:**
+    -   Min-Max, Z-skoru, Robust scaling
+    -   Hangi yöntem ne zaman kullanılmalı?
+    -   Model öncesi ölçekleme fark yaratır!
+
+------------------------------------------------------------------------
+
+### 🙏 Teşekkürler
+
+> Katılımınız ve ilginiz için çok teşekkürler!\
+> Görüşmek üzere 👋\
+> **Dr. M. Fatih Tüzen**\
+> [rprogramlama.netlify.app](https://rprogramlama.netlify.app)\
+> [linkedin.com/in/dr-m-fatih-t-2b2a4328](https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/)

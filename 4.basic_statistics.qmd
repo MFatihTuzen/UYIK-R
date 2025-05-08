@@ -81,12 +81,12 @@ Verilerin toplanması, özetlenmesi, yorumlanması ve karar vermeye dönüştür
 
 ### ⚖️ Temel Farklılıklar
 
-| Konu              | İstatistik                | Makine Öğrenmesi                                  |
-|-------------------|----------------------|-------------------------------|
-| Amaç              | Anlam çıkarma, yorumlama  | Tahmin yapma, performans artırma                  |
-| Odak              | Modelin anlaşılabilirliği | Tahmin doğruluğu / hata minimizasyonu             |
-| Yorumlanabilirlik | Yüksek                    | Genelde düşüktür (özellikle black-box modellerde) |
-| Temel Yaklaşım    | Model → veri              | Veri → model                                      |
+| Konu | İstatistik | Makine Öğrenmesi |
+|----|----|----|
+| Amaç | Anlam çıkarma, yorumlama | Tahmin yapma, performans artırma |
+| Odak | Modelin anlaşılabilirliği | Tahmin doğruluğu / hata minimizasyonu |
+| Yorumlanabilirlik | Yüksek | Genelde düşüktür (özellikle black-box modellerde) |
+| Temel Yaklaşım | Model → veri | Veri → model |
 
 ### 📌 Kısa Not
 
@@ -212,7 +212,7 @@ Mode(round(economics$psavert, 1))
 
 ## 🎨 Ortalamayı ve Ortancayı Görselleştir
 
-::: columns
+:::: columns
 ::: {.column width="95%"}
 ```{r}
 ggplot(economics, aes(x = psavert)) +
@@ -223,7 +223,7 @@ ggplot(economics, aes(x = psavert)) +
        x = "Tasarruf Oranı (%)", y = "Frekans")
 ```
 :::
-:::
+::::
 
 ⚠️ Ortalama ve ortanca arasındaki fark, dağılımın çarpıklığını gösterir
 
@@ -324,7 +324,7 @@ sd(economics$uempmed, na.rm = TRUE)
 
 ### 💡 R Uygulaması
 
-::: columns
+:::: columns
 ::: {.column width="90%"}
 ```{r}
 ggplot(economics, aes(y = uempmed)) +
@@ -333,7 +333,7 @@ ggplot(economics, aes(y = uempmed)) +
        y = "Ortalama İşsizlik Süresi (hafta)")
 ```
 :::
-:::
+::::
 
 ⚠️ Aykırı değerler = IQR × 1.5 dışındaki gözlemler
 
@@ -347,7 +347,7 @@ ggplot(economics, aes(y = uempmed)) +
 
 ### 💡 Yoğunluk Eğrisi = Sürekli dağılım tahmini
 
-::: columns
+:::: columns
 ::: {.column width="95%"}
 ```{r}
 ggplot(economics, aes(x = psavert)) +
@@ -357,13 +357,13 @@ ggplot(economics, aes(x = psavert)) +
        x = "Tasarruf Oranı (%)", y = "Yoğunluk")
 ```
 :::
-:::
+::::
 
 🎯 Histogram + yoğunluk birlikte yorumlandığında **çarpıklık, çok tepelilik** daha kolay anlaşılır
 
 ## 🎨 Ortalama ve Ortanca ile Görsel Karşılaştırma
 
-::: columns
+:::: columns
 ::: {.column width="95%"}
 ```{r}
 ggplot(economics, aes(x = psavert)) +
@@ -374,7 +374,7 @@ ggplot(economics, aes(x = psavert)) +
        x = "Tasarruf Oranı", y = "Yoğunluk")
 ```
 :::
-:::
+::::
 
 📌 Ortalamadan sapma varsa → çarpıklık vardır
 
@@ -413,11 +413,11 @@ Bir değişkenin değerleri, ortalama etrafında **çan eğrisi şeklinde** sime
 -   %68, %95, %99.7 kuralı (Empirik kural)
 -   Teorik temel: z-skorları, hipotez testleri, regresyon
 
-::: columns
+:::: columns
 ::: {.column width="90%"}
 ![](images/sigma.jpg){fig-align="center"}
 :::
-:::
+::::
 
 ### 💡 Pratikte Neden Önemli?
 
@@ -428,7 +428,7 @@ Bir değişkenin değerleri, ortalama etrafında **çan eğrisi şeklinde** sime
 
 ## 📊 Histogram + Yoğunluk = İlk İzlenim
 
-::: columns
+:::: columns
 ::: {.column width="90%"}
 ```{r}
 ggplot(economics, aes(x = uempmed)) +
@@ -438,7 +438,7 @@ ggplot(economics, aes(x = uempmed)) +
        x = "Ortalama İşsizlik Süresi", y = "Yoğunluk")
 ```
 :::
-:::
+::::
 
 🔍 Gözle → kabaca çarpık mı, simetrik mi, çifte tepe mi yorum yapılabilir
 
@@ -569,7 +569,7 @@ cor(economics$pce, economics$pop, use = "complete.obs")
 
 ## 🎨 Görselle Destekleyelim
 
-::: columns
+:::: columns
 ::: {.column width="90%"}
 ```{r}
 ggplot(economics, aes(x = pop, y = pce)) +
@@ -579,7 +579,7 @@ ggplot(economics, aes(x = pop, y = pce)) +
        x = "Nüfus", y = "Tüketim Harcamaları")
 ```
 :::
-:::
+::::
 
 ✅ Doğrusal bir ilişki görsel olarak da doğrulanıyor
 
