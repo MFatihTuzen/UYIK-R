@@ -82,7 +82,7 @@ Verilerin toplanması, özetlenmesi, yorumlanması ve karar vermeye dönüştür
 ### ⚖️ Temel Farklılıklar
 
 | Konu              | İstatistik                | Makine Öğrenmesi                                  |
-|---------------|------------------|--------------------------|
+|-------------------|----------------------|-------------------------------|
 | Amaç              | Anlam çıkarma, yorumlama  | Tahmin yapma, performans artırma                  |
 | Odak              | Modelin anlaşılabilirliği | Tahmin doğruluğu / hata minimizasyonu             |
 | Yorumlanabilirlik | Yüksek                    | Genelde düşüktür (özellikle black-box modellerde) |
@@ -453,7 +453,7 @@ qqline(economics$uempmed, col = "red", lwd = 2)
 
 ### 🔍 Nasıl Yorumlanır?
 
--    **Noktalar çizgiye yakınsa** → dağılım normale yakın
+-   **Noktalar çizgiye yakınsa** → dağılım normale yakın
 
 -   **Uçlardaki sapmalar** → çarpıklık, kuyruk problemleri olabilir
 
@@ -473,7 +473,7 @@ shapiro.test(economics$uempmed)
 
 ### 📌 Hipotezler
 
--    **H₀:** Veri normal dağılmıştır
+-   **H₀:** Veri normal dağılmıştır
 
 -   **H₁:** Veri normal dağılmamıştır
 
@@ -607,7 +607,7 @@ ggplot(economics, aes(x = pop, y = pce)) +
 
 ### 🏠 **Nikah sayısı ↔ Elektrik tüketimi**
 
--    Yıllar içinde her ikisi de artar
+-   Yıllar içinde her ikisi de artar
 
 -   Korelasyon yüksek çıkabilir
 
@@ -617,7 +617,7 @@ ggplot(economics, aes(x = pop, y = pce)) +
 
 ### 🧢 **Deniz korsanları sayısı ↔ Küresel ısınma**
 
--    Korsan sayısı düştükçe, küresel sıcaklık arttı
+-   Korsan sayısı düştükçe, küresel sıcaklık arttı
 
 -   📈 Güçlü negatif korelasyon!
 
@@ -678,5 +678,7 @@ Bu oturumda:
 
 İyi bir veri analisti olmak, **sayılara bakmak değil, onları anlamaktır**.
 
-📬 Sorularınız için:\
+📬 Sorularınız için:
+
+📧 fatih.tuzen\@tuik.gov.tr\
 📎 [LinkedIn: Dr. M. Fatih Tüzen](https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/)

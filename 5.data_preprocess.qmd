@@ -1,0 +1,420 @@
+---
+title: "R Programlama ile Veri Analizi"
+subtitle: "Veri Ön İşleme"
+author: "Dr. Muhammed Fatih TÜZEN"
+date: 2025-5-16
+date-format: "DD-MM-YYYY"
+format: 
+  revealjs:
+    theme: white
+    slide-number: true
+    slide-number-format: "c / t"
+    footer: "Altıncı Uluslararası Uygulamalı İstatistik Kongresi (UYIK 2025)"
+    css: custom.css
+    scrollable: true
+    logo: images/TUiK_logo_Tr.jpg
+editor: visual
+execute:
+  echo: true
+  eval: true
+  warnings: false
+  messages: false
+---
+
+## Sunum Planı
+
+<div>
+
+::: nonincremental
+-   **Veri Ön İşleme**
+-   **Eksik Veriler**
+-   **İmputasyon (Doldurma Yöntemleri)**
+-   **Aykırı Değer Analizi**
+-   **Veri Normalleştirme (Ölçekleme)**
+:::
+
+<div>
+
+📦 Ders Materyalleri: <https://github.com/MFatihTuzen/UYIK-R>
+
+</div>
+
+</div>
+
+------------------------------------------------------------------------
+
+## 🧹 Veri Ön İşleme Nedir?
+
+### 📘 Tanım
+
+Veri ön işleme, **ham veriyi analiz edilebilir, temiz ve anlamlı hale getirme sürecidir.**\
+Bu adım, istatistiksel analiz, makine öğrenmesi ve raporlama süreçlerinin temelidir.
+
+### 🔍 Neden Gereklidir?
+
+-   Gerçek dünya verisi genellikle **eksik**, **hatalı**, **dağınık**, **ölçeksizdir**
+-   Model performansını ve analiz doğruluğunu doğrudan etkiler
+-   Veri kalitesi analiz kalitesini doğrudan belirler
+-   “Çöp girerse çöp çıkar” → Garbage In, Garbage Out 🗑️
+
+### 📊 Modelleme Sürecindeki Yeri
+
+> `Veri Toplama → Veri Ön İşleme → Modelleme → Değerlendirme → Raporlama`
+
+🎯 Güçlü modellerin temelinde iyi hazırlanmış veri yatar
+
+------------------------------------------------------------------------
+
+## 🧭 Veri Ön İşleme Hangi Adımları Kapsar?
+
+### 🔄 Genel Süreç Adımları
+
+1.  **Veri Temizleme**
+    -   Eksik gözlemler (NA)
+    -   Aykırı değerler
+    -   Bozuk formatlar, tutarsız kategoriler
+2.  **Veri Dönüştürme**
+    -   Ölçekleme (normalleştirme / standardizasyon)
+    -   Kodlama (kategori → sayısal)
+    -   Dönüşümler (log, sqrt vs.)
+3.  **Veri Bütünleştirme**
+    -   Farklı kaynaklardan verilerin birleştirilmesi
+    -   Join, merge, bind işlemleri
+4.  **Değişken Seçimi / Özellik Mühendisliği**
+    -   Gereksiz değişkenlerin çıkarılması
+    -   Yeni değişkenlerin oluşturulması
+
+## 🛠️ Sık Kullanılan Fonksiyonlar & Paketler
+
+### 🔍 R Fonksiyonları
+
+-   `is.na()`, `summary()`, `glimpse()`, `str()`
+-   `mutate()`, `if_else()`, `case_when()`
+-   `scale()`, `cut()`, `factor()`
+-   `rename()`, `select()`, `arrange()`
+
+### 📦 Faydalı Paketler
+
+-   `dplyr`, `tidyr` → veri dönüştürme
+-   `janitor` → değişken isimlerini temizleme (`clean_names()`)
+-   `naniar`, `VIM` → eksik veri görselleştirme
+-   `recipes`, `caret` → ölçekleme, ön işleme zinciri
+-   `datawizard`, `forcats`, `lubridate` → özel veri türleriyle çalışma
+
+> 🔍 Ön işleme sadece temizlik değil; aynı zamanda **hazırlık ve güçlendirme** sürecidir.
+>
+> 💡 Analizin kalitesi veriye ne kadar iyi dokunduğunuzla doğrudan ilişkilidir.
+
+------------------------------------------------------------------------
+
+## 📂 Kullanılacak Veri Seti: `airquality`
+
+### 📘 Tanım
+
+`airquality` veri seti, **New York'ta Mayıs–Eylül 1973** tarihleri arasında günlük olarak ölçülen hava kalitesi verilerini içerir.\
+R içinde **hazır olarak** gelir, kuruluma gerek yoktur.
+
+### 🔢 Değişkenler
+
+| Değişken  | Açıklama                             |
+|-----------|--------------------------------------|
+| `Ozone`   | Ozon miktarı (ppb)                   |
+| `Solar.R` | Güneş radyasyonu (lang)              |
+| `Wind`    | Rüzgar hızı (mph)                    |
+| `Temp`    | Sıcaklık (Fahrenheit)                |
+| `Month`   | Ay bilgisi (5 = Mayıs, …, 9 = Eylül) |
+| `Day`     | Gün bilgisi                          |
+
+### ❗ Veri Özellikleri
+
+-   **Eksik değerler** var (`Ozone`, `Solar.R`)
+-   **Aykırı gözlemler** tespit edilebilir
+-   Tüm sayısal değişkenler → **ölçekleme için uygun**
+-   Küçük boyutlu ve eğitime ideal
+
+> 🧪 Tüm uygulamaları bu veri seti üzerinden gerçekleştireceğiz
+
+------------------------------------------------------------------------
+
+## 🧩 Eksik Veri Nedir?
+
+### 📘 Tanım
+
+Eksik veri (missing data), bir gözlem birimi için **ilgili değişkenin değerinin mevcut olmaması** durumudur.\
+R ortamında bu durum `NA` (Not Available) ile gösterilir.
+
+### 📉 Neden Önemlidir?
+
+-   Sonuçların **yanlı** olmasına neden olabilir
+-   Örneklem büyüklüğünü azaltır
+-   Bazı analizler `NA` barındıran gözlemleri dışlar
+-   Bazı yöntemler eksik veri içeren değişkenlerde **çalışmaz**
+
+> ❗ Eksik veriyi silmek değil, **anlamak ve doğru yönetmek** gerekir.
+
+------------------------------------------------------------------------
+
+## ❓ Eksik Veri Neden Oluşur? – Türleri
+
+### 💥 Yaygın Nedenler
+
+-   Ölçüm yapılmaması
+-   Cevap vermeme (anketler)
+-   Sensör hataları
+-   Veri aktarım sorunları
+-   Filtreleme/kriterlere bağlı dışlama
+
+### 🧠 Eksik Veri Türleri
+
+| Tür      | Açıklama                                                                                              |
+|-------------|-----------------------------------------------------------|
+| **MCAR** | Eksiklik rastgele ve tüm gözlemler için eşit olasılıkla oluşur                                        |
+| **MAR**  | Eksiklik, gözlemlenebilen diğer değişkenlerle ilişkilidir (örneğin yaş arttıkça eksik olma olasılığı) |
+| **MNAR** | Eksiklik, gözlemlenemeyen bir özelliğe bağlıdır (örneğin çok hasta bireylerin veri vermemesi)         |
+
+> 🎯 Türünü bilmek → uygun işlem tekniğini seçmek için kritik!
+
+------------------------------------------------------------------------
+
+## 🧠 Eksik Veri Türleri – Açıklamalar ve Örnekler
+
+### 📌 1. MCAR – Missing Completely at Random
+
+> Eksik değerler tamamen rastgele oluşur; **hiçbir değişkenle ilişkili değildir.**
+
+🔍 **Örnek:**\
+Anket kâğıdının bir kısmının yanlışlıkla yırtılması ve bazı soruların kaybolması
+
+✅ Yorum:\
+Analiz için en güvenli eksiklik türüdür → **yanlılık yaratmaz**
+
+### 📌 2. MAR – Missing at Random
+
+> Eksiklik, gözlemlenebilen başka bir değişkenle ilişkilidir.\
+> Eksiklik rastgele değildir, **ama açıklanabilir.**
+
+🔍 **Örnek:**\
+Yaş arttıkça gelir bilgisini paylaşmama olasılığı artar (yaş gözlemlenebilir ama gelir eksik)
+
+⚠️ Yorum:\
+Eksik veri atamaları yapılabilir, ama dikkatli olmak gerekir
+
+### 📌 3. MNAR – Missing Not at Random
+
+> Eksiklik, **gözlemlenemeyen bir nedene** bağlıdır.\
+> Eksik olma durumu, doğrudan eksik değerin kendisiyle ilgilidir.
+
+🔍 **Örnek:**\
+Aşırı yüksek gelirli bireylerin gelir bilgisini gizlemesi (kimlerin eksik bıraktığı bilgisi gözlemlenemiyor)
+
+🚨 Yorum:\
+Modelleme için **en riskli durumdur** → İmputasyon yanlı olabilir
+
+> 🎯 Eksik verinin türü bilinmeden doğru müdahale yapılamaz!
+
+------------------------------------------------------------------------
+
+## 🔍 R ile Eksik Veri Tespiti
+
+### 🔧 Temel Fonksiyonlar
+
+```{r}
+summary(airquality)
+```
+
+Her değişkenin min–max, NA durumu görülür.
+
+```{r}
+sum(is.na(airquality))
+colSums(is.na(airquality))
+```
+
+Tüm veri setindeki ve değişken bazlı eksik değer sayıları
+
+### 📌 Eksik olan gözlemleri filtreleme
+
+```{r}
+airquality[!complete.cases(airquality), ]
+```
+
+-   En az bir NA içeren satırlar
+
+-   `complete.cases()` fonksiyonu çok güçlü ve pratik
+
+🎯 Sayısal tespit analizden önce kontrol listesinin başında olmalı
+
+------------------------------------------------------------------------
+
+## 🧰 Eksik Veriyi Görselleştirme
+
+### 📦 `naniar` paketi
+
+```{r}
+library(naniar)
+gg_miss_var(airquality)
+```
+
+Değişken bazında eksik oranı çubuğu
+
+```{r}
+vis_miss(airquality)
+```
+
+Tabloda eksik vs dolu alanların gösterimi (ısı haritası gibi)
+
+## 📦 Alternatif: `visdat` paketi
+
+```{r}
+library(visdat)
+vis_dat(airquality)
+```
+
+Veri tipleriyle birlikte eksikliği ve yapıyı renkli olarak sunar
+
+------------------------------------------------------------------------
+
+## 🔄 Eksik Veri Doldurma (İmputasyon) Nedir?
+
+### 📘 Tanım
+
+İmputasyon, eksik verilerin **istatistiksel veya algoritmik yöntemlerle** tahmin edilerek doldurulması işlemidir.
+
+### 🎯 Neden Gerekli?
+
+-   Örneklem boyutunu korur
+-   Bazı analiz teknikleri eksik veri kabul etmez
+-   Bias riskini azaltır (özellikle MCAR/MAR durumlarında)
+
+### ❗ Ne Zaman Risklidir?
+
+-   MNAR durumlarında
+-   Aykırı değerler içeren değişkenlerde
+-   Küçük veri setlerinde “ortalama ile doldurma” genellikle **tehlikelidir**
+
+> 🧠 İmputasyon dikkat ister: Yanlış teknik = yanlış sonuç
+
+------------------------------------------------------------------------
+
+### 🔧 Basit İmputasyon Yöntemleri
+
+```{r}
+# Ortalama ile
+airquality$Ozone <- ifelse(is.na(airquality$Ozone),
+                           mean(airquality$Ozone, na.rm = TRUE),
+                           airquality$Ozone)
+
+# Ortanca ile
+airquality$Solar.R <- ifelse(is.na(airquality$Solar.R),
+                             median(airquality$Solar.R, na.rm = TRUE),
+                             airquality$Solar.R)
+```
+
+⚠️ Ortalamayla doldurmak varyansı küçültür → modelleme etkilenebilir
+
+🔍 Basit yöntemler hızlıdır ama **istatistiksel varsayımları bozabilir**
+
+Bu yüzden daha sofistike yaklaşımlar gerekir.
+
+---
+
+### **MICE (Multivariate Imputation by Chained Equations)**
+
+-    Değişkenler arası ilişkiyi koruyarak eksik değerleri tahmin eder
+
+-   Her eksik değişken için ayrı regresyon modeli kurar (chain)
+
+-   Çoklu imputasyon yapar: `m` kez tekrar eder → belirsizlik dikkate alınır
+
+```{r}
+# Gerekli paket
+library(mice)
+
+# airquality veri setini gözden geçir
+summary(airquality)
+
+# Çoklu imputasyon başlat
+# method = "pmm" predictive mean matching kullanır
+# m = 5 → 5 farklı tamamlanmış veri seti üretilecek
+# seed → tekrar üretilebilirlik için sabitlenir
+imp <- mice(airquality, method = "pmm", m = 5, seed = 123)
+
+# İlk tamamlanmış (impute edilmiş) veri setini al
+completed_data <- complete(imp, 1)
+
+# Ozone değişkeninin imputasyon öncesi ve sonrası dağılımı
+summary(airquality$Ozone)
+summary(completed_data$Ozone)
+
+```
+
+🧾 **Açıklamalar:**
+
+-    `mice()` fonksiyonu eksik verileri değişken bazlı modellerle doldurur.
+
+-   `pmm`: Tahmin edilen değere en yakın gözlemin değeri kullanılır → aykırı değer üretme riski düşer.
+
+-   `complete(imp, 1)`: 5 farklı tamamlanmış veri setinden ilkini alırız.
+
+-   Bu işlemin sonunda elde ettiğimiz `completed_data` modeli kurmaya hazır hale gelir.
+
+---
+
+### **missForest** (Random Forest ile imputasyon)
+
+-   Hem sayısal hem kategorik verilerle çalışır
+
+-   Karar ağaçları kullanarak eksik değerleri tahmin eder
+
+-   Dışsal değişkenleri etkili biçimde kullanır
+
+```{r}
+# Gerekli paket
+library(missForest)
+
+# Random Forest ile imputasyon (dikkat: zaman alabilir!)
+# ntree = 100 default, istenirse artırılabilir
+# verbose = TRUE → işlem ilerleyişini gösterir
+set.seed(123)
+imp_rf <- missForest(airquality, verbose = TRUE)
+
+# İmpute edilmiş veri setine erişim
+imputed_data <- imp_rf$ximp
+
+# Karşılaştırma: Ozone değişkeni
+summary(airquality$Ozone)
+summary(imputed_data$Ozone)
+
+```
+
+🧾 **Açıklamalar:**
+
+-    `missForest()` hem sayısal hem kategorik değişkenlerde çalışır
+
+-   Decision tree yapıları sayesinde doğrusal olmayan ilişkileri de öğrenir
+
+-   `ximp`: Eksik veriler doldurulmuş hali
+
+-   `OOBerror` gibi hata ölçüleri de döner (isteğe bağlı kullanılabilir)
+
+---
+
+### 🔁 Çoklu İmputasyonun Farkı ve Kullanımı
+
+```{r}
+# Her bir tamamlanmış veri seti için model kurulumu
+fit <- with(imp, lm(Ozone ~ Solar.R + Wind + Temp))
+
+# Tüm modellerin birleştirilmesi
+pooled <- pool(fit)
+
+# Havuzlanmış (pool edilmiş) regresyon sonuçları
+summary(pooled)
+```
+
+🧾 **Açıklamalar:**
+
+-    `with()`: Her bir imputasyon setinde regresyon kurar
+
+-   `pool()`: Bu regresyonların sonuçlarını birleştirir, varyans ve belirsizliği yansıtarak güvenilir sonuç sunar
+
+-   `summary(pooled)`: Nihai regresyon çıktısını verir
