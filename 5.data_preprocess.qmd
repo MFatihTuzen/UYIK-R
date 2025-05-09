@@ -17,8 +17,8 @@ editor: visual
 execute:
   echo: true
   eval: true
-  warnings: false
-  messages: false
+  warning: false
+  message: false
 ---
 
 ## Sunum Planı
@@ -166,11 +166,11 @@ R ortamında bu durum `NA` (Not Available) ile gösterilir.
 
 ### 🧠 Eksik Veri Türleri
 
-| Tür | Açıklama |
-|------------------------------------|------------------------------------|
-| **MCAR** | Eksiklik rastgele ve tüm gözlemler için eşit olasılıkla oluşur |
-| **MAR** | Eksiklik, gözlemlenebilen diğer değişkenlerle ilişkilidir (örneğin yaş arttıkça eksik olma olasılığı) |
-| **MNAR** | Eksiklik, gözlemlenemeyen bir özelliğe bağlıdır (örneğin çok hasta bireylerin veri vermemesi) |
+| Tür      | Açıklama                                                                                              |
+|----------|-------------------------------------------------------------------------------------------------------|
+| **MCAR** | Eksiklik rastgele ve tüm gözlemler için eşit olasılıkla oluşur                                        |
+| **MAR**  | Eksiklik, gözlemlenebilen diğer değişkenlerle ilişkilidir (örneğin yaş arttıkça eksik olma olasılığı) |
+| **MNAR** | Eksiklik, gözlemlenemeyen bir özelliğe bağlıdır (örneğin çok hasta bireylerin veri vermemesi)         |
 
 > 🎯 Türünü bilmek → uygun işlem tekniğini seçmek için kritik!
 
@@ -403,7 +403,7 @@ Eksik değerler olduğunda, **tek bir değerle** (örneğin ortalama veya tek bi
 
 Ama bu doğru değil çünkü:
 
--    Aslında neyin oraya gelmesi gerektiğini bilmiyoruz.
+-   Aslında neyin oraya gelmesi gerektiğini bilmiyoruz.
 
 -   İmputasyon **belirsizlik içerir**. Bu belirsizliği tek bir setle göz ardı ederiz.
 
@@ -610,7 +610,7 @@ outliers_z
 
 ### 👀 3. Görsel Yöntemler (Boxplot)
 
-:::: columns
+::: columns
 ::: {.column width="90%"}
 ```{r}
 library(ggplot2)
@@ -624,18 +624,18 @@ ggplot(air_data, aes(y = Ozone)) +
   theme_minimal()
 ```
 :::
-::::
+:::
 
 ------------------------------------------------------------------------
 
 ### 🔎 Diğer Yöntemler (İleri Seviye)
 
-| Yöntem | Açıklama |
-|--------------------------------|----------------------------------------|
-| **Mahalanobis Mesafesi** | Çok değişkenli aykırılık tespiti |
-| **LOF (Local Outlier Factor)** | Yoğunluk temelli, kümelenme analizinde güçlü |
-| **DBSCAN** | Aykırıları ayrı kümeye yerleştirir |
-| **Isolation Forest** | Makine öğrenmesi temelli, büyük veri için uygun |
+| Yöntem                         | Açıklama                                        |
+|--------------------------------|-------------------------------------------------|
+| **Mahalanobis Mesafesi**       | Çok değişkenli aykırılık tespiti                |
+| **LOF (Local Outlier Factor)** | Yoğunluk temelli, kümelenme analizinde güçlü    |
+| **DBSCAN**                     | Aykırıları ayrı kümeye yerleştirir              |
+| **Isolation Forest**           | Makine öğrenmesi temelli, büyük veri için uygun |
 
 ### 💬 Yorum
 
@@ -685,11 +685,11 @@ ggplot(air_data, aes(y = Ozone)) +
 
 ### 🔍 En Yaygın Yöntemler
 
-| Yöntem | Formül | Açıklama |
-|----------------------|----------------------|----------------------------|
-| **Min-Max Normalizasyonu** | $$ x' = \frac{x - \min(x)}{\max(x) - \min(x)} $$ | 0–1 aralığına dönüştürür |
-| **Z-Skoru Standardizasyonu** | $$ z = \frac{x - \mu}{\sigma} $$ | Ortalama 0, sd = 1 olacak şekilde standardize eder |
-| **Robust Scaling** | $$ x' = \frac{x - \text{median}}{\text{IQR}} $$ | Aykırı değerlerden daha az etkilenir |
+| Yöntem                       | Formül                                           | Açıklama                                           |
+|------------------------------|--------------------------------------------------|----------------------------------------------------|
+| **Min-Max Normalizasyonu**   | $$ x' = \frac{x - \min(x)}{\max(x) - \min(x)} $$ | 0–1 aralığına dönüştürür                           |
+| **Z-Skoru Standardizasyonu** | $$ z = \frac{x - \mu}{\sigma} $$                 | Ortalama 0, sd = 1 olacak şekilde standardize eder |
+| **Robust Scaling**           | $$ x' = \frac{x - \text{median}}{\text{IQR}} $$  | Aykırı değerlerden daha az etkilenir               |
 
 ### 🧠 Tavsiye
 
@@ -732,7 +732,7 @@ head(normalized_df, 6)
 
 ### 📉 Görsel Karşılaştırma
 
-:::: columns
+::: columns
 ::: {.column width="90%"}
 ```{r}
 library(tidyr)
@@ -749,23 +749,24 @@ ggplot(normalized_df_long, aes(x = Value, fill = Method)) +
   theme_minimal()
 ```
 :::
-::::
+:::
 
 ### 📌 Not:
 
 -   Bu yöntemler **veri setinin yapısını bozmaz**, sadece **ölçeğini değiştirir**.
--   Gözlemler arası
+-   Gözlemler arası sıralama, dağılım şekli ve korelasyon korunur.
+-   **Amaç:** Ölçekleri eşitleyerek modellerin veri üzerindeki önyargısını azaltmaktır.
 
----
+------------------------------------------------------------------------
 
 ### 🧭 Hangi Normalleştirme Yöntemi Ne Zaman Kullanılır?
 
-| Yöntem | Kullanım Durumu | Not |
-|--------------|---------------------------------------------|--------------|
-| **Min-Max** | Değerlerin 0–1 aralığına çekilmesi isteniyorsa | Özellikle neural network, k-NN gibi yöntemlerde |
-| **Z-Skoru** | Ortalama 0, sd 1 ölçeği gerekiyorsa | PCA, regresyon gibi analitik yöntemlerde idealdir |
-| **Robust Scaling** | Aykırı değerlerin etkisini azaltmak istiyorsan | Medyan ve IQR kullanımı sayesinde daha sağlam |
-| **Standardizasyon Gereksiz** | Ağaç tabanlı yöntemler (decision tree, RF) | Bu modeller ölçek duyarlı değildir |
+| Yöntem                       | Kullanım Durumu                                | Not                                               |
+|------------------------------|------------------------------------------------|---------------------------------------------------|
+| **Min-Max**                  | Değerlerin 0–1 aralığına çekilmesi isteniyorsa | Özellikle neural network, k-NN gibi yöntemlerde   |
+| **Z-Skoru**                  | Ortalama 0, sd 1 ölçeği gerekiyorsa            | PCA, regresyon gibi analitik yöntemlerde idealdir |
+| **Robust Scaling**           | Aykırı değerlerin etkisini azaltmak istiyorsan | Medyan ve IQR kullanımı sayesinde daha sağlam     |
+| **Standardizasyon Gereksiz** | Ağaç tabanlı yöntemler (decision tree, RF)     | Bu modeller ölçek duyarlı değildir                |
 
 ### 🧠 Tavsiye:
 
@@ -774,7 +775,7 @@ ggplot(normalized_df_long, aes(x = Value, fill = Method)) +
 -   Aykırı değer varsa → `Robust Scaling`
 -   Tüm veri normalize değilse → karşılaştırmalar yanıltıcı olabilir.
 
----
+------------------------------------------------------------------------
 
 ### 📌 Neler Öğrendik?
 
@@ -797,6 +798,8 @@ ggplot(normalized_df_long, aes(x = Value, fill = Method)) +
 
 > Katılımınız ve ilginiz için çok teşekkürler!\
 > Görüşmek üzere 👋\
-> **Dr. M. Fatih Tüzen**\
+> **Dr. M. Fatih Tüzen**
+>
+> 📧 fatih.tuzen\@tuik.gov.tr\
 > [rprogramlama.netlify.app](https://rprogramlama.netlify.app)\
 > [linkedin.com/in/dr-m-fatih-t-2b2a4328](https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/)

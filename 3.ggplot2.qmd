@@ -17,8 +17,8 @@ editor: visual
 execute:
   echo: true
   eval: true
-  warnings: false
-  messages: false
+  warning: false
+  message: false
 ---
 
 ## Sunum Planı
@@ -157,7 +157,7 @@ ggplot(diamonds, aes(x = carat)) +
 ### 🔧 Fonksiyon ve Argümanlar
 
 | Argüman                | Açıklama                                           |
-|------------------------|----------------------------------------------------|
+|-----------------------|-------------------------------------------------|
 | `bins`                 | Aralık sayısı (fazla olursa detay, az olursa özet) |
 | `fill`                 | Sütun içi renk                                     |
 | `color`                | Sütun kenarlığı rengi                              |
@@ -469,7 +469,7 @@ Renk (`fill`) ve kenarlık (`color`) ile stil verilebilir
 ## ⚔️ `geom_bar()` vs `geom_col()`
 
 | Özellik        | `geom_bar()`                                 | `geom_col()`                             |
-|----------------|----------------------------------------------|------------------------------------------|
+|----------------|-----------------------------|---------------------------|
 | Y değerleri    | Otomatik olarak gözlem sayısını **hesaplar** | **Senin sağladığın y** değerini kullanır |
 | Girdi          | Sadece `x` yeterlidir                        | `x` ve `y` ikisi de gerekir              |
 | Tipik kullanım | Kategorilerin frekans grafiği                | Özet tablolar, oranlar, manuel veriler   |

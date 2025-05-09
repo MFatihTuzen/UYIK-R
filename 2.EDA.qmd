@@ -17,8 +17,8 @@ editor: visual
 execute:
   echo: true
   eval: true
-  warnings: false
-  messages: false
+  warning: false
+  message: false
 ---
 
 ## Sunum Planı

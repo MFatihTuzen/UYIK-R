@@ -1,0 +1,616 @@
+---
+title: "R Programlama ile Veri Analizi"
+subtitle: "Doğrusal Regresyon Analizi"
+author: "Dr. Muhammed Fatih TÜZEN"
+date: 2025-5-16
+date-format: "DD-MM-YYYY"
+format: 
+  revealjs:
+    theme: white
+    slide-number: true
+    slide-number-format: "c / t"
+    footer: "Altıncı Uluslararası Uygulamalı İstatistik Kongresi (UYIK 2025)"
+    css: custom.css
+    scrollable: true
+    logo: images/TUiK_logo_Tr.jpg
+editor: visual
+execute:
+  echo: true
+  eval: true
+  warning: false
+  message: false
+---
+
+## Sunum Planı
+
+<div>
+
+::: nonincremental
+-   **Doğrusal Regresyon Nedir?**
+-   **Varsayımlar**
+-   **Artık Analizi**
+-   **Model Performansı**
+-   **Dikkat Edilecek Hususlar**
+-   **Faydalı Kaynaklar**
+:::
+
+<div>
+
+📦 Ders Materyalleri: <https://github.com/MFatihTuzen/UYIK-R>
+
+</div>
+
+</div>
+
+## 📊 Doğrusal Regresyon Nedir?
+
+### 🔍 Tanım:
+
+Doğrusal regresyon, **bir bağımlı değişkenin (sonucun)** bir veya birden fazla **bağımsız değişken (girdi)** yardımıyla **doğrusal bir ilişki modeli üzerinden tahmin edilmesini** sağlayan istatistiksel bir yöntemdir.
+
+### 🧠 Ne işe yarar?
+
+-   İki değişken arasındaki ilişkinin gücünü ve yönünü analiz eder.
+-   Nedensellik değil, **ilişki modelleme** amacı taşır.
+-   Gelecekteki gözlemleri tahmin etmek için kullanılabilir.
+-   Makine öğrenmesinin birçok modeline **temel oluşturur.**
+
+### 🧠 Yorum:
+
+> Regresyon, veriler arasındaki ilişkileri **modellenebilir ve yorumlanabilir** hale getirir.\
+> Ancak **korelasyon ≠ nedensellik** olduğunu asla unutmamak gerekir.
+
+## 🧮 Basit Doğrusal Regresyon – Temel Model
+
+### 📐 Matematiksel Form:
+
+$$
+y_i = \beta_0 + \beta_1 x_i + \varepsilon_i
+$$
+
+-   $y_i$: bağımlı değişken (tahmin edilmek istenen)
+-   $x_i$: bağımsız değişken (girdi)
+-   $\beta_0$: sabit terim (intercept)
+-   $\beta_1$: eğim (slope)
+-   $\varepsilon_i$: gözlem başına hata (artık)
+
+---
+
+### 🔧 Parametrelerin Tahmini – OLS (Ordinary Least Squares)
+
+Amaç: Hata terimlerinin karesinin toplamını minimize eden $\beta_0$ ve $\beta_1$ değerlerini bulmaktır.
+
+Minimize edilen fonksiyon:
+
+$$
+\text{SSE} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \sum_{i=1}^{n} (y_i - (\beta_0 + \beta_1 x_i))^2
+$$
+
+Bu işlemin sonunda $\beta_0$ ve $\beta_1$ için kapalı form çözümler elde edilir.
+
+------------------------------------------------------------------------
+
+## 🧠 Varsayımlar
+
+**Modelin Sağlıklı İşleyebilmesi İçin Gerekli Koşullar**
+
+| Varsayım                             | Açıklama                                            |
+|------------------------------------|------------------------------------|
+| **Lineerlik**                        | $x$ ile $y$ arasında doğrusal ilişki olmalı         |
+| **Hataların ortalaması sıfırdır**    | $E[\varepsilon_i] = 0$                              |
+| **Sabit varyans (homoskedastisite)** | Hataların varyansı sabittir                         |
+| **Bağımsızlık**                      | Gözlemler birbirinden bağımsızdır                   |
+| **Normal dağılım**                   | Hatalar normal dağılmıştır (özellikle çıkarım için) |
+
+> ❗ Varsayımlar sağlanmazsa tahminler tutarsız veya yanlı olabilir.
+
+------------------------------------------------------------------------
+
+## 📉 Artık (Residual) Nedir?
+
+> Artık, bir gözlem için modelin yaptığı tahmin ile gerçek değer arasındaki farktır:
+
+$$
+\varepsilon_i = y_i - \hat{y}_i
+$$
+
+-   Artıklar: modelin ne kadar “yanıldığını” gösterir
+-   Artıkların analizi, modelin doğruluğunu ve varsayımların sağlanıp sağlanmadığını anlamada kullanılır.
+
+::: columns
+::: {.column width="90%"}
+```{r}
+x <- 1:10
+y <- 2 + 0.5 * x + rnorm(10, sd = 1)
+model <- lm(y ~ x)
+plot(x, y, pch = 19, main = "Regresyon Doğrusu ve Artıklar")
+abline(model, col = "blue", lwd = 2)
+segments(x, y, x, fitted(model), col = "red")  # artıklar (hatalar)
+```
+:::
+:::
+
+> 🔴 Kırmızı çizgiler artıkları temsil eder. Modelin her noktada ne kadar saptığını gösterir.
+
+## 🏙️ Boston Veri Seti Tanıtımı
+
+### 📦 Veri Kaynağı
+
+> `Boston` veri seti, **MASS** paketinde yer alır.\
+> 506 gözlem ve 14 değişkenden oluşur.\
+> Amaç: **Boston’daki konut değerlerini** sosyo-ekonomik ve çevresel değişkenlerle açıklamak.
+
+```{r}
+library(MASS)
+data("Boston")
+str(Boston)
+```
+
+------------------------------------------------------------------------
+
+### 🔍 Ana Değişkenler
+
+| Değişken  | Açıklama                                                       |
+|---------------------------------------|---------------------------------|
+| `medv`    | Median konut değeri (1000 \$ cinsinden) → **bağımlı değişken** |
+| `lstat`   | \% düşük sosyo-ekonomik statüdeki insanlar                     |
+| `rm`      | Ortalama oda sayısı                                            |
+| `crim`    | Suç oranı                                                      |
+| `nox`     | Azot oksit yoğunluğu (hava kirliliği)                          |
+| `dis`     | Şehir merkezine uzaklık                                        |
+| `ptratio` | Öğrenci-öğretmen oranı                                         |
+| `age`     | %1940'tan önce inşa edilmiş ev oranı                           |
+| `indus`   | Endüstriyel alan oranı                                         |
+| `chas`    | Charles Nehri kenarında mı? (0 = hayır, 1 = evet)              |
+
+------------------------------------------------------------------------
+
+### 🎯 Modelleme Amacımız
+
+> Değişkenlerden biriyle başlayarak konut değerini (`medv`) tahmin etmek.\
+> Başlangıç: `medv ~ lstat` → basit regresyon modeli.
+
+### 📌 Neden `lstat`?
+
+-   Gelir düzeyini temsil eder
+-   Fiyatlarla ilişkili olması beklenir
+-   Görsel ilişki kolay algılanabilir
+-   İleri adımlarda `rm`, `crim` gibi değişkenlerle **çoklu modele** geçeceğiz
+
+## 🧪 Uygulama: Basit Doğrusal Regresyon
+
+### 🎯 Model: `medv ~ lstat`
+
+> Amaç: Düşük sosyo-ekonomik statüdeki insanların oranı arttıkça, konut fiyatı (`medv`) nasıl değişiyor?
+
+```{r}
+# Modeli kur
+model1 <- lm(medv ~ lstat, data = Boston)
+model1
+
+```
+
+---
+
+### 📋 Regresyon Çıktısının Yorumlanması
+
+```{r}
+# Model özetini incele
+summary(model1)
+```
+
+### 🔍 Çıktı Bileşenleri:
+
+1.  **Call:**\
+    Model formülünü tekrar gösterir: `medv ~ lstat`
+
+2.  **Coefficients:**
+
+    | Terim     | Estimate | Std. Error | t value | Pr(\>    |
+    |-----------|----------|------------|---------|----------|
+    | Intercept | 34.5538  | 0.5626     | 61.41   | \< 2e-16 |
+    | lstat     | -0.9500  | 0.0387     | -24.54  | \< 2e-16 |
+
+    -   **Estimate**: Tahmin edilen katsayı
+    -   **Std. Error**: Bu tahminin belirsizliği (SE)
+    -   **t value**: $\frac{\text{Estimate}}{\text{Std.Error}}$
+    -   **p-value**: Katsayının sıfırdan farklı olup olmadığını test eder
+
+    > Eğer p \< 0.05 ise, o değişkenin modele anlamlı katkı sağladığı düşünülür.
+
+    ### ℹ️ Std. Error Nedir?
+
+    > **Std. Error (Standart Hata)**, tahmin edilen regresyon katsayısının (β̂) **ne kadar belirsiz olduğunu** ölçer.\
+    > Başka bir deyişle, **katsayının örnekleme dağılımının standart sapmasıdır**.
+
+    -   Eğer **standart hata küçükse**, bu katsayıya daha fazla güvenebiliriz.
+    -   Eğer büyükse, örneklemdeki rastgelelik bu katsayının değerine daha çok etki ediyor olabilir.
+
+    > 🔎 **İyi bir model** genellikle anlamlı katsayılar + küçük standart hatalara sahiptir.
+
+------------------------------------------------------------------------
+
+### 🧠 Faydalı Tavsiyeler
+
+#### ✔️ `broom` paketi kullan: Daha okunabilir sonuçlar
+
+```{r}
+library(broom)
+
+glance(model1)      # Model düzeyinde özet istatistikler
+tidy(model1)        # Katsayılar, SE, p-değerleri
+augment(model1)     # Gözlem düzeyinde hatalar, tahminler, artıklar
+```
+
+#### ✔️ R² yorumlanırken dikkatli ol:
+
+-   Çok yüksek olması her zaman iyi değildir
+-   Düşük olabilir ama model doğru bir ilişkiyi temsil ediyor olabilir
+
+#### ✔️ `confint()` fonksiyonu ile güven aralığına bak
+
+```{r}
+confint(model1)
+```
+
+------------------------------------------------------------------------
+
+### 📌 Ekstra Bilgi: `sigma`
+
+```{r}
+sigma(model1)  # Ortalama artık hatasının tahmini (residual std error)
+```
+
+> Bu değer “gerçek veri ile modelin tahminleri ortalama ne kadar sapıyor?” sorusunun cevabıdır.
+
+### 💡 Yorum
+
+-   `lstat` değişkeni 1 birim arttığında (örneğin %12 → %13), medv **ortalama β₁ kadar azalır**\
+-   Eğer bu katsayı negatifse, düşük sosyo-ekonomik oran **arttıkça** konut değeri **azalıyor** demektir\
+-   Bu bulgu anlamlıysa (p \< 0.001), veri içindeki ilişki güçlüdür
+
+---
+
+### 📉 Regresyon Doğrusu ve Artıklar
+
+::: columns
+::: {.column width="90%"}
+```{r}
+library(ggplot2)
+
+ggplot(Boston, aes(x = lstat, y = medv)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(
+    title = "Basit Doğrusal Regresyon: medv ~ lstat",
+    x = "% düşük statüdeki insanlar (lstat)",
+    y = "Ortalama Konut Değeri (medv)"
+  ) +
+  theme_minimal()
+```
+:::
+:::
+
+> 🔵 Mavi çizgi modelin tahmin ettiği regresyon doğrusudur.\
+> Noktaların bu doğruya uzaklığı **artık değerlerdir** ve modelin ne kadar sapma yaptığını gösterir.
+
+### 🧠 Not
+
+> Bu model yalnızca **doğrusal bir ilişki** varsayar.\
+> Ama bu ilişki her zaman doğrusal olmayabilir — grafik bu varsayımı test etmek için önemlidir.
+
+---
+
+### 🧮 Gözlem Bazlı Regresyon Analizi – Artıklar ve Tahminler
+
+### 🎯 Amaç:
+
+> Model her bir gözlem için ne kadar doğru tahmin yapıyor?\
+> Artıklar ne kadar büyük? Sistematik sapma var mı?
+
+```{r}
+library(broom)
+
+# augment ile detaylı çıktı
+augmented <- augment(model1)
+
+# İlk 6 gözlem için çıktıya bakalım
+head(augmented)
+```
+
+### 📊 Önemli Kolonlar
+
+| Kolon        | Açıklama                                             |
+|--------------|------------------------------------------------------|
+| `.fitted`    | Modelin tahmin ettiği medv değeri                    |
+| `.resid`     | Artık değeri: $y_i - \hat{y}_i$                      |
+| `.std.resid` | Standardize artık (çıkıntılı gözlemleri tespit için) |
+| `.hat`       | Leverage değeri (etkili gözlem mi?)                  |
+| `.sigma`     | Tahminin hata tahmini (her gözlem için)              |
+
+------------------------------------------------------------------------
+
+### 📉 Görselleştirme: Tahmin vs Gerçek
+
+::: columns
+::: {.column width="90%"}
+```{r}
+library(ggplot2)
+
+ggplot(augmented, aes(x = .fitted, y = medv)) +
+  geom_point(alpha = 0.6) +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(
+    title = "Tahmin Edilen vs Gerçek Değerler",
+    x = "Tahmin (fitted)",
+    y = "Gerçek (medv)"
+  ) +
+  theme_minimal()
+```
+:::
+:::
+
+> 🔴 Kırmızı çizgi tam tahmin çizgisidir: $\hat{y} = y$\
+> Noktalar bu çizgiden çok sapıyorsa model orada başarısızdır.
+
+### 🧠 Tavsiye:
+
+-   `.std.resid` \> 2 olan gözlemleri **potansiyel uç değer** olarak işaretleyin.
+-   `.hat` değeri yüksekse gözlem model üzerinde **orantısız etki yaratıyor** olabilir.
+
+```{r}
+library(dplyr)
+augmented %>%
+  filter(abs(.std.resid) > 2 | .hat > 0.1)
+```
+
+## 📏 Regresyon Modeli Nasıl Değerlendirilir?
+
+### 🔍 Neden Gerekli?
+
+> Modelin ne kadar iyi tahmin yaptığı sadece $R^2$ ile anlaşılmaz.\
+> Gerçek değerlerden ortalama ne kadar sapma olduğunu da bilmeliyiz.
+
+### 📊 Temel Metrikler
+
+| Metrik          | Açıklama                                                     |
+|------------------------------------|------------------------------------|
+| **RMSE**        | Ortalama karekök hata: büyük hatalar daha çok cezalandırılır |
+| **MAE**         | Ortalama mutlak hata: yorumlaması kolay                      |
+| **R²**          | Açıklanan varyans oranı                                      |
+| **Adjusted R²** | Değişken sayısına göre düzeltilmiş R²                        |
+| **AIC / BIC**   | Model karşılaştırması: daha düşük daha iyidir                |
+| **sigma()**     | Ortalama artık sapması (residual std error)                  |
+
+------------------------------------------------------------------------
+
+### 🧪 Uygulama – R ile Hesaplama
+
+```{r}
+library(Metrics)
+
+actual <- Boston$medv
+predicted <- predict(model1)
+
+rmse(actual, predicted)   # Ortalama hata miktarı
+mae(actual, predicted)    # Ortalama mutlak hata
+sigma(model1)             # summary(model1) içindeki residual std error
+```
+
+#### Ek olarak:
+
+```{r}
+glance(model1)[, c("r.squared", "adj.r.squared", "AIC", "BIC")]
+```
+
+> 🔍 `glance()` ile performans metriklerine tek satırda ulaşılır.
+
+------------------------------------------------------------------------
+
+### 📌 Tavsiyeler:
+
+-   RMSE ve MAE birlikte kullanılır → Biri sapmaları büyütür, diğeri sadeleştirir
+-   AIC/BIC sadece **aynı hedef değişkenli modeller** arasında karşılaştırma için anlamlıdır
+-   Çok yüksek R² bazen **overfitting** (ezberleme) anlamına da gelebilir
+-   Sigma küçükse, artıklar küçük → iyi bir şey
+
+### 💡 Kural
+
+> Performans metriğini yorumlarken:\
+> **“Tahmin ettiğim değer, ortalama olarak gerçek değerden ne kadar sapıyor?”**\
+> sorusuna cevap arıyoruz.
+
+## 🧪 Çoklu Doğrusal Regresyon
+
+### 🎯 Amaç:
+
+> Fiyatları etkileyebileceğini düşündüğümüz değişkenlerle daha gerçekçi bir model kurmak
+
+```{r}
+model2 <- lm(medv ~ lstat + rm + age + crim, data = Boston)
+summary(model2)
+```
+
+### 🔍 İlk Yorumlar
+
+-   Her bir değişkenin **etkisi sabitken diğer değişkenin etkisi** yorumlanır\
+    → Örn: `lstat` 1 birim artarken, `rm`, `age`, `crim` sabit tutulur
+-   p-değerleri sayesinde hangi değişkenlerin **istatistiksel olarak anlamlı** olduğu anlaşılır
+-   Adjusted R² = çok önemli! Değişken sayısı arttığında R² her zaman yükselir, ama **adj.R²** artmazsa dikkat!
+
+------------------------------------------------------------------------
+
+### 📊 Tahmin ve Gerçek Değer Grafiği
+
+::: columns
+::: {.column width="90%"}
+```{r}
+library(broom)
+aug2 <- augment(model2)
+
+ggplot(aug2, aes(x = .fitted, y = medv)) +
+  geom_point(alpha = 0.6) +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(
+    title = "Çoklu Model: Tahmin vs Gerçek Değer",
+    x = "Tahmin (fitted)",
+    y = "Gerçek (medv)"
+  ) +
+  theme_minimal()
+```
+:::
+:::
+
+### 💬 Yorum:
+
+> Çoklu model, `medv ~ lstat` tek başına olduğundan genellikle **daha iyi** sonuç verir.\
+> Ama **anlamlılık**, **çoklu ilişki** ve **etki büyüklüğü** gibi unsurları göz ardı etmemek gerekir.
+
+## ⚠️ Çoklu Doğrusal Regresyonda Sık Yapılan Hatalar
+
+### 🚫 Tipik Hatalar
+
+-   **Tüm değişkenleri körlemesine eklemek** → Açıklayıcı güç değil, gürültü artar
+-   **Korelasyon varsa mutlaka koymalıyım düşüncesi** → Multikolineariteye yol açabilir
+-   **Kategorik değişkenleri sayısal gibi bırakmak** → Faktör dönüşümü yapılmadan model yanlış çalışır
+-   **Artıkları ve varsayımları test etmemek** → R² yüksek olsa da model istatistiksel olarak geçersiz olabilir
+-   **R²’ye körü körüne güvenmek** → Model iyi gözükür ama ezber yapıyor olabilir (overfitting)
+-   **Veriyi incelemeden regresyona girmek** → Lineerlik sağlanmıyor olabilir
+
+------------------------------------------------------------------------
+
+#### ✔️ VIF ile Multikolineariteyi Kontrol Et
+
+VIF (Variance Inflation Factor) ile çoklu doğrusal ilişkiyi kontrol et
+
+```{r}
+library(car)
+vif(model2)
+```
+
+> 🔍 VIF \> 5 → **ciddi çoklu ilişki riski**,\
+> VIF \> 10 → **kritik düzeyde uyarı**
+
+---
+
+#### ✔️ `performance` paketi ile hızlı model testi
+
+### 🎯 Amaç:
+
+> Regresyon modelinin varsayımlarını **tek adımda test etmek**\
+> Artıkların dağılımı, varyans sabitliği, lineerlik, normal dağılım ve uç değerler dahil
+
+::: columns
+::: {.column width="95%"}
+```{r}
+library(performance)
+check_model(model2)
+```
+:::
+:::
+
+### 📊 Üretilen Grafikler ve Yorumları
+
+| Grafik                         | Ne Gösterir?                                    | Nasıl Yorumlanır?                                                                                           |
+|-----------------|------------------------|-------------------------------|
+| **Posterior Predictive Check** | Histogram veya yoğunluk grafiği olarak verilir. | Modelin tahmin ettiği değerlerin, gerçek değerlerle **benzer dağılıma** sahip olup olmadığını kontrol eder. |
+| **Linearity Check**            | Fitted vs Residuals                             | Noktalar rastgele dağılmalı. Desen varsa lineerlik sağlanmıyor.                                             |
+| **Homoscedasticity**           | Artıkların sabit varyansı                       | Fan açılıyorsa heteroskedastisite olabilir.                                                                 |
+| **Normality of Residuals**     | QQ Plot                                         | Noktalar eğriden sapıyorsa normal dağılım varsayımı bozulmuş olabilir.                                      |
+| **Outliers**                   | Standardize artıklar ve leverage                | Uzak noktalar varsa, potansiyel etkili uç gözlemler olabilir.                                               |
+| **Influential Obs.**           | Cook’s Distance                                 | .5 üzeri değerler varsa dikkat: gözlem modeli etkiliyor olabilir.                                           |
+
+---
+
+### 📌 Dikkat Edilmesi Gerekenler
+
+-   **Lineerlik bozulmuşsa** → modelin formunu değiştir (log, polinomik dönüşüm)
+-   **Heteroskedastisite varsa** → `lmtest::bptest()` ile test et, `robust` modelleri düşün
+-   **QQ plot bozuksa** → çıkarım yaparken dikkat et, normal varsayımı önemliyse `glm` düşün
+-   **Leverage ve Cook’s D. yüksekse** → gözlemi silmeden önce etkisini analiz et
+
+### 🧠 Tavsiye
+
+> `check_model()` sonucu sadece görüp geçilmez.\
+> Her bir grafiği modelin anatomik bir MR’ı gibi düşün.\
+> Varsayımlar sağlanmıyorsa: **model değiştirilir ya da dönüştürülür.**
+
+---
+
+#### ✔️ Kategorik Değişkenler için `factor()` kullan
+
+```{r}
+Boston$chas <- as.factor(Boston$chas)
+```
+
+### 🎓 Hatırlatma
+
+> **İyi bir regresyon modeli**, sadece yüksek R² değil;\
+> anlamlı katsayılar, düşük multikolinearite, tutarlı varsayımlar ve yorumlanabilirlik içerir.
+
+## 🧰 Doğrusal Regresyonda Kullanılabilecek İleri Araçlar
+
+### 📦 Öne Çıkan Paketler ve Amaçları
+
+| Paket          | Amaç                                      | Notlar                                          |
+|------------------------------------|-----------------|-------------------|
+| `broom`        | Regresyon çıktısını düzenleme             | `tidy()`, `glance()`, `augment()` fonksiyonları |
+| `car`          | Varsayım testi, multikolinearite          | `vif()`, `linearHypothesis()`                   |
+| `performance`  | Model varsayımları, etkili gözlem tespiti | `check_model()` ile tam analiz                  |
+| `modelsummary` | Yayın kalitesinde regresyon tabloları     | Çoklu model karşılaştırması kolay               |
+| `ggfortify`    | Regresyon için otomatik artık grafikleri  | `autoplot(lm_model)`                            |
+| `glmnet`       | Ridge, Lasso, Elastic Net                 | Regularizasyon için                             |
+| `tidymodels`   | Modern modelleme altyapısı                | `recipes`, `workflow`, `tune`, `parsnip`        |
+| `jtools`       | Regresyon grafiklendirme, etkili sunum    | `summ()`, `plot_summs()`                        |
+
+------------------------------------------------------------------------
+
+### 🧠 Ne Zaman Kullanılır?
+
+-   **Modeli yorumlamak için**: `broom`, `modelsummary`, `jtools`
+-   **Varsayımları test etmek için**: `performance`, `car`
+-   **Görselleştirme için**: `ggplot2`, `ggfortify`, `jtools`
+-   **Gelişmiş regresyon için**: `glmnet`, `tidymodels`
+-   **Sunum/rapor üretmek için**: `modelsummary`, `stargazer` (LaTeX için)
+
+------------------------------------------------------------------------
+
+### 📚 Faydalı Kaynaklar
+
+-   📖 *An Introduction to Statistical Learning* (ISLR)\
+-   📖 *Hands-On Machine Learning with R* – Brad Boehmke & Brandon Greenwell\
+-   🔗 [tidymodels.org](https://www.tidymodels.org/) – modern modelleme ekosistemi\
+-   🔗 [easystats.github.io/performance](https://easystats.github.io/performance) – varsayım kontrolleri
+
+### 🎯 Kapanış Tavsiyesi
+
+> Doğrusal regresyon, sadece “ilk model” değil, çoğu zaman **en güçlü referans modeldir**.\
+> Modern araçlarla desteklenirse hem sağlam, hem de sürdürülebilir analizler yapılabilir.
+
+---
+
+### 📚 Neler Öğrendik?
+
+-   **Doğrusal Regresyonun temel mantığı**: Bağımlı ve bağımsız değişkenler arasındaki ilişki
+-   **Parametre tahmini, artıklar, varsayımlar**
+-   **Basit ve çoklu modellerle uygulama** (`lm`, `summary`, `augment`)
+-   **Model değerlendirme metrikleri**: RMSE, MAE, R², AIC
+-   **Varsayım kontrolleri** (`check_model`, `vif`)
+-   **Regresyonu anlamlı kılan şey: yorumlama, sadeleşme, kontrol**
+
+### 🔧 Tavsiyeler
+
+-   Her modeli **yorumla**, sadece **hesaplama** yapma
+-   **Varsayımlar bozulduğunda** bileceğin araçlar olsun
+-   Regresyon = Makine öğrenmesine açılan **istatistiksel kapı**
+
+------------------------------------------------------------------------
+
+### 🙏 Teşekkürler
+
+> Katılımınız için teşekkür ederim!\
+> 📧 İletişim: **Dr. M. Fatih Tüzen**
+>
+> > 📧 fatih.tuzen\@tuik.gov.tr\
+> > 🌐 [rprogramlama.netlify.app](https://rprogramlama.netlify.app)\
+> > 🔗 [linkedin.com/in/dr-m-fatih-t-2b2a4328](https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/)

@@ -1,0 +1,97 @@
+---
+title: "EDA ve Regresyon Uygulaması"
+format: html
+editor: visual
+---
+
+# 🧪 Uygulama: Eğitim Özeti Egzersizi
+
+Bu uygulama, eğitim boyunca öğrendiğiniz eksik veri analizi, aykırı değer tespiti, normalleştirme ve regresyon konularını kapsayan bir mini çalışmadır. Katılımcılar olarak aşağıdaki soruları çözmeye çalışın. Gerekli durumlarda **ipuçlarını kullanın**. Kod bloklarını çalıştırmak için `Ctrl+Enter` yeterlidir.
+
+------------------------------------------------------------------------
+
+## 1. Veriyi Yükle ve Tanı
+
+**Görev:** `ISLR2` paketindeki `Wage` veri setini yükleyin ve tanıyın.
+
+📌 *İpucu:* Paketi yükledikten sonra veri setine erişebilir ve yapısını öğrenmek için `head()`, `str()`, `summary()` gibi işlevleri kullanabilirsiniz.
+
+------------------------------------------------------------------------
+
+## 2. Eksik Değerleri İncele
+
+**Görev:** Hangi değişkenlerde eksik veri var? Kaçar tane?
+
+📌 *İpucu:* `is.na()` ve `colSums()` fonksiyonlarını birleştirerek sütunlardaki eksik gözlemleri sayabilirsiniz. Alternatif olarak `naniar` paketi görsel destek sunar.
+
+------------------------------------------------------------------------
+
+## 3. Ortalama ile İmputasyon Uygula
+
+**Görev:** NA içeren sayısal bir değişkene ortalama değeriyle imputasyon uygulayın.
+
+📌 *İpucu:* `mean()` fonksiyonu ile ortalama hesaplayabilir, `mutate()` veya köşeli parantez ile NA değerleri bu ortalama ile değiştirebilirsiniz.
+
+------------------------------------------------------------------------
+
+## 4. Aykırı Değerleri Tespit Et (IQR)
+
+**Görev:** `age` değişkenindeki aykırı değerleri IQR yöntemi ile belirleyin.
+
+📌 *İpucu:* 1. ve 3. çeyrekleri (`quantile`) kullanarak IQR hesaplayın. Alt ve üst sınırları belirleyip bu sınırların dışında kalan gözlemleri inceleyin.
+
+------------------------------------------------------------------------
+
+## 5. Normalleştirme (Min-Max)
+
+**Görev:** `wage` değişkenini 0–1 aralığına ölçekleyin.
+
+📌 *İpucu:* Min-Max formülü: `(x - min(x)) / (max(x) - min(x))` şeklindedir. Bu dönüşümü bir yeni değişken olarak ekleyin.
+
+------------------------------------------------------------------------
+
+## 6. Basit Regresyon Kurun
+
+**Görev:** `wage ~ age` modelini kurun ve model çıktısını yorumlayın.
+
+📌 *İpucu:* `lm()` fonksiyonu ile model kurabilir, `summary()` ile özet bilgilerine ulaşabilirsiniz. Özellikle `Estimate`, `Std. Error`, `R-squared`, `p-value` kısımlarına dikkat edin.
+
+------------------------------------------------------------------------
+
+## 7. Regresyon Doğrusu ve Artıklar
+
+**Görev:** ggplot2 ile regresyon doğrusunu çizin ve artık değerleri görselleştirin.
+
+📌 *İpucu:* `geom_point()` ile veriyi, `geom_smooth(method = "lm")` ile regresyon doğrusunu çizebilirsiniz. Artıkları görmek için `broom::augment()` ile `.fitted` değerleri kullanarak segmentler oluşturabilirsiniz.
+
+------------------------------------------------------------------------
+
+## 8. Çoklu Regresyon Modeli Kurun
+
+**Görev:** `wage ~ age + education + year` modeli kurun ve çıktısını yorumlayın.
+
+📌 *İpucu:* `lm()` fonksiyonu ile çoklu model kurabilirsiniz. `education` değişkeni faktör türündeyse otomatik olarak dummy dönüşüm uygulanır. `summary()` çıktısında değişken başına p-değerlerine dikkat edin.
+
+------------------------------------------------------------------------
+
+## 9. VIF Analizi
+
+**Görev:** Çoklu model için VIF değerlerini hesaplayın.
+
+📌 *İpucu:* `car` paketindeki `vif()` fonksiyonu modeldeki çoklu doğrusal ilişkiyi kontrol eder. VIF \> 5 genellikle dikkat edilmesi gereken sınır olarak kabul edilir.
+
+------------------------------------------------------------------------
+
+## 10. Model Performansı (RMSE, MAE)
+
+**Görev:** Modelin tahmin performansını değerlendirin (RMSE, MAE).
+
+📌 *İpucu:* `predict()` fonksiyonu ile tahmin yapabilir, `Metrics` paketindeki `rmse()` ve `mae()` fonksiyonlarıyla hata ölçümleri yapabilirsiniz.
+
+------------------------------------------------------------------------
+
+## BONUS: Artık Analizi & Varsayım Kontrolü
+
+**Görev:** `check_model()` fonksiyonu ile model varsayımlarını test edin.
+
+📌 *İpucu:* `performance` paketi içerisindeki `check_model()` fonksiyonu lineerlik, varyans, normal dağılım ve etkili gözlemler hakkında çok yönlü grafikler sunar.

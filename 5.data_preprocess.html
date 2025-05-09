@@ -6,8 +6,8 @@
 <script src="5.data_preprocess_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="5.data_preprocess_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="5.data_preprocess_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="5.data_preprocess_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.6.40">
+<link href="5.data_preprocess_files/libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.39">
 
   <meta name="author" content="Dr.&nbsp;Muhammed Fatih TÜZEN">
   <title>R Programlama ile Veri Analizi</title>
@@ -703,22 +703,22 @@ Modelleme için <strong>en riskli durumdur</strong> → İmputasyon yanlı olabi
 <pre><code>  missForest iteration 1 in progress...done!
     estimated error(s): 0.4729807 
     difference(s): 0.004116049 
-    time: 0.06 seconds
+    time: 0.03 seconds
 
   missForest iteration 2 in progress...done!
     estimated error(s): 0.4591754 
     difference(s): 0.0003780686 
-    time: 0.08 seconds
+    time: 0.03 seconds
 
   missForest iteration 3 in progress...done!
     estimated error(s): 0.4640599 
     difference(s): 0.0001197957 
-    time: 0.07 seconds
+    time: 0.04 seconds
 
   missForest iteration 4 in progress...done!
     estimated error(s): 0.4655499 
     difference(s): 0.0001712192 
-    time: 0.07 seconds</code></pre>
+    time: 0.03 seconds</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="co"># İmpute edilmiş veri setine erişim</span></span>
 <span id="cb21-2"><a href=""></a>imputed_data <span class="ot">&lt;-</span> imp_rf<span class="sc">$</span>ximp</span>
@@ -1211,7 +1211,8 @@ Ama ağaç tabanlı yöntemlerde (decision tree, random forest) genellikle gerek
 <h3 id="not">📌 Not:</h3>
 <ul>
 <li>Bu yöntemler <strong>veri setinin yapısını bozmaz</strong>, sadece <strong>ölçeğini değiştirir</strong>.</li>
-<li>Gözlemler arası</li>
+<li>Gözlemler arası sıralama, dağılım şekli ve korelasyon korunur.</li>
+<li><strong>Amaç:</strong> Ölçekleri eşitleyerek modellerin veri üzerindeki önyargısını azaltmaktır.</li>
 </ul>
 </section>
 <section class="slide level2">
@@ -1219,9 +1220,9 @@ Ama ağaç tabanlı yöntemlerde (decision tree, random forest) genellikle gerek
 <h3 id="hangi-normalleştirme-yöntemi-ne-zaman-kullanılır">🧭 Hangi Normalleştirme Yöntemi Ne Zaman Kullanılır?</h3>
 <table class="caption-top">
 <colgroup>
-<col style="width: 19%">
-<col style="width: 61%">
-<col style="width: 19%">
+<col style="width: 23%">
+<col style="width: 52%">
+<col style="width: 23%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1291,7 +1292,8 @@ Ama ağaç tabanlı yöntemlerde (decision tree, random forest) genellikle gerek
 <blockquote>
 <p>Katılımınız ve ilginiz için çok teşekkürler!<br>
 Görüşmek üzere 👋<br>
-<strong>Dr.&nbsp;M. Fatih Tüzen</strong><br>
+<strong>Dr.&nbsp;M. Fatih Tüzen</strong></p>
+<p>📧 fatih.tuzen@tuik.gov.tr<br>
 <a href="https://rprogramlama.netlify.app">rprogramlama.netlify.app</a><br>
 <a href="https://www.linkedin.com/in/dr-m-fatih-t-2b2a4328/">linkedin.com/in/dr-m-fatih-t-2b2a4328</a></p>
 </blockquote>
