@@ -1,0 +1,148 @@
+---
+title: "EDA ve Regresyon Uygulama - Çözümler"
+format: html
+editor: visual
+execute:
+  warning: false
+  message: false
+---
+
+# ✅ Uygulama Çözümleri
+
+Bu belge, "EDA ve Regresyon Uygulaması" sorularının çözümlerini içerir. Her bölümde çözüm kodu ve kısa açıklamalar sunulmuştur.
+
+------------------------------------------------------------------------
+
+## 1. Veriyi Yükle ve Tanı
+
+```{r}
+library(ISLR2)
+data(Wage)
+str(Wage)
+summary(Wage)
+head(Wage)
+```
+
+**Açıklama:** `Wage` veri seti maaş, yaş, eğitim gibi değişkenleri içerir. `str()` ile yapısını incelemek faydalı olur.
+
+------------------------------------------------------------------------
+
+## 2. Eksik Değerleri İncele
+
+```{r}
+colSums(is.na(Wage))
+```
+
+**Açıklama:** Hangi sütunda kaç tane NA değeri olduğunu öğrenmiş olduk.
+
+------------------------------------------------------------------------
+
+## 3. Ortalama ile İmputasyon Uygula
+
+```{r}
+mean_wage <- mean(Wage$wage, na.rm = TRUE)
+Wage$wage[is.na(Wage$wage)] <- mean_wage
+```
+
+**Açıklama:** NA olan değerler, ilgili değişkenin ortalaması ile değiştirildi.
+
+------------------------------------------------------------------------
+
+## 4. Aykırı Değerleri Tespit Et (IQR)
+
+```{r}
+q1 <- quantile(Wage$age, 0.25)
+q3 <- quantile(Wage$age, 0.75)
+iqr <- IQR(Wage$age)
+lower <- q1 - 1.5 * iqr
+upper <- q3 + 1.5 * iqr
+outliers <- Wage$age[Wage$age < lower | Wage$age > upper]
+outliers
+```
+
+**Açıklama:** IQR yöntemine göre alt ve üst sınırların dışındaki gözlemler aykırı kabul edildi.
+
+------------------------------------------------------------------------
+
+## 5. Normalleştirme (Min-Max)
+
+```{r}
+Wage$wage_scaled <- (Wage$wage - min(Wage$wage)) / (max(Wage$wage) - min(Wage$wage))
+summary(Wage$wage_scaled)
+```
+
+**Açıklama:** Değerler 0–1 arasına indirgenerek normalleştirildi.
+
+------------------------------------------------------------------------
+
+## 6. Basit Regresyon Kurun
+
+```{r}
+model1 <- lm(wage ~ age, data = Wage)
+summary(model1)
+```
+
+**Açıklama:** `age` değişkeninin `wage` üzerindeki doğrusal etkisi analiz edildi.
+
+------------------------------------------------------------------------
+
+## 7. Regresyon Doğrusu ve Artıklar
+
+```{r}
+library(ggplot2)
+library(broom)
+aug <- augment(model1)
+
+ggplot(aug, aes(x = age, y = wage)) +
+  geom_point() +
+  geom_line(aes(y = .fitted), color = "blue") +
+  geom_segment(aes(xend = age, yend = .fitted), alpha = 0.3)
+```
+
+**Açıklama:** Mavi çizgi tahmin değerlerini, kırık çizgiler artık değerleri temsil eder.
+
+------------------------------------------------------------------------
+
+## 8. Çoklu Regresyon Modeli Kurun
+
+```{r}
+model2 <- lm(wage ~ age + education + year, data = Wage)
+summary(model2)
+```
+
+**Açıklama:** Birden çok değişkenle kurulan modelin özet bilgileri analiz edildi.
+
+------------------------------------------------------------------------
+
+## 9. VIF Analizi
+
+```{r}
+library(car)
+vif(model2)
+```
+
+**Açıklama:** VIF değerleri 5'in üzerindeyse multikolinearite riski olabilir.
+
+------------------------------------------------------------------------
+
+## 10. Model Performansı (RMSE, MAE)
+
+```{r}
+library(Metrics)
+pred <- predict(model2)
+rmse(Wage$wage, pred)
+mae(Wage$wage, pred)
+```
+
+**Açıklama:** Modelin tahmin başarımını ölçmek için hata metrikleri kullanıldı.
+
+------------------------------------------------------------------------
+
+## BONUS: Artık Analizi & Varsayım Kontrolü
+
+```{r}
+library(performance)
+check_model(model2)
+```
+
+**Açıklama:** Model varsayımlarını test etmek için `check_model()` fonksiyonu kullanıldı. Lineerlik, normal dağılım, sabit varyans ve etkili gözlemler görsel olarak incelenebilir.
